@@ -19,7 +19,7 @@ export default [
         path: 'detail',
         name: 'DashboardDetail',
         component: () => import('@/pages/dashboard/detail/index.vue'),
-        meta: { title: '统计报表' },
+        meta: { title: '统计报表--' },
       },
 
     ],

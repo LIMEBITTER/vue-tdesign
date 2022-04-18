@@ -9,7 +9,9 @@ export default [
     name: 'list',
     component: Layout,
     redirect: '/list/base',
-    meta: { title: '列表页', icon: ListIcon },
+    // meta: { title: '列表页', icon: ListIcon },
+    meta: { title: '会议管理', icon: ListIcon },
+
     children: [
       // {
       //   path: 'base',
@@ -23,12 +25,31 @@ export default [
       //   component: () => import('@/pages/list/card/index.vue'),
       //   meta: { title: '卡片列表页' },
       // },
+
+      // {
+      //   path: 'filter',
+      //   name: 'ListFilter',
+      //   component: () => import('@/pages/list/filter/index.vue'),
+      //   meta: { title: '会议开始结束' },
+      // },
       {
         path: 'filter',
         name: 'ListFilter',
         component: () => import('@/pages/list/filter/index.vue'),
-        meta: { title: '所有预定会议查看列表' },
+        meta: { title: '所有预定会议查看列表-（会议信息查询）' },
       },
+      {
+        path: 'base',
+        name: 'FormBase',
+        component: () => import('@/pages/form/base/index.vue'),
+        meta: { title: '会议申请' },
+      },
+      // {
+      //   path: 'filter',
+      //   name: 'ListFilter',
+      //   component: () => import('@/pages/list/filter/index.vue'),
+      //   meta: { title: '会议历史查询' },
+      // },
       // {
       //   path: 'tree',
       //   name: 'ListTree',
@@ -43,6 +64,8 @@ export default [
     component: Layout,
     redirect: '/form/base',
     meta: { title: '表单页', icon: FormIcon },
+    // meta: { title: '签到管理', icon: FormIcon },
+
     children: [
       {
         path: 'base',

@@ -1,16 +1,16 @@
 <template>
   <div class="dashboard-panel-detail">
-    <card title="本月采购申请情况">
+    <card title="本月会议使用情况">
       <t-row :gutter="[16, 16]">
         <t-col v-for="(item, index) in PANE_LIST_DATA" :key="index" :xs="6" :xl="3">
           <card border class="dashboard-detail-container-item" size="small" :describe="item.title">
             <div class="number">{{ item.number }}</div>
             <div class="dashboard-detail-container-item-text">
-              <div class="dashboard-detail-container-item-text-left">
-                环比
-                <trend class="icon" :type="item.upTrend ? 'up' : 'down'" :describe="item.upTrend || item.downTrend" />
-              </div>
-              <t-icon name="chevron-right" />
+<!--              <div class="dashboard-detail-container-item-text-left">-->
+<!--                环比-->
+<!--                <trend class="icon" :type="item.upTrend ? 'up' : 'down'" :describe="item.upTrend || item.downTrend" />-->
+<!--              </div>-->
+<!--              <t-icon name="chevron-right" />-->
             </div>
           </card>
         </t-col>
@@ -18,48 +18,57 @@
     </card>
     <t-row :gutter="[16, 16]" class="card-container-margin">
       <t-col :xs="12" :xl="9">
-        <card title="采购商品申请趋势" describe="(件)">
-          <template #option>
-            <t-date-picker
-              class="card-date-picker-container"
-              :default-value="LAST_7_DAYS"
-              theme="primary"
-              mode="date"
-              range
-              @change="onMaterialChange"
-            />
-          </template>
-          <div id="lineContainer" style="width: 100%; height: 416px"></div>
-        </card>
+<!--        <card title="会议服务使用情况" describe="(次)">-->
+<!--          <template #option>-->
+<!--            <t-date-picker-->
+<!--              class="card-date-picker-container"-->
+<!--              :default-value="LAST_7_DAYS"-->
+<!--              theme="primary"-->
+<!--              mode="date"-->
+<!--              range-->
+<!--              @change="onMaterialChange"-->
+<!--            />-->
+<!--          </template>-->
+<!--          <div id="lineContainer" style="width: 100%; height: 416px"></div>-->
+<!--        </card>-->
       </t-col>
       <t-col :xs="12" :xl="3">
-        <product-card
-          v-for="(item, index) in PRODUCT_LIST"
-          :key="index"
-          :product="item"
-          :class="{ 'card-container-margin': index !== 0 }"
-        />
+<!--        <product-card-->
+<!--          v-for="(item, index) in PRODUCT_LIST"-->
+<!--          :key="index"-->
+<!--          :product="item"-->
+<!--          :class="{ 'card-container-margin': index !== 0 }"-->
+<!--        />-->
+<!--        <card title="您的会议及时签到率">-->
+<!--          <div-->
+<!--            id="countContainer"-->
+<!--            ref="countContainer"-->
+<!--            :style="{ width: `${resizeTime * 326}px`, height: `${resizeTime * 326}px`, margin: '0 auto' }"-->
+<!--            class="dashboard-chart-container"-->
+<!--          ></div>-->
+<!--          <div id="piechart"></div>-->
+<!--        </card>-->
       </t-col>
     </t-row>
-    <card title="采购商品满意度分布" class="card-container-margin">
-      <template #option>
-        <t-date-picker
-          class="card-date-picker-container"
-          :defaultValue="LAST_7_DAYS"
-          theme="primary"
-          mode="date"
-          range
-          @change="onSatisfyChange"
-        ></t-date-picker>
-        <t-button class="card-date-button">导出数据</t-button>
-      </template>
-      <div id="scatterContainer" style="width: 100%; height: 374px"></div>
-    </card>
+<!--    <card title="采购商品满意度分布" class="card-container-margin">-->
+<!--      <template #option>-->
+<!--        <t-date-picker-->
+<!--          class="card-date-picker-container"-->
+<!--          :defaultValue="LAST_7_DAYS"-->
+<!--          theme="primary"-->
+<!--          mode="date"-->
+<!--          range-->
+<!--          @change="onSatisfyChange"-->
+<!--        ></t-date-picker>-->
+<!--        <t-button class="card-date-button">导出数据</t-button>-->
+<!--      </template>-->
+<!--      <div id="scatterContainer" style="width: 100%; height: 374px"></div>-->
+<!--    </card>-->
   </div>
 </template>
 <script lang="ts">
 import { GridComponent, TooltipComponent, LegendComponent } from 'echarts/components';
-import { LineChart, ScatterChart } from 'echarts/charts';
+import {LineChart, PieChart, ScatterChart} from 'echarts/charts';
 import { CanvasRenderer } from 'echarts/renderers';
 import * as echarts from 'echarts/core';
 import { mapState } from 'vuex';
@@ -72,15 +81,18 @@ import { LAST_7_DAYS } from '@/utils/date';
 
 import ProductCard from '@/components/card/component-card.vue';
 import { PANE_LIST_DATA, PRODUCT_LIST } from '@/service/service-detail';
-import { changeChartsTheme, getFolderLineDataSet, getScatterDataSet } from '../base';
+import { changeChartsTheme, getFolderLineDataSet,getPieChartDataSet, getScatterDataSet } from '../base';
 
-echarts.use([GridComponent, LegendComponent, TooltipComponent, LineChart, ScatterChart, CanvasRenderer]);
+echarts.use([GridComponent, LegendComponent, PieChart,TooltipComponent, LineChart, ScatterChart, CanvasRenderer]);
 
 export default {
   name: 'DashboardDetail',
   components: { Trend, Card, ProductCard },
   data() {
     return {
+
+      resizeTime: 1,
+
       prefix,
       PANE_LIST_DATA,
       PRODUCT_LIST,
@@ -99,6 +111,8 @@ export default {
         },
       ],
       LAST_7_DAYS,
+      // currentMonth: this.getThisMonth(),
+
     };
   },
   computed: {
@@ -116,6 +130,9 @@ export default {
     this.renderCharts();
   },
   methods: {
+
+
+
     /** 采购商品满意度选择 */
     onSatisfyChange(value) {
       const { chartColors } = this.$store.state.setting;

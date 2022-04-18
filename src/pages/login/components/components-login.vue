@@ -82,6 +82,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import QrcodeVue from 'qrcode.vue';
+import axios from "axios";
 
 const INITIAL_DATA = {
   phone: '',
@@ -123,7 +124,11 @@ export default Vue.extend({
     },
     async onSubmit({ validateResult }) {
       if (validateResult === true) {
+
         await this.$store.dispatch('user/login', this.formData);
+        // axios.post('/api/users/login',this.formData).then(res => {
+        //   console.log(res)
+        // })
 
         this.$message.success('登录成功');
         this.$router.replace('/').catch(() => '');

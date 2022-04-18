@@ -5,35 +5,35 @@
         <t-col :span="10">
           <t-row :gutter="[16, 16]">
             <t-col :flex="1">
-              <t-form-item label="会议名" name="name">
+              <t-form-item label="姓名" name="name">
                 <t-input
-                  v-model="formData.mname"
+                  v-model="formData.name"
                   class="form-item-content"
                   type="search"
-                  placeholder="请输入会议名称"
+                  placeholder="请输入姓名"
                   :style="{ minWidth: '134px' }"
                 />
               </t-form-item>
             </t-col>
             <t-col :flex="1">
-              <t-form-item label="会议状态" name="status">
+              <t-form-item label="签到状态" name="status">
                 <t-select
                   v-model="formData.status"
                   class="form-item-content`"
                   :options="CONTRACT_STATUS_OPTIONS"
-                  placeholder="请选择会议状态"
+                  placeholder="请选择签到状态"
                 />
               </t-form-item>
             </t-col>
             <t-col :flex="1">
-              <t-form-item label="会议号" name="no">
-                <t-input
-                  v-model="formData.mid"
-                  class="form-item-content"
-                  placeholder="请输入会议号"
-                  :style="{ minWidth: '134px' }"
-                />
-              </t-form-item>
+<!--              <t-form-item label="会议号" name="no">-->
+<!--                <t-input-->
+<!--                  v-model="formData.no"-->
+<!--                  class="form-item-content"-->
+<!--                  placeholder="请输入会议号"-->
+<!--                  :style="{ minWidth: '134px' }"-->
+<!--                />-->
+<!--              </t-form-item>-->
             </t-col>
 <!--            <t-col :flex="1">-->
 <!--              <t-form-item label="合同类型" name="type">-->
@@ -66,30 +66,25 @@
         @change="rehandleChange"
         :loading="dataLoading"
       >
-        <template #status="{ row }">
-          <t-tag v-if="row.status === CONTRACT_STATUS.FAIL" theme="danger" variant="light">审核失败</t-tag>
-          <t-tag v-if="row.status === CONTRACT_STATUS.AUDIT_PENDING" theme="warning" variant="light">待审核</t-tag>
-          <t-tag v-if="row.status === CONTRACT_STATUS.EXEC_PENDING" theme="warning" variant="light">未开始</t-tag>
-          <t-tag v-if="row.status === CONTRACT_STATUS.EXECUTING" theme="success" variant="light">进行中</t-tag>
-          <t-tag v-if="row.status === CONTRACT_STATUS.FINISH" theme="success" variant="light">已结束</t-tag>
-        </template>
-        <template #contractType="{ row }">
-          <p v-if="row.contractType === CONTRACT_TYPES.MAIN">审核失败</p>
-          <p v-if="row.contractType === CONTRACT_TYPES.SUB">待审核</p>
-          <p v-if="row.contractType === CONTRACT_TYPES.SUPPLEMENT">待履行</p>
-        </template>
-<!--        <template #paymentType="{ row }">-->
-<!--          <p v-if="row.paymentType === CONTRACT_PAYMENT_TYPES.PAYMENT" class="payment-col">-->
-<!--            付款<trend class="dashboard-item-trend" type="up" />-->
-<!--          </p>-->
-<!--          <p v-if="row.paymentType === CONTRACT_PAYMENT_TYPES.RECIPT" class="payment-col">-->
-<!--            收款<trend class="dashboard-item-trend" type="down" />-->
-<!--          </p>-->
+<!--        <template #status="{ row }">-->
+<!--          <t-tag v-if="row.status === CONTRACT_STATUS.FAIL" theme="danger" variant="light">审核失败</t-tag>-->
+<!--          <t-tag v-if="row.status === CONTRACT_STATUS.AUDIT_PENDING" theme="warning" variant="light">待审核</t-tag>-->
+<!--          <t-tag v-if="row.status === CONTRACT_STATUS.EXEC_PENDING" theme="warning" variant="light">待履行</t-tag>-->
+<!--          <t-tag v-if="row.status === CONTRACT_STATUS.EXECUTING" theme="success" variant="light">履行中</t-tag>-->
+<!--          <t-tag v-if="row.status === CONTRACT_STATUS.FINISH" theme="success" variant="light">已完成</t-tag>-->
 <!--        </template>-->
+<!--        <template #contractType="{ row }">-->
+<!--          <p v-if="row.contractType === CONTRACT_TYPES.MAIN">审核失败</p>-->
+<!--          <p v-if="row.contractType === CONTRACT_TYPES.SUB">待审核</p>-->
+<!--          <p v-if="row.contractType === CONTRACT_TYPES.SUPPLEMENT">待履行</p>-->
+<!--        </template>-->
+
         <template #op="slotProps">
-          <a class="t-button-link" @click="rehandleClickOp(slotProps)">开始会议</a>
-          <a class="t-button-link" @click="handleClickDetail()">管理</a>
-          <a class="t-button-link" @click="handleClickDelete(slotProps)">删除</a>
+<!--          <a class="t-button-link" @click="rehandleClickOp(slotProps)">开始会议</a>-->
+          <a class="t-button-link" @click="rehandleClickOp(slotProps)">管理</a>
+          <a class="t-button-link" @click="rehandleClickOp(slotProps)">补签</a>
+
+          <!--          <a class="t-button-link" @click="handleClickDelete(slotProps)">删除</a>-->
         </template>
       </t-table>
       <t-dialog
@@ -109,7 +104,7 @@ import Trend from '@/components/trend/index.vue';
 
 import {
   CONTRACT_STATUS,
-  CONTRACT_STATUS_OPTIONS,
+   CONTRACT_STATUS_OPTIONS,
   CONTRACT_TYPES,
   CONTRACT_TYPE_OPTIONS,
   CONTRACT_PAYMENT_TYPES,
@@ -129,8 +124,8 @@ export default {
       CONTRACT_PAYMENT_TYPES,
       prefix,
       formData: {
-        mname: '',
-        mid: undefined,
+        name: '',
+        no: undefined,
         status: undefined,
       },
       data: [],
@@ -138,42 +133,31 @@ export default {
       value: 'frist',
       columns: [
         {
-          title: '会议名',
+          title: '姓名',
           fixed: 'left',
           minWidth: '300',
           align: 'left',
           ellipsis: true,
-          colKey: 'mname',
+          colKey: 'uname',
         },
-        { title: '会议状态', colKey: 'status', width: 200, cell: { col: 'status' } },
+        { title: '签到状态', colKey: 'status', width: 200, cell: { col: 'status' } },
         {
-          title: '会议号',
+          title: '电话',
           width: 200,
           ellipsis: true,
-          colKey: 'mid',
+          colKey: 'phone',
         },
         {
-          title: '开始时间',
+          title: '邮箱',
           width: 200,
           ellipsis: true,
-          // colKey: 'contractType',
-          colKey:'startTime',
+          colKey: 'email',
         },
         {
-          title: '结束时间',
+          title: '签到方式',
           width: 200,
           ellipsis: true,
-          // colKey: 'paymentType',
-          colKey: 'endTime',
-
-        },
-        {
-          title: '总人数',
-          width: 200,
-          ellipsis: true,
-          // colKey: 'amount',
-          colKey: 'totalNum',
-
+          colKey: 'signType',
         },
         {
           align: 'left',
@@ -209,25 +193,25 @@ export default {
     },
   },
   mounted() {
-    this.dataLoading = true;
-    this.$request
-      .get('/api/get-list')
-      .then((res) => {
-        if (res.code === 0) {
-          const { list = [] } = res.data;
-          this.data = list;
-          this.pagination = {
-            ...this.pagination,
-            total: list.length,
-          };
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      })
-      .finally(() => {
-        this.dataLoading = false;
-      });
+    // this.dataLoading = true;
+    // this.$request
+    //   .get('/api/get-list')
+    //   .then((res) => {
+    //     if (res.code === 0) {
+    //       const { list = [] } = res.data;
+    //       this.data = list;
+    //       this.pagination = {
+    //         ...this.pagination,
+    //         total: list.length,
+    //       };
+    //     }
+    //   })
+    //   .catch((e) => {
+    //     console.log(e);
+    //   })
+    //   .finally(() => {
+    //     this.dataLoading = false;
+    //   });
   },
   methods: {
     onReset(data) {
@@ -241,9 +225,6 @@ export default {
     },
     rehandleChange(changeParams, triggerAndData) {
       console.log('统一Change', changeParams, triggerAndData);
-    },
-    handleClickDetail() {
-      this.$router.push('/detail/base');
     },
     rehandleClickOp({ text, row }) {
       console.log(text, row);

@@ -2,7 +2,7 @@
   <div>
     <t-row :gutter="[16, 16]">
       <card title="会议基本信息">
-        <t-button theme="default" variant="outline" style="width: 88px;height: 32px;position: absolute;right: 65px">
+        <t-button theme="default" variant="outline" style="width: 88px;height: 32px;">
           返回
         </t-button>
         <div class="info-block">
@@ -21,21 +21,27 @@
         </div>
 
 
-        <t-button theme="primary" style="width: 88px;height: 32px;position: relative;left: 1249px">
-          修改会议信息
+        <t-button theme="primary" style="width: 88px;height: 32px;">
+          修改
         </t-button>
       </card>
-      <t-col :flex="3">
-        <card title="参会者信息查询">
-          1231
-        </card>
 
-      </t-col>
-      <t-col :flex="1">
-        <card title="dfdfdfd">
-          ddddd
-        </card>
-      </t-col>
+      <t-row :gutter="[16, 16]" class="card-container-margin">
+        <t-col :xs="12" :xl="9">
+          <card title="参会者信息查询">
+            <common-table/>
+          </card>
+        </t-col>
+        <t-col :xs="12" :xl="3">
+          <card title="签到">
+            <p>已签到人数：40</p>
+            <p>签到率：100%</p>
+            <p>补签人数：0</p>
+            <t-button style="margin-top: 10px">结束签到</t-button>
+
+          </card>
+        </t-col>
+      </t-row>
 
     </t-row>
 
@@ -55,10 +61,11 @@
 import { prefix } from '@/config/global';
 import model from '@/service/service-detail-base';
 import Card from '@/components/card/index.vue';
+import CommonTable from "../components/CommonTable.vue";
 
 export default {
   name: 'DetailBase',
-  components: { Card },
+  components: { Card ,CommonTable},
   data() {
     return {
       prefix,

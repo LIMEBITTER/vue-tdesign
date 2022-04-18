@@ -10,7 +10,7 @@
 
 
     <t-form-item name="account">
-      <t-input v-model="formData.account" size="large" placeholder="请输入账号">
+      <t-input v-model="formData.uname" size="large" placeholder="请输入用户名">
         <template #prefix-icon>
           <t-icon name="user" />
         </template>
@@ -51,16 +51,16 @@
         </t-input>
       </t-form-item>
 
-    <t-upload
-      v-model="files"
-      :autoUpload="autoUpload"
-      :theme="display"
-      :data="{ extra_data: 123, file_name: 'certificate' }"
-      draggable
-      action="https://service-bv448zsw-1257786608.gz.apigw.tencentcs.com/api/upload-demo"
-      @cancel-upload="onCancelUpload"
-      @remove="onRemove"
-    />
+<!--    <t-upload-->
+<!--      v-model="files"-->
+<!--      :autoUpload="autoUpload"-->
+<!--      :theme="display"-->
+<!--      :data="{ extra_data: 123, file_name: 'certificate' }"-->
+<!--      draggable-->
+<!--      action="https://service-bv448zsw-1257786608.gz.apigw.tencentcs.com/api/upload-demo"-->
+<!--      @cancel-upload="onCancelUpload"-->
+<!--      @remove="onRemove"-->
+<!--    />-->
 
 
 
@@ -94,9 +94,10 @@
 </template>
 <script lang="ts">
 import Vue from 'vue';
+import axios from "axios";
 
 const INITIAL_DATA = {
-  account:'',
+  uname:'',
   phone: '',
   email: '',
   password: '',
@@ -135,6 +136,13 @@ export default Vue.extend({
         //   this.$message.error('请同意TDesign服务协议和TDesign 隐私声明');
         //   return;
         // }
+        // this.request.post('/api/users/register',this.formData).then(res=>{
+        //   console.log(res)
+        // })
+
+        this.$http.post('http://81.68.167.55:9900/users/register',this.formData).then(res=>{
+          console.log(res)
+        })
         this.$message.success('注册成功');
         this.$emit('registerSuccess');
       }

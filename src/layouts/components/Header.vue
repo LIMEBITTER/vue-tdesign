@@ -47,7 +47,7 @@
                 <t-icon class="header-user-avatar" name="user-circle" />
               </template>
               <div class="header-user-account">
-                Tencent
+                Test
                 <t-icon name="chevron-down" />
               </div>
             </t-button>
