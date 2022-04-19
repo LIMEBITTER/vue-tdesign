@@ -104,7 +104,7 @@ import Trend from '@/components/trend/index.vue';
 
 import {
   CONTRACT_STATUS,
-   CONTRACT_STATUS_OPTIONS,
+  CONTRACT_STATUS_OPTIONS,
   CONTRACT_TYPES,
   CONTRACT_TYPE_OPTIONS,
   CONTRACT_PAYMENT_TYPES,
@@ -193,25 +193,25 @@ export default {
     },
   },
   mounted() {
-    // this.dataLoading = true;
-    // this.$request
-    //   .get('/api/get-list')
-    //   .then((res) => {
-    //     if (res.code === 0) {
-    //       const { list = [] } = res.data;
-    //       this.data = list;
-    //       this.pagination = {
-    //         ...this.pagination,
-    //         total: list.length,
-    //       };
-    //     }
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   })
-    //   .finally(() => {
-    //     this.dataLoading = false;
-    //   });
+    this.dataLoading = true;
+    this.$request
+      .get('/api/get-list')
+      .then((res) => {
+        if (res.code === 0) {
+          const { list = [] } = res.data;
+          this.data = list;
+          this.pagination = {
+            ...this.pagination,
+            total: list.length,
+          };
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        this.dataLoading = false;
+      });
   },
   methods: {
     onReset(data) {

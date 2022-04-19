@@ -8,8 +8,8 @@
     @submit="onSubmit"
   >
     <template v-if="type == 'password'">
-      <t-form-item name="account">
-        <t-input v-model="formData.account" size="large" placeholder="请输入账号：admin">
+      <t-form-item name="uname">
+        <t-input v-model="formData.uname" size="large" placeholder="请输入账号：admin">
           <template #prefix-icon>
             <t-icon name="user" />
           </template>
@@ -23,7 +23,25 @@
           :type="showPsw ? 'text' : 'password'"
           clearable
           key="password"
-          placeholder="请输入登录密码：admin"
+          placeholder="请输入登录密码：123"
+        >
+          <template #prefix-icon>
+            <t-icon name="lock-on" />
+          </template>
+          <template #suffix-icon>
+            <t-icon :name="showPsw ? 'browse' : 'browse-off'" @click="showPsw = !showPsw" />
+          </template>
+        </t-input>
+      </t-form-item>
+
+      <t-form-item name="confirmPassword">
+        <t-input
+          v-model="formData.confirmPassword"
+          size="large"
+          :type="showPsw ? 'text' : 'password'"
+          clearable
+          key="password"
+          placeholder="确认密码：123"
         >
           <template #prefix-icon>
             <t-icon name="lock-on" />
@@ -85,17 +103,23 @@ import QrcodeVue from 'qrcode.vue';
 import axios from "axios";
 
 const INITIAL_DATA = {
-  phone: '',
-  account: 'admin',
-  password: 'admin',
+  // phone: '',
+  // account: 'admin',
+  // password: 'admin',
   // verifyCode: '',
-  checked: false,
+  // checked: false,
+  uname:'',
+  password:'',
+  confirmPassword: ''
 };
+
 
 const FORM_RULES = {
   // phone: [{ required: true, message: '手机号必填', type: 'error' }],
-  account: [{ required: true, message: '账号必填', type: 'error' }],
+  uname: [{ required: true, message: '账号必填', type: 'error' }],
   password: [{ required: true, message: '密码必填', type: 'error' }],
+  confirmPassword: [{ validator: (val) => val===password_confirmed,  message: '两次输入密码不一致',trigger: 'blur', required: true ,type:'error'}],
+
   // verifyCode: [{ required: true, message: '验证码必填', type: 'error' }],
 };
 /** 高级详情 */
@@ -104,14 +128,27 @@ export default Vue.extend({
   components: {
     // QrcodeVue,
   },
+
   data() {
+
     return {
-      FORM_RULES,
+      // FORM_RULES,
+
       type: 'password',
       formData: { ...INITIAL_DATA },
       showPsw: false,
       countDown: 0,
       intervalTimer: null,
+      // 后台获取的token
+      userToken:'',
+      FORM_RULES :{
+        // phone: [{ required: true, message: '手机号必填', type: 'error' }],
+        uname: [{ required: true, message: '账号必填', type: 'error' }],
+        password: [{ required: true, message: '密码必填', type: 'error' }],
+        confirmPassword: [{ validator: (val) => val===this.formData.password,  message: '两次输入密码不一致',trigger: 'blur', required: true ,type:'error'}],
+
+        // verifyCode: [{ required: true, message: '验证码必填', type: 'error' }],
+      },
     };
   },
   beforeDestroy() {
@@ -124,14 +161,27 @@ export default Vue.extend({
     },
     async onSubmit({ validateResult }) {
       if (validateResult === true) {
+        this.$request.post('api/user/login',this.formData).then(res=> {
+          console.log(res)
 
-        await this.$store.dispatch('user/login', this.formData);
-        // axios.post('/api/users/login',this.formData).then(res => {
-        //   console.log(res)
-        // })
 
-        this.$message.success('登录成功');
-        this.$router.replace('/').catch(() => '');
+          if (res.data.code === '200') {
+            // token存储
+            this.userToken = res.data.token;
+            localStorage.setItem('user_name', this.formData.uname);
+
+            localStorage.setItem('token', this.userToken);
+            // this.$router.push('/dashboard');
+            // console.log('zhixing')
+            // console.log(this.formData.uname)
+            this.$router.replace('/').catch(() => '');
+
+            this.$message.success(res.data.msg);
+
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        })
       }
     },
     handleCounter() {

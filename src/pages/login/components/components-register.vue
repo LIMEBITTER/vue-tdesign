@@ -32,24 +32,48 @@
         </template>
       </t-input>
     </t-form-item>
+
+
+    <t-form-item name="confirmPassword">
+      <t-input
+        v-model="formData.confirmPassword"
+        size="large"
+        :type="showPsw ? 'text' : 'password'"
+        clearable
+        key="password"
+        placeholder="确认密码：123"
+      >
+        <template #prefix-icon>
+          <t-icon name="lock-on" />
+        </template>
+        <template #suffix-icon>
+          <t-icon :name="showPsw ? 'browse' : 'browse-off'" @click="showPsw = !showPsw" />
+        </template>
+      </t-input>
+    </t-form-item>
+
+
 <!--    <template v-if="type == 'phone'">-->
-      <t-form-item name="phone">
-        <t-input v-model="formData.phone" :maxlength="11" size="large" placeholder="请输入您的手机号">
-          <template #prefix-icon>
-            <t-icon name="user" />
-          </template>
-        </t-input>
-      </t-form-item>
+
+<!--      <t-form-item name="phone">-->
+<!--        <t-input v-model="formData.phone" :maxlength="11" size="large" placeholder="请输入您的手机号">-->
+<!--          <template #prefix-icon>-->
+<!--            <t-icon name="user" />-->
+<!--          </template>-->
+<!--        </t-input>-->
+<!--      </t-form-item>-->
+
 <!--    </template>-->
 
 <!--    <template v-if="type == 'email'">-->
-      <t-form-item name="email">
-        <t-input v-model="formData.email" type="text" size="large" placeholder="请输入您的邮箱">
-          <template #prefix-icon>
-            <t-icon name="mail" />
-          </template>
-        </t-input>
-      </t-form-item>
+
+<!--      <t-form-item name="email">-->
+<!--        <t-input v-model="formData.email" type="text" size="large" placeholder="请输入您的邮箱">-->
+<!--          <template #prefix-icon>-->
+<!--            <t-icon name="mail" />-->
+<!--          </template>-->
+<!--        </t-input>-->
+<!--      </t-form-item>-->
 
 <!--    <t-upload-->
 <!--      v-model="files"-->
@@ -97,17 +121,18 @@ import Vue from 'vue';
 import axios from "axios";
 
 const INITIAL_DATA = {
+  // uid:1,
   uname:'',
-  phone: '',
-  email: '',
   password: '',
+  // email: '',
+  // phone: '',
   // verifyCode: '',
-  checked: false,
+  // checked: false,
 };
 
 const FORM_RULES = {
-  phone: [{ required: true, message: '手机号必填', type: 'error' }],
-  email: [{ required: true, email: true, message: '邮箱必填', type: 'error' }],
+  // phone: [{ required: true, message: '手机号必填', type: 'error' }],
+  // email: [{ required: true, email: true, message: '邮箱必填', type: 'error' }],
   password: [{ required: true, message: '密码必填', type: 'error' }],
   // verifyCode: [{ required: true, message: '验证码必填', type: 'error' }],
 };
@@ -117,13 +142,21 @@ export default Vue.extend({
   name: 'Register',
   data() {
     return {
-      FORM_RULES,
+      // FORM_RULES,
       type: 'phone',
       emailOptions: [],
       formData: { ...INITIAL_DATA },
       showPsw: false,
       countDown: 0,
       intervalTimer: null,
+      FORM_RULES :{
+        // phone: [{ required: true, message: '手机号必填', type: 'error' }],
+        uname: [{ required: true, message: '账号必填', type: 'error' }],
+        password: [{ required: true, message: '密码必填', type: 'error' }],
+        confirmPassword: [{ validator: (val) => val===this.formData.password,  message: '两次输入密码不一致',trigger: 'blur', required: true ,type:'error'}],
+
+        // verifyCode: [{ required: true, message: '验证码必填', type: 'error' }],
+      },
     };
   },
   beforeDestroy() {
@@ -131,6 +164,7 @@ export default Vue.extend({
   },
   methods: {
     onSubmit({ validateResult }: { validateResult: boolean }) {
+
       if (validateResult === true) {
         // if (!this.formData.checked) {
         //   this.$message.error('请同意TDesign服务协议和TDesign 隐私声明');
@@ -139,12 +173,48 @@ export default Vue.extend({
         // this.request.post('/api/users/register',this.formData).then(res=>{
         //   console.log(res)
         // })
+        console.log('formdata',this.formData)
 
-        this.$http.post('http://81.68.167.55:9900/users/register',this.formData).then(res=>{
+        this.$http.post('api/user/register',this.formData).then(res=>{
           console.log(res)
+          const status = res.data.code;
+          console.log('status',status)
+          if (status === 500){
+            // console.log('zhixing500')
+          }
+          if (res.data.code===20000){
+            this.$message.success('注册成功');
+            this.$emit('registerSuccess');
+            // this.$router.push('/login');
+
+          }else {
+            this.$message.error('注册失败');
+
+          }
         })
-        this.$message.success('注册成功');
-        this.$emit('registerSuccess');
+
+
+        // this.$request.post('api/user/register',this.formData).then(res=> {
+        //   console.log(res)
+        //   localStorage.setItem('token', this.userToken);
+        //   if (res.data.code === '200') {
+        //     // this.$router.push('/dashboard');
+        //     // console.log('zhixing')
+        //     // console.log(this.formData.uname)
+        //     this.$router.replace('/').catch(() => '');
+        //
+        //     this.$message.success(res.data.msg);
+        //
+        //   } else {
+        //     this.$message.error(res.data.msg);
+        //   }
+        // })
+
+        // this.$request.post('api/users/register',this.formData).then(res=>{
+        //   console.log(res)
+        // })
+
+
       }
     },
     // switchType(val: 'email' | 'phone') {

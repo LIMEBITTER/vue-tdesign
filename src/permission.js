@@ -11,9 +11,13 @@ const whiteListRouters = store.getters['permission/whiteListRouters'];
 router.beforeEach(async (to, from, next) => {
   NProgress.start();
 
-  const token = store.getters['user/token'];
+  // const token = store.getters['user/token'];
+  // 获取 token ！！！
+  const token = localStorage.getItem('token')
+
 
   if (token) {
+    // 如果访问login router放行
     if (to.path === '/login') {
       setTimeout(() => {
         store.dispatch('user/logout');
@@ -23,7 +27,9 @@ router.beforeEach(async (to, from, next) => {
       return;
     }
 
+    // 获取用户角色
     const roles = store.getters['user/roles'];
+    console.log('roles',roles)
 
     if (roles && roles.length > 0) {
       next();

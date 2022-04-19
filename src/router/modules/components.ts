@@ -44,6 +44,12 @@ export default [
         component: () => import('@/pages/form/base/index.vue'),
         meta: { title: '会议申请' },
       },
+      {
+        path: 'joinmeeting',
+        name: 'MeetingJoin',
+        component: () => import('@/pages/form/joinmeeting/index.vue'),
+        meta: { title: '会议加入' },
+      },
       // {
       //   path: 'filter',
       //   name: 'ListFilter',
@@ -92,7 +98,7 @@ export default [
         path: 'base',
         name: 'DetailBase',
         component: () => import('@/pages/detail/base/index.vue'),
-        meta: { title: '会议信息查询' },
+        meta: { title: '会议开始结束' },
       },
       // {
       //   path: 'advanced',

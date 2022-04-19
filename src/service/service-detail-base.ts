@@ -15,7 +15,7 @@ class DetailBase {
     return [
       {
         name: '会议名',
-        value: '总部办公用品采购项目',
+        value: 'xxx会议',
       },
 
       {
@@ -30,18 +30,6 @@ class DetailBase {
         name: '申请人',
         value: '王明明',
       },
-      // {
-      //   name: '合同金额',
-      //   value: '5,000,000元',
-      // },
-      // {
-      //   name: '甲方',
-      //   value: '腾讯科技（深圳）有限公司',
-      // },
-      // {
-      //   name: '乙方',
-      //   value: '欧尚',
-      // },
       {
         name: '会议状态',
         value: '履行中',
@@ -71,10 +59,10 @@ class DetailBase {
       //     value: 'pdf',
       //   },
       // },
-      {
-        name: '备注',
-        value: '--',
-      },
+      // {
+      //   name: '备注',
+      //   value: '--',
+      // },
       {
         name: '创建时间',
         value: '2020-12-22 10:00:00',

@@ -1,11 +1,11 @@
 <template>
   <div class="login-wrapper">
-    <login-header />
+<!--    <login-header />-->
 
     <div class="login-container">
       <div class="title-container">
         <h1 class="title margin-no">登录到</h1>
-        <h3 class="title">嘉心糖在线会议服务</h3>
+        <h3 class="title">人脸签到会议系统</h3>
         <div class="sub-title">
           <p class="tip">{{ type == 'register' ? '已有账号?' : '没有账号吗?' }}</p>
           <p class="tip" @click="switchType(type == 'register' ? 'login' : 'register')">
@@ -25,13 +25,11 @@
 <script>
 import Login from './components/components-login.vue';
 import Register from './components/components-register.vue';
-import LoginHeader from './components/components-header.vue';
 import TdesignSetting from '@/layouts/setting.vue';
 
 export default {
   name: 'LoginIndex',
   components: {
-    LoginHeader,
     Login,
     Register,
     TdesignSetting,
@@ -50,4 +48,17 @@ export default {
 </script>
 <style lang="less">
 @import url('./index.less');
+  .login-container{
+      text-align: center;
+      background-color: #fff;
+      border-radius: 20px;
+      padding: 50px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+
+  }
+
+
 </style>

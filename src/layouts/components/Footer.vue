@@ -1,6 +1,6 @@
 <template>
 <!--  <div :class="prefix + '-footer'">Copyright @ 2021-{{ new Date().getFullYear() }} Tencent. All Rights Reserved</div>-->
-  <div :class="prefix + '-footer'">嘉心糖会议签到系统</div>
+  <div :class="prefix + '-footer'">人脸签到会议系统</div>
 
 
 </template>

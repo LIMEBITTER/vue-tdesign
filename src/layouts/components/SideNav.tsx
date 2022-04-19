@@ -2,8 +2,8 @@ import Vue from 'vue';
 import { prefix } from '@/config/global';
 
 import MenuContent from './MenuContent';
-import Logo from '@/assets/assets-t-logo.svg';
-import LogoFull from '@/assets/assets-logo-full.svg';
+// import Logo from '@/assets/assets-t-logo.svg';
+// import LogoFull from '@/assets/assets-logo-full.svg';
 
 import pgk from '../../../package.json';
 
@@ -115,11 +115,7 @@ export default Vue.extend({
               class={`${prefix}-side-nav-logo-wrapper`}
               onClick={() => this.handleNav('/dashboard/base')}
             >
-              {this.collapsed ? (
-                <Logo class={`${prefix}-side-nav-logo-t-logo`} />
-              ) : (
-                <LogoFull class={`${prefix}-side-nav-logo-tdesign-logo`} />
-              )}
+              {/*<h2>人脸签到会议系统</h2>*/}
             </span>
           )}
           <menu-content navData={this.menu}></menu-content>

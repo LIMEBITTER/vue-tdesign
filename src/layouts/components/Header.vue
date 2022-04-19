@@ -3,7 +3,7 @@
     <t-head-menu :class="menuCls" :theme="theme" expandType="popup" :value="active">
       <template #logo>
         <span v-if="showLogo" class="header-logo-container" @click="handleNav('/dashboard/base')">
-          <tLogoFull class="t-logo" />
+<!--          <tLogoFull class="t-logo" />-->
         </span>
         <div v-else class="header-operate-left">
           <t-button theme="default" shape="square" variant="text" @click="changeCollapsed">
@@ -21,16 +21,16 @@
           <!-- 全局通知 -->
           <notice />
 
-          <t-tooltip placement="bottom" content="代码仓库">
-            <t-button theme="default" shape="square" variant="text" @click="navToGitHub">
-              <t-icon name="logo-github" />
-            </t-button>
-          </t-tooltip>
-          <t-tooltip placement="bottom" content="帮助文档">
-            <t-button theme="default" shape="square" variant="text" @click="navToHelper">
-              <t-icon name="help-circle" />
-            </t-button>
-          </t-tooltip>
+<!--          <t-tooltip placement="bottom" content="代码仓库">-->
+<!--            <t-button theme="default" shape="square" variant="text" @click="navToGitHub">-->
+<!--              <t-icon name="logo-github" />-->
+<!--            </t-button>-->
+<!--          </t-tooltip>-->
+<!--          <t-tooltip placement="bottom" content="帮助文档">-->
+<!--            <t-button theme="default" shape="square" variant="text" @click="navToHelper">-->
+<!--              <t-icon name="help-circle" />-->
+<!--            </t-button>-->
+<!--          </t-tooltip>-->
           <t-dropdown :min-column-width="125" trigger="click">
             <template #dropdown>
               <t-dropdown-menu>
@@ -47,16 +47,16 @@
                 <t-icon class="header-user-avatar" name="user-circle" />
               </template>
               <div class="header-user-account">
-                Test
+                {{user_name}}
                 <t-icon name="chevron-down" />
               </div>
             </t-button>
           </t-dropdown>
-          <t-tooltip placement="bottom" content="系统设置">
-            <t-button theme="default" shape="square" variant="text" @click="toggleSettingPanel">
-              <t-icon name="setting" />
-            </t-button>
-          </t-tooltip>
+<!--          <t-tooltip placement="bottom" content="系统设置">-->
+<!--            <t-button theme="default" shape="square" variant="text" @click="toggleSettingPanel">-->
+<!--              <t-icon name="setting" />-->
+<!--            </t-button>-->
+<!--          </t-tooltip>-->
         </div>
       </template>
     </t-head-menu>
@@ -66,7 +66,7 @@
 <script>
 import Vue from 'vue';
 import { prefix } from '@/config/global';
-import tLogoFull from '@/assets/assets-logo-full.svg';
+// import tLogoFull from '@/assets/assets-logo-full.svg';
 
 import Notice from './Notice.vue';
 import Search from './Search.vue';
@@ -75,7 +75,7 @@ import MenuContent from './MenuContent';
 export default Vue.extend({
   components: {
     MenuContent,
-    tLogoFull,
+    // tLogoFull,
     Notice,
     Search,
   },
@@ -110,6 +110,7 @@ export default Vue.extend({
       prefix,
       visibleNotice: false,
       isSearchFocus: false,
+      user_name:'',
     };
   },
   computed: {
@@ -140,11 +141,17 @@ export default Vue.extend({
       ];
     },
   },
+  mounted() {
+    this.user_name = localStorage.getItem('user_name');
+  },
   methods: {
     toggleSettingPanel() {
       this.$store.commit('setting/toggleSettingPanel', true);
     },
     handleLogout() {
+      // 退出登录 清空token
+      localStorage.removeItem('user_name');
+      localStorage.removeItem('token');
       this.$router.push(`/login?redirect=${this.$router.history.current.fullPath}`);
     },
     changeCollapsed() {

@@ -17,8 +17,8 @@
         <!-- 合同名称,合同类型 -->
         <t-row class="row-gap" :gutter="[16, 24]">
           <t-col :span="6">
-            <t-form-item label="会议名称" name="name">
-              <t-input v-model="formData.name" :style="{ width: '322px' }" placeholder="请输入内容" />
+            <t-form-item label="会议名" name="mname">
+              <t-input v-model="formData.mname" :style="{ width: '322px' }" placeholder="请输入内容" />
             </t-form-item>
           </t-col>
           <t-col :span="6">
@@ -79,10 +79,21 @@
 <!--              </t-select>-->
 <!--            </t-form-item>-->
           </t-col>
+<!--          <t-col :span="6">-->
+<!--            <t-form-item label="会议开始日期" name="signDate">-->
+<!--              <t-date-picker-->
+<!--                v-model="formData.signDate"-->
+<!--                :style="{ width: '322px' }"-->
+<!--                theme="primary"-->
+<!--                mode="date"-->
+<!--                separator="/"-->
+<!--              />-->
+<!--            </t-form-item>-->
+<!--          </t-col>-->
           <t-col :span="6">
-            <t-form-item label="会议开始日期" name="signDate">
+            <t-form-item label="会议预定时间" name="expectTime">
               <t-date-picker
-                v-model="formData.signDate"
+                v-model="formData.expectTime"
                 :style="{ width: '322px' }"
                 theme="primary"
                 mode="date"
@@ -91,20 +102,9 @@
             </t-form-item>
           </t-col>
           <t-col :span="6">
-            <t-form-item label="会议预计时间" name="startDate">
+            <t-form-item label="会议结束时间" name="endTime">
               <t-date-picker
-                v-model="formData.startDate"
-                :style="{ width: '322px' }"
-                theme="primary"
-                mode="date"
-                separator="/"
-              />
-            </t-form-item>
-          </t-col>
-          <t-col :span="6">
-            <t-form-item label="会议结束日期" name="endDate">
-              <t-date-picker
-                v-model="formData.endDate"
+                v-model="formData.endTime"
                 :style="{ width: '322px' }"
                 theme="primary"
                 mode="date"
@@ -171,15 +171,10 @@ const INITIAL_DATA = {
   // files: [],
 };
 const FORM_RULES = {
-  name: [{ required: true, message: '请输入合同名称', type: 'error' }],
-  type: [{ required: true, message: '请选择合同类型', type: 'error' }],
-  payment: [{ required: true, message: '请选择合同收付类型', type: 'error' }],
-  amount: [{ required: true, message: '请输入合同金额', type: 'error' }],
-  partyA: [{ required: true, message: '请选择甲方', type: 'error' }],
-  partyB: [{ required: true, message: '请选择乙方', type: 'error' }],
-  signDate: [{ required: true, message: '请选择日期', type: 'error' }],
-  startDate: [{ required: true, message: '请选择日期', type: 'error' }],
-  endDate: [{ required: true, message: '请选择日期', type: 'error' }],
+  mname: [{ required: true, message: '请输入会议名', type: 'error' }],
+  partyA: [{ required: true, message: '请选择申请人', type: 'error' }],
+  expectTime: [{ required: true, message: '请选择预定时间', type: 'error' }],
+  endTime: [{ required: true, message: '请选择结束时间', type: 'error' }],
 };
 
 export default {
@@ -196,9 +191,9 @@ export default {
       //   { label: '类型C', value: '3' },
       // ],
       partyAOptions: [
-        { label: '公司A', value: '1' },
-        { label: '公司B', value: '2' },
-        { label: '公司C', value: '3' },
+        { label: 'test1', value: '1' },
+        { label: 'test2', value: '2' },
+        { label: 'test3', value: '3' },
       ],
       // partyBOptions: [
       //   { label: '公司A', value: '1' },
@@ -207,15 +202,10 @@ export default {
       // ],
       textareaValue: '',
       rules: {
-        name: [{ required: true, message: '请输入合同名称', type: 'error' }],
-        // type: [{ required: true, message: '请选择合同类型', type: 'error' }],
-        // payment: [{ required: true, message: '请选择合同收付类型', type: 'error' }],
-        // amount: [{ required: true, message: '请输入合同金额', type: 'error' }],
-        partyA: [{ required: true, message: '请选择甲方', type: 'error' }],
-        // partyB: [{ required: true, message: '请选择乙方', type: 'error' }],
-        signDate: [{ required: true, message: '请选择日期', type: 'error' }],
-        startDate: [{ required: true, message: '请选择日期', type: 'error' }],
-        endDate: [{ required: true, message: '请选择日期', type: 'error' }],
+        mname: [{ required: true, message: '请输入会议名', type: 'error' }],
+        partyA: [{ required: true, message: '请选择申请人', type: 'error' }],
+        expectTime: [{ required: true, message: '请选择预定时间', type: 'error' }],
+        endTime: [{ required: true, message: '请选择结束时间', type: 'error' }],
       },
     };
   },
@@ -238,11 +228,22 @@ export default {
       this.stepSuccess = !this.stepSuccess;
     },
     onReset() {
-      this.$message.warning('取消新建');
+      this.$message.warning('取消申请');
     },
     onSubmit({ validateResult }) {
       if (validateResult === true) {
-        this.$message.success('新建成功');
+        this.$request.post('api/meetings/apply',this.formData).then(res=> {
+          console.log('meeting apply',res)
+
+          if (res.data.code === '200') {
+
+            this.$message.success(res.data.msg);
+
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        })
+        this.$message.success('申请成功');
       }
     },
   },
