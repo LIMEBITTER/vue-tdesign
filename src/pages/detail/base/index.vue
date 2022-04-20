@@ -6,17 +6,18 @@
           返回
         </t-button>
         <div class="info-block">
-          <div v-for="(item, index) in baseInfoData" :key="index" class="info-item">
-            <h1>{{ item.name }}</h1>
-            <span
-              :class="{
-              ['inProgress']: item.type && item.type.value === 'inProgress',
-              ['pdf']: item.type && item.type.value === 'pdf',
-            }"
-            >
-            <i v-if="item.type && item.type.key === 'contractStatus'" />
-            {{ item.value }}
-          </span>
+          <div class="info-item">
+            <table
+
+
+            <!--            <span-->
+<!--              :class="{-->
+<!--              ['inProgress']: item.type && item.type.value === 'inProgress',-->
+<!--            }"-->
+<!--            >-->
+<!--            <i v-if="item.type && item.type.key === 'contractStatus'" />-->
+<!--            {{ item.value }}-->
+<!--          </span>-->
           </div>
         </div>
 
@@ -70,7 +71,21 @@ export default {
     return {
       prefix,
       baseInfoData: model.getBaseInfoData(),
+      formData:{
+        mid:'',
+        startTime:'',
+        endTime:'',
+        totalNum:null,
+      }
+
     };
+  },
+  mounted() {
+    this.formData.mid = this.$route.params.mid
+    this.formData.startTime = this.$route.params.startTime
+    this.formData.endTime = this.$route.params.endTime
+    this.formData.totalNum = this.$route.params.totalNum
+
   },
   methods: {},
 };

@@ -120,7 +120,7 @@ export default Vue.extend({
           )}
           <menu-content navData={this.menu}></menu-content>
           <span slot="operations" class="version-container">
-            {!this.collapsed && 'TDesign Starter'} {pgk.version}
+            {!this.collapsed && '人脸会议签到系统'}
           </span>
         </t-menu>
         <div class={`${prefix}-side-nav-placeholder${this.collapsed ? '-hidden' : ''}`}></div>

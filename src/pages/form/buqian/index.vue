@@ -11,13 +11,13 @@
   >
     <div class="form-basic-container">
       <div class="form-basic-item">
-        <div class="form-basic-container-title">加入会议</div>
+        <div class="form-basic-container-title">会议补签</div>
         <!-- 表单内容 -->
 
         <!-- 合同名称,合同类型 -->
         <t-row class="row-gap" :gutter="[16, 24]">
           <t-col :span="6">
-            <t-form-item label="会议号" name="mname">
+            <t-form-item label="补签会议号" name="mname">
               <t-input v-model="formData.mname" :style="{ width: '322px' }" placeholder="请输入内容" />
             </t-form-item>
           </t-col>
@@ -25,30 +25,22 @@
 
           </t-col>
           <t-col :span="6">
-            <t-form-item label="会议名" name="mname">
-              <t-input v-model="formData.mname" :style="{ width: '322px' }" placeholder="请输入内容" />
+            <t-form-item label="补签人" name="user">
+              <t-input v-model="formData.user" :style="{ width: '322px' }" placeholder="请输入内容" />
             </t-form-item>
           </t-col>
           <t-col :span="6"></t-col>
-
-          <t-col :span="6">
-            <t-form-item label="申请人" name="user_name">
-              <t-input v-model="user_name"  :style="{ width: '322px' }"  placeholder="请输入内容" disabled></t-input>
-
-            </t-form-item>
-            <t-form-item label="会议总人数" name="totalNum">
-              <t-input v-model="totalNum"  :style="{ width: '322px' }" type="number"  placeholder="请输入内容"></t-input>
-
-            </t-form-item>
-          </t-col>
-
-
 
 
           <t-col :span="6">
           </t-col>
 
         </t-row>
+                <div class="form-basic-container-title form-title-gap">其它信息</div>
+
+                <t-form-item label="补签原因" name="comment">
+                  <t-textarea v-model="formData.comment" :height="124" placeholder="请输入补签原因" />
+                </t-form-item>
 
       </div>
     </div>
@@ -78,7 +70,7 @@ const FORM_RULES = {
 };
 
 export default {
-  name: 'MeetingJoin',
+  name: 'BuQian',
   data() {
     return {
       prefix,

@@ -36,7 +36,7 @@ export default [
         path: 'filter',
         name: 'ListFilter',
         component: () => import('@/pages/list/filter/index.vue'),
-        meta: { title: '所有预定会议查看列表-（会议信息查询）' },
+        meta: { title: '会议历史查询' },
       },
       {
         path: 'base',
@@ -50,12 +50,18 @@ export default [
         component: () => import('@/pages/form/joinmeeting/index.vue'),
         meta: { title: '会议加入' },
       },
-      // {
-      //   path: 'filter',
-      //   name: 'ListFilter',
-      //   component: () => import('@/pages/list/filter/index.vue'),
-      //   meta: { title: '会议历史查询' },
-      // },
+      {
+        path: 'buqian',
+        name: 'BuQian',
+        component: () => import('@/pages/form/buqian/index.vue'),
+        meta: { title: '补签页面' },
+      },
+      {
+        path: 'camera',
+        name: 'Camera',
+        component: () => import('@/pages/camera/Camera.vue'),
+        meta: { title: '摄像头' },
+      },
       // {
       //   path: 'tree',
       //   name: 'ListTree',
@@ -120,55 +126,5 @@ export default [
       // },
     ],
   },
-  // {
-  //   path: '/result',
-  //   name: 'result',
-  //   component: Layout,
-  //   redirect: '/result/success',
-  //   meta: { title: '结果页', icon: 'check-circle' },
-  //   children: [
-  //     {
-  //       path: 'success',
-  //       name: 'ResultSuccess',
-  //       component: () => import('@/pages/result/success/index.vue'),
-  //       meta: { title: '成功页' },
-  //     },
-  //     {
-  //       path: 'fail',
-  //       name: 'ResultFail',
-  //       component: () => import('@/pages/result/fail/index.vue'),
-  //       meta: { title: '失败页' },
-  //     },
-  //     {
-  //       path: 'network-error',
-  //       name: 'ResultNetworkError',
-  //       component: () => import('@/pages/result/network-error/index.vue'),
-  //       meta: { title: '网络异常' },
-  //     },
-  //     {
-  //       path: '403',
-  //       name: 'Result403',
-  //       component: () => import('@/pages/result/403/index.vue'),
-  //       meta: { title: '无权限' },
-  //     },
-  //     {
-  //       path: '404',
-  //       name: 'Result404',
-  //       component: () => import('@/pages/result/404/index.vue'),
-  //       meta: { title: '访问页面不存在页' },
-  //     },
-  //     {
-  //       path: '500',
-  //       name: 'Result500',
-  //       component: () => import('@/pages/result/500/index.vue'),
-  //       meta: { title: '服务器出错页' },
-  //     },
-  //     {
-  //       path: 'browser-incompatible',
-  //       name: 'ResultBrowserIncompatible',
-  //       component: () => import('@/pages/result/browser-incompatible/index.vue'),
-  //       meta: { title: '浏览器不兼容页' },
-  //     },
-  //   ],
-  // },
+
 ];

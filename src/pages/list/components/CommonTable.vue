@@ -87,7 +87,7 @@
 <!--          </p>-->
 <!--        </template>-->
         <template #op="slotProps">
-          <a class="t-button-link" @click="rehandleClickOp(slotProps)">开始会议</a>
+          <a class="t-button-link" @click="startMeeting(slotProps)">开始会议</a>
           <a class="t-button-link" @click="handleClickDetail()">管理</a>
           <a class="t-button-link" @click="handleClickDelete(slotProps)">删除</a>
         </template>
@@ -211,14 +211,19 @@ export default {
   mounted() {
     this.dataLoading = true;
     this.$request
-      .get('/api/get-list')
+      .get('/api/meetingRecord')
       .then((res) => {
-        if (res.code === 0) {
-          const { list = [] } = res.data;
-          this.data = list;
+        console.log('查询所有会议：',res)
+        if (res.data.code === '200') {
+          // const { list = [] } = res.data.result;
+          // console.log('list',list)
+          // this.data = list;
+          this.data = res.data.result;
+
+          console.log('data',this.data)
           this.pagination = {
             ...this.pagination,
-            total: list.length,
+            total: this.data.length,
           };
         }
       })
@@ -266,6 +271,21 @@ export default {
     resetIdx() {
       this.deleteIdx = -1;
     },
+
+    startMeeting(currentRow){
+      console.log('currentRow',currentRow)
+
+      // this.$router.push('/detail/base')
+      this.$router.push({
+        name:'DetailBase',
+        params:{
+          mid:currentRow.row.mid,
+          startTime:currentRow.row.startTime,
+          endTime:currentRow.row.endTime,
+          totalNum:currentRow.row.totalNum
+        }
+      })
+    }
   },
 };
 </script>

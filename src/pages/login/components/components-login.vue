@@ -114,14 +114,14 @@ const INITIAL_DATA = {
 };
 
 
-const FORM_RULES = {
+// const FORM_RULES = {
   // phone: [{ required: true, message: '手机号必填', type: 'error' }],
-  uname: [{ required: true, message: '账号必填', type: 'error' }],
-  password: [{ required: true, message: '密码必填', type: 'error' }],
-  confirmPassword: [{ validator: (val) => val===password_confirmed,  message: '两次输入密码不一致',trigger: 'blur', required: true ,type:'error'}],
+  // uname: [{ required: true, message: '账号必填', type: 'error' }],
+  // password: [{ required: true, message: '密码必填', type: 'error' }],
+  // confirmPassword: [{ validator: (val) => val===password_confirmed,  message: '两次输入密码不一致',trigger: 'blur', required: true ,type:'error'}],
 
   // verifyCode: [{ required: true, message: '验证码必填', type: 'error' }],
-};
+// };
 /** 高级详情 */
 export default Vue.extend({
   name: 'Login',
@@ -167,7 +167,7 @@ export default Vue.extend({
 
           if (res.data.code === '200') {
             // token存储
-            this.userToken = res.data.token;
+            this.userToken = res.data.result.token;
             localStorage.setItem('user_name', this.formData.uname);
 
             localStorage.setItem('token', this.userToken);
@@ -179,7 +179,7 @@ export default Vue.extend({
             this.$message.success(res.data.msg);
 
           } else {
-            this.$message.error(res.data.msg);
+            this.$message.error(res.data.message);
           }
         })
       }

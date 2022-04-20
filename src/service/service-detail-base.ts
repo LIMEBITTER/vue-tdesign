@@ -51,18 +51,7 @@ class DetailBase {
         name: '会议结束时间',
         value: '2022-12-20',
       },
-      // {
-      //   name: '合同附件',
-      //   value: '总部办公用品采购项目合同.pdf',
-      //   type: {
-      //     key: 'contractAnnex',
-      //     value: 'pdf',
-      //   },
-      // },
-      // {
-      //   name: '备注',
-      //   value: '--',
-      // },
+
       {
         name: '创建时间',
         value: '2020-12-22 10:00:00',
