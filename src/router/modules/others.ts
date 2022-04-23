@@ -15,6 +15,12 @@ export default [
         component: () => import('@/pages/user/index.vue'),
         meta: { title: '会议人员信息' },
       },
+      {
+        path: 'indexm',
+        name: 'MemberIndex',
+        component: () => import('@/pages/member/index.vue'),
+        meta: { title: '参会人员信息' },
+      },
     ],
   },
   // {

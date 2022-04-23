@@ -13,30 +13,23 @@ export default [
     meta: { title: '会议管理', icon: ListIcon },
 
     children: [
-      // {
-      //   path: 'base',
-      //   name: 'ListBase',
-      //   component: () => import('@/pages/list/base/index.vue'),
-      //   meta: { title: '基础列表页' },
-      // },
-      // {
-      //   path: 'card',
-      //   name: 'ListCard',
-      //   component: () => import('@/pages/list/card/index.vue'),
-      //   meta: { title: '卡片列表页' },
-      // },
-
-      // {
-      //   path: 'filter',
-      //   name: 'ListFilter',
-      //   component: () => import('@/pages/list/filter/index.vue'),
-      //   meta: { title: '会议开始结束' },
-      // },
       {
         path: 'filter',
         name: 'ListFilter',
         component: () => import('@/pages/list/filter/index.vue'),
         meta: { title: '会议历史查询' },
+      },
+      {
+        path: 'filterall',
+        name: 'ListFilterAll',
+        component: () => import('@/pages/list/filterallcheck/index.vue'),
+        meta: { title: '会议查看' },
+      },
+      {
+        path: 'checkallmeetings',
+        name: 'ListFilterUser',
+        component: () => import('@/pages/list/checkallmeetings/index.vue'),
+        meta: { title: '所有会议情况浏览' },
       },
       {
         path: 'base',
@@ -62,12 +55,7 @@ export default [
         component: () => import('@/pages/camera/Camera.vue'),
         meta: { title: '摄像头' },
       },
-      // {
-      //   path: 'tree',
-      //   name: 'ListTree',
-      //   component: () => import('@/pages/list/tree/index.vue'),
-      //   meta: { title: '树状筛选列表页' },
-      // },
+
     ],
   },
   {
@@ -104,14 +92,20 @@ export default [
         path: 'base',
         name: 'DetailBase',
         component: () => import('@/pages/detail/base/index.vue'),
-        meta: { title: '会议开始结束' },
+        meta: { title: '会议开始结束' ,keepAlive:false},
       },
-      // {
-      //   path: 'advanced',
-      //   name: 'DetailAdvanced',
-      //   component: () => import('@/pages/detail/advanced/index.vue'),
-      //   meta: { title: '多卡片详情页' },
-      // },
+      {
+        path: 'basecheck',
+        name: 'BaseCheck',
+        component: () => import('@/pages/detail/basecheck/index.vue'),
+        meta: { title: '当前会议信息' },
+      },
+      {
+        path: 'facedetection',
+        name: 'FaceDetection',
+        component: () => import('@/pages/detail/facedetection/index.vue'),
+        meta: { title: '人脸签到' },
+      },
       // {
       //   path: 'deploy',
       //   name: 'DetailDeploy',

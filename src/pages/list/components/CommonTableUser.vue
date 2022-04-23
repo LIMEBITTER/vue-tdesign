@@ -35,16 +35,7 @@
                 />
               </t-form-item>
             </t-col>
-<!--            <t-col :flex="1">-->
-<!--              <t-form-item label="合同类型" name="type">-->
-<!--                <t-select-->
-<!--                  v-model="formData.type"-->
-<!--                  class="form-item-content`"-->
-<!--                  :options="CONTRACT_TYPE_OPTIONS"-->
-<!--                  placeholder="请选择合同类型"-->
-<!--                />-->
-<!--              </t-form-item>-->
-<!--            </t-col>-->
+
           </t-row>
         </t-col>
 
@@ -80,9 +71,7 @@
         </template>
 
         <template #op="slotProps">
-<!--          <a class="t-button-link" @click="startMeeting(slotProps)">开始会议</a>-->
-          <a class="t-button-link" @click="handleClickDetail(slotProps)">详情</a>
-          <a class="t-button-link" @click="handleClickDelete(slotProps)">删除</a>
+          <a class="t-button-link" @click="signNow(slotProps)">现在签到</a>
         </template>
       </t-table>
       <t-dialog
@@ -109,7 +98,7 @@ import {
 } from '@/constants';
 
 export default {
-  name: 'list-table',
+  name: 'list-table-user',
   components: {
     Trend,
   },
@@ -143,27 +132,33 @@ export default {
           colKey: 'mid',
         },
         {
-          title: '开始时间',
+          title: '签到方式',
           width: 200,
           ellipsis: true,
           // colKey: 'contractType',
-          colKey:'startTime',
+          colKey:'signMethod',
         },
-        // {
-        //   title: '结束时间',
-        //   width: 200,
-        //   ellipsis: true,
-        //   // colKey: 'paymentType',
-        //   colKey: 'endTime',
-        //
-        // },
         {
-          title: '总人数',
+          title: '当前签到状态',
+          width: 200,
+          ellipsis: true,
+          // colKey: 'paymentType',
+          colKey: 'isSign',
+
+        },
+        {
+          title: '是否为补签',
           width: 200,
           ellipsis: true,
           // colKey: 'amount',
-          colKey: 'totalNum',
-
+          colKey: 'isRetroactive',
+        },
+        {
+          title: '签到时间',
+          width: 200,
+          ellipsis: true,
+          // colKey: 'amount',
+          colKey: 'signTime',
         },
         {
           align: 'left',
@@ -199,30 +194,30 @@ export default {
     },
   },
   mounted() {
-    // this.dataLoading = true;
-    // this.$request
-    //   .get('/api/meetingRecord')
-    //   .then((res) => {
-    //     console.log('查询所有会议：',res)
-    //     if (res.data.code === '200') {
-    //       // const { list = [] } = res.data.result;
-    //       // console.log('list',list)
-    //       // this.data = list;
-    //       this.data = res.data.result;
-    //
-    //       console.log('data',this.data)
-    //       this.pagination = {
-    //         ...this.pagination,
-    //         total: this.data.length,
-    //       };
-    //     }
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   })
-    //   .finally(() => {
-    //     this.dataLoading = false;
-    //   });
+    this.dataLoading = true;
+    this.$request
+      .get('/api/meetingRecord')
+      .then((res) => {
+        console.log('查询所有会议：',res)
+        if (res.data.code === '200') {
+          // const { list = [] } = res.data.result;
+          // console.log('list',list)
+          // this.data = list;
+          this.data = res.data.result;
+
+          console.log('data',this.data)
+          this.pagination = {
+            ...this.pagination,
+            total: this.data.length,
+          };
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        this.dataLoading = false;
+      });
   },
   methods: {
     onReset(data) {
@@ -283,6 +278,11 @@ export default {
     //     }
     //   })
     // }
+    signNow(){
+      // 判断当前签到状态 已签到提示已经签到 未签到则跳转至人脸签到页面
+      this.$router.push('/detail/facedetection')
+
+    }
   },
 };
 </script>

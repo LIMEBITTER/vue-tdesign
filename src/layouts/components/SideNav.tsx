@@ -45,10 +45,17 @@ export default Vue.extend({
   data() {
     return {
       prefix,
+      myMenu:this.menu,
     };
   },
+
   mounted() {
     this.autoCollapsed();
+    console.log('mymenu--------------',this.myMenu)
+    // 隐藏要隐藏的菜单
+    // this.myMenu.pop()
+    console.log('mymenu--------------',this.myMenu)
+
 
     window.onresize = () => {
       this.autoCollapsed();
@@ -115,10 +122,10 @@ export default Vue.extend({
               class={`${prefix}-side-nav-logo-wrapper`}
               onClick={() => this.handleNav('/dashboard/base')}
             >
-              {/*<h2>人脸签到会议系统</h2>*/}
+              {/* <h2>人脸签到会议系统</h2> */}
             </span>
           )}
-          <menu-content navData={this.menu}></menu-content>
+          <menu-content navData={this.myMenu}></menu-content>
           <span slot="operations" class="version-container">
             {!this.collapsed && '人脸会议签到系统'}
           </span>

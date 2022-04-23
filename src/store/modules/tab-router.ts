@@ -43,7 +43,8 @@ const mutations = {
     const { routeIdx } = newRoute;
     state.tabRouterList = [state.tabRouterList?.[routeIdx]];
   },
-  removeTabRouterList() {
+  removeTabRouterList(state: TTabRouterType, newRoute: TRouterInfo) {
+    console.log('state',state)
     state.tabRouterList = [];
   },
   initTabRouterList(state: TTabRouterType, newRoute: TRouterInfo[]) {

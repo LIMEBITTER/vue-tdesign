@@ -1,6 +1,6 @@
 <template>
   <div>
-    <t-row :gutter="[16, 16]">
+    <t-row>
       <card title="会议基本信息">
         <t-button theme="default" variant="outline" style="width: 88px;height: 32px;" @click="back()">
           返回
@@ -17,9 +17,6 @@
           <h1>创建时间</h1>
           <div class="info-item">
 
-
-
-
             <!--            <span-->
 <!--              :class="{-->
 <!--              ['inProgress']: item.type && item.type.value === 'inProgress',-->
@@ -32,41 +29,42 @@
         </div>
 
 
-        <t-button theme="primary" style="width: 88px;height: 32px;">
-          修改
-        </t-button>
       </card>
+        <t-col>
+          <card title="人脸上传" class="container-base-margin-top">
+            <camera/>
 
-      <t-row :gutter="[16, 16]" class="card-container-margin">
-        <t-col :xs="12" :xl="9">
-          <card title="参会者信息查询">
-            <common-table :mid="formData.mid"/>
-          </card>
-        </t-col>
-        <t-col :xs="12" :xl="3">
-          <card title="签到">
-            <p>已签到人数：40</p>
-            <p>签到率：100%</p>
-            <p>补签人数：0</p>
-            <t-button style="margin-top: 10px" @click="endMeeting()">结束签到</t-button>
 
           </card>
         </t-col>
-      </t-row>
+
+
+        <t-col >
+          <card title="您的信息" class="container-base-margin-top" >
+            <p>姓名：</p>
+            <p>邮箱：</p>
+            <p>电话：0</p>
+
+          </card>
+
+          <div class="form-submit-container" style="margin: auto">
+                <t-button style="margin-top: 20px" theme="primary" class="form-submit-confirm" type="submit"> 人脸签到 </t-button>
+          </div>
+        </t-col>
+
 
     </t-row>
-
   </div>
 </template>
 <script>
 import { prefix } from '@/config/global';
 import model from '@/service/service-detail-base';
 import Card from '@/components/card/index.vue';
-import CommonTable from "../components/CommonTable.vue";
+import Camera from "../components/Camera.vue";
 
 export default {
-  name: 'DetailBase',
-  components: { Card ,CommonTable},
+  name: 'FaceDetection',
+  components: { Card,Camera },
   data() {
     return {
       prefix,
@@ -97,6 +95,7 @@ export default {
     back(){
       // this.$router.push('/list/filterall')
       this.$router.go(-1)
+
     },
     endMeeting(){
       console.log('结束会议！！！！')
@@ -112,4 +111,5 @@ export default {
 </script>
 <style lang="less" scoped>
 @import './index';
+
 </style>

@@ -80,21 +80,33 @@
 <!--        </template>-->
 
         <template #op="slotProps">
-<!--          <a class="t-button-link" @click="rehandleClickOp(slotProps)">开始会议</a>-->
-          <a class="t-button-link" @click="rehandleClickOp(slotProps)">管理</a>
-          <a class="t-button-link" @click="rehandleClickOp(slotProps)">补签</a>
-
-          <!--          <a class="t-button-link" @click="handleClickDelete(slotProps)">删除</a>-->
+          <a class="t-button-link" @click="checkInfo(slotProps)">详情</a>
+          <a class="t-button-link" @click="buqian(slotProps)">补签</a>
         </template>
       </t-table>
-      <t-dialog
-        header="确认删除当前所选会议？"
-        :body="confirmBody"
-        :visible.sync="confirmVisible"
-        @confirm="onConfirmDelete"
-        :onCancel="onCancel"
-      >
+<!--      <t-dialog-->
+<!--        header="确认删除当前所选会议？"-->
+<!--        :body="confirmBody"-->
+<!--        :visible.sync="confirmVisible"-->
+<!--        @confirm="onConfirmDelete"-->
+<!--        :onCancel="onCancel"-->
+<!--      >-->
+<!--      </t-dialog>-->
+      <t-dialog header="人员补签" :closeBtn="false" :visible.sync="visible5" @confirm="onConfirm" :onClose="close5">
+        <div slot="body">
+          <t-form :data="resignData" :labelAlign="formData.labelAlign" :labelWidth="60">
+            <t-form-item label="会议号" name="mid" disabled>
+              <t-input v-model="resignData.mid"></t-input>
+            </t-form-item>
+            <t-form-item label="补签人" name="user" disabled>
+              <t-input v-model="resignData.resignedUser"></t-input>
+            </t-form-item>
+          </t-form>
+
+
+        </div>
       </t-dialog>
+
     </div>
   </div>
 </template>
@@ -115,8 +127,13 @@ export default {
   components: {
     Trend,
   },
+  // 子组件接收并深度监听赋值
+  props:['mid'],
+
   data() {
     return {
+      visible5: false,
+      // 重新签到的人员
       CONTRACT_STATUS,
       CONTRACT_STATUS_OPTIONS,
       CONTRACT_TYPES,
@@ -127,6 +144,11 @@ export default {
         name: '',
         no: undefined,
         status: undefined,
+      },
+      // 补签对话框数据
+      resignData:{
+        resignedUser:'',
+        mid:this.mid,
       },
       data: [],
       dataLoading: false,
@@ -141,18 +163,18 @@ export default {
           colKey: 'uname',
         },
         { title: '签到状态', colKey: 'status', width: 200, cell: { col: 'status' } },
-        {
-          title: '电话',
-          width: 200,
-          ellipsis: true,
-          colKey: 'phone',
-        },
-        {
-          title: '邮箱',
-          width: 200,
-          ellipsis: true,
-          colKey: 'email',
-        },
+        // {
+        //   title: '电话',
+        //   width: 200,
+        //   ellipsis: true,
+        //   colKey: 'phone',
+        // },
+        // {
+        //   title: '邮箱',
+        //   width: 200,
+        //   ellipsis: true,
+        //   colKey: 'email',
+        // },
         {
           title: '签到方式',
           width: 200,
@@ -183,13 +205,12 @@ export default {
       deleteIdx: -1,
     };
   },
-  computed: {
-    confirmBody() {
-      if (this.deleteIdx > -1) {
-        const { name } = this.data?.[this.deleteIdx];
-        return `删除后，${name}的所有合同信息将被清空，且无法恢复`;
-      }
-      return '';
+
+  // 实现每次进入不同的会议能实时更新会议号
+  watch:{
+    mid(){
+      this.resignData.mid = this.mid
+
     },
   },
   mounted() {
@@ -247,6 +268,33 @@ export default {
     resetIdx() {
       this.deleteIdx = -1;
     },
+    buqian(e){
+      console.log('当前补签人员',e)
+      // 将当前行的人员姓名存入
+      this.resignData.resignedUser = e.row.uname
+      this.visible5 = true
+    },
+    checkInfo(currentRow){
+      console.log('当前人员',currentRow)
+      // 当前人员信息
+      this.$router.push('/user/indexm')
+
+
+    },
+    sendingRequest() {
+      console.log('sending request');
+    },
+    close5() {
+      this.visible5 = false;
+    },
+    onConfirm(context) {
+      const { e } = context;
+      // todo something else here
+      this.sendingRequest();
+      this.visible5 = false;
+      e.stopPropagation();
+    },
+
   },
 };
 </script>

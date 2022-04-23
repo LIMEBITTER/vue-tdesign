@@ -39,8 +39,8 @@
 <!--              </t-select>-->
 <!--            </t-form-item>-->
             <t-col :span="6">
-              <t-form-item label="申请人" name="user_name">
-                <t-input v-model="user_name"  :style="{ width: '322px' }"  placeholder="请输入内容" disabled></t-input>
+              <t-form-item label="申请人" name="host">
+                <t-input v-model="formData.host"  :style="{ width: '322px' }"  placeholder="请输入内容" disabled></t-input>
 
               </t-form-item>
               <t-form-item label="会议总人数" name="totalNum">
@@ -107,13 +107,11 @@ import { prefix } from '@/config/global';
 
 const INITIAL_DATA = {
   mname: '',
-  // type: '',
-  // partyA: '',
-  // startTime: '',
   endTime: '',
   totalNum:null,
   // 此页面默认申请为预定会议 0
   isApply:0,
+  host:''
 };
 const FORM_RULES = {
   mname: [{ required: true, message: '请输入会议名', type: 'error' }],
@@ -129,7 +127,7 @@ export default {
     return {
       prefix,
       stepSuccess: true,
-      formData: { ...INITIAL_DATA },
+      formData: { ...INITIAL_DATA},
       FORM_RULES,
       // partyAOptions: [
       //   { label: 'test1', value: '1' },
@@ -142,6 +140,7 @@ export default {
   },
   mounted() {
     this.user_name = localStorage.getItem('user_name');
+    this.formData.host = this.user_name;
   },
   methods: {
     changeStatus() {

@@ -16,10 +16,6 @@
           <h1>会议结束时间{{formData.endTime}}</h1>
           <h1>创建时间</h1>
           <div class="info-item">
-
-
-
-
             <!--            <span-->
 <!--              :class="{-->
 <!--              ['inProgress']: item.type && item.type.value === 'inProgress',-->
@@ -36,25 +32,10 @@
           修改
         </t-button>
       </card>
-
-      <t-row :gutter="[16, 16]" class="card-container-margin">
-        <t-col :xs="12" :xl="9">
-          <card title="参会者信息查询">
-            <common-table :mid="formData.mid"/>
-          </card>
-        </t-col>
-        <t-col :xs="12" :xl="3">
-          <card title="签到">
-            <p>已签到人数：40</p>
-            <p>签到率：100%</p>
-            <p>补签人数：0</p>
-            <t-button style="margin-top: 10px" @click="endMeeting()">结束签到</t-button>
-
-          </card>
-        </t-col>
-      </t-row>
-
     </t-row>
+
+
+
 
   </div>
 </template>
@@ -62,11 +43,10 @@
 import { prefix } from '@/config/global';
 import model from '@/service/service-detail-base';
 import Card from '@/components/card/index.vue';
-import CommonTable from "../components/CommonTable.vue";
 
 export default {
-  name: 'DetailBase',
-  components: { Card ,CommonTable},
+  name: 'BaseCheck',
+  components: { Card },
   data() {
     return {
       prefix,
@@ -77,10 +57,6 @@ export default {
         endTime:'',
         totalNum:null,
       },
-      // 结束会议时传输的数据
-      endData:{
-
-      }
 
     };
   },
@@ -95,18 +71,9 @@ export default {
 
   methods: {
     back(){
-      // this.$router.push('/list/filterall')
+      // this.$router.push('/list/filter')
       this.$router.go(-1)
-    },
-    endMeeting(){
-      console.log('结束会议！！！！')
-      // this.$request.post('api/meetingRecord/endMeeting',this.endData).then(res=>{
-      //   console.log('结束会议',res)
-      //
-      // })
-      this.$router.push({name:'ListFilter'})
     }
-
   },
 };
 </script>

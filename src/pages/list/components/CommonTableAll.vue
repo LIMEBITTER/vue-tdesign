@@ -80,7 +80,7 @@
         </template>
 
         <template #op="slotProps">
-<!--          <a class="t-button-link" @click="startMeeting(slotProps)">开始会议</a>-->
+          <a class="t-button-link" @click="startMeeting(slotProps)">开始会议</a>
           <a class="t-button-link" @click="handleClickDetail(slotProps)">详情</a>
           <a class="t-button-link" @click="handleClickDelete(slotProps)">删除</a>
         </template>
@@ -109,7 +109,7 @@ import {
 } from '@/constants';
 
 export default {
-  name: 'list-table',
+  name: 'list-table-all',
   components: {
     Trend,
   },
@@ -199,30 +199,30 @@ export default {
     },
   },
   mounted() {
-    // this.dataLoading = true;
-    // this.$request
-    //   .get('/api/meetingRecord')
-    //   .then((res) => {
-    //     console.log('查询所有会议：',res)
-    //     if (res.data.code === '200') {
-    //       // const { list = [] } = res.data.result;
-    //       // console.log('list',list)
-    //       // this.data = list;
-    //       this.data = res.data.result;
-    //
-    //       console.log('data',this.data)
-    //       this.pagination = {
-    //         ...this.pagination,
-    //         total: this.data.length,
-    //       };
-    //     }
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   })
-    //   .finally(() => {
-    //     this.dataLoading = false;
-    //   });
+    this.dataLoading = true;
+    this.$request
+      .get('/api/meetingRecord')
+      .then((res) => {
+        console.log('查询所有会议：',res)
+        if (res.data.code === '200') {
+          // const { list = [] } = res.data.result;
+          // console.log('list',list)
+          // this.data = list;
+          this.data = res.data.result;
+
+          console.log('data',this.data)
+          this.pagination = {
+            ...this.pagination,
+            total: this.data.length,
+          };
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        this.dataLoading = false;
+      });
   },
   methods: {
     onReset(data) {
@@ -270,19 +270,19 @@ export default {
       this.deleteIdx = -1;
     },
 
-    // startMeeting(currentRow){
-    //   console.log('currentRow',currentRow)
-    //
-    //   this.$router.push({
-    //     name:'DetailBase',
-    //     params:{
-    //       mid:currentRow.row.mid,
-    //       startTime:currentRow.row.startTime,
-    //       endTime:currentRow.row.endTime,
-    //       totalNum:currentRow.row.totalNum
-    //     }
-    //   })
-    // }
+    startMeeting(currentRow){
+      console.log('currentRow',currentRow)
+
+      this.$router.push({
+        name:'DetailBase',
+        params:{
+          mid:currentRow.row.mid,
+          startTime:currentRow.row.startTime,
+          endTime:currentRow.row.endTime,
+          totalNum:currentRow.row.totalNum
+        }
+      })
+    }
   },
 };
 </script>

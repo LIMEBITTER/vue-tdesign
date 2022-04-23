@@ -6,9 +6,12 @@
     <div v-if="imgSrc" class="img_bg_camera">
       <img :src="imgSrc" alt="" class="tx_img">
     </div>
-    <button @click="getCompetence()">打开摄像头</button>
-    <button @click="stopNavigator()">关闭摄像头</button>
-    　　　　　<button @click="setImage()">拍照</button>
+    <t-button theme="default" variant="base" @click="getCompetence()">打开摄像头</t-button>
+    <t-button theme="default" variant="base" @click="stopNavigator()">关闭摄像头</t-button>
+    <t-button theme="default" variant="base" @click="setImage()">拍照</t-button>
+<!--    <button @click="getCompetence()">打开摄像头</button>-->
+<!--    <button @click="stopNavigator()">关闭摄像头</button>-->
+<!--    <button @click="setImage()">拍照</button>-->
 
 
   </div>
@@ -85,17 +88,17 @@ export default {
     },
     // base64转文件
 
-    // dataURLtoFile (dataurl, filename) {
-    //   const arr = dataurl.split(',')
-    //   const mime = arr[0].match(/:(.*?);/)[1]
-    //   const bstr = atob(arr[1])
-    //   let n = bstr.length
-    //   const u8arr = new Uint8Array(n)
-    //   while (n--) {
-    //     u8arr[n] = bstr.charCodeAt(n)
-    //   }
-    //   return new File([u8arr], filename, { type: mime })
-    // },
+    dataURLtoFile (dataurl, filename) {
+      const arr = dataurl.split(',')
+      const mime = arr[0].match(/:(.*?);/)[1]
+      const bstr = atob(arr[1])
+      let n = bstr.length
+      const u8arr = new Uint8Array(n)
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n)
+      }
+      return new File([u8arr], filename, { type: mime })
+    },
     // 关闭摄像头
 
     stopNavigator () {
@@ -110,7 +113,7 @@ export default {
 .camera_outer{
   position: relative;
   overflow: hidden;
-  background: url("../../assets/img/user_0608_04.jpg") no-repeat center;
+  /*background: url("../../assets/img/user_0608_04.jpg") no-repeat center;*/
   background-size: 100%;
   video,canvas,.tx_img{
     -moz-transform:scaleX(-1);
