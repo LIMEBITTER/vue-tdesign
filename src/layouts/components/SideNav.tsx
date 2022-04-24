@@ -53,7 +53,7 @@ export default Vue.extend({
     this.autoCollapsed();
     console.log('mymenu--------------',this.myMenu)
     // 隐藏要隐藏的菜单
-    // this.myMenu.pop()
+    this.myMenu.pop()
     console.log('mymenu--------------',this.myMenu)
 
 

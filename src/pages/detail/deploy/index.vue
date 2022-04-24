@@ -206,5 +206,5 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-@import '../base/index.less';
+@import 'src/pages/hidden/meetingStart/index.less';
 </style>

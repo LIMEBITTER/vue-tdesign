@@ -67,11 +67,10 @@
         :loading="dataLoading"
       >
 <!--        <template #status="{ row }">-->
-<!--          <t-tag v-if="row.status === CONTRACT_STATUS.FAIL" theme="danger" variant="light">审核失败</t-tag>-->
-<!--          <t-tag v-if="row.status === CONTRACT_STATUS.AUDIT_PENDING" theme="warning" variant="light">待审核</t-tag>-->
-<!--          <t-tag v-if="row.status === CONTRACT_STATUS.EXEC_PENDING" theme="warning" variant="light">待履行</t-tag>-->
-<!--          <t-tag v-if="row.status === CONTRACT_STATUS.EXECUTING" theme="success" variant="light">履行中</t-tag>-->
-<!--          <t-tag v-if="row.status === CONTRACT_STATUS.FINISH" theme="success" variant="light">已完成</t-tag>-->
+
+<!--          <t-tag v-if="row.status === CONTRACT_STATUS.EXEC_PENDING" theme="warning" variant="light">未开始</t-tag>-->
+<!--          <t-tag v-if="row.status === CONTRACT_STATUS.EXECUTING" theme="success" variant="light">进行中</t-tag>-->
+<!--          <t-tag v-if="row.status === CONTRACT_STATUS.FINISH" theme="success" variant="light">已结束</t-tag>-->
 <!--        </template>-->
 <!--        <template #contractType="{ row }">-->
 <!--          <p v-if="row.contractType === CONTRACT_TYPES.MAIN">审核失败</p>-->
@@ -117,9 +116,7 @@ import Trend from '@/components/trend/index.vue';
 import {
   CONTRACT_STATUS,
   CONTRACT_STATUS_OPTIONS,
-  CONTRACT_TYPES,
-  CONTRACT_TYPE_OPTIONS,
-  CONTRACT_PAYMENT_TYPES,
+
 } from '@/constants';
 
 export default {
@@ -136,9 +133,7 @@ export default {
       // 重新签到的人员
       CONTRACT_STATUS,
       CONTRACT_STATUS_OPTIONS,
-      CONTRACT_TYPES,
-      CONTRACT_TYPE_OPTIONS,
-      CONTRACT_PAYMENT_TYPES,
+
       prefix,
       formData: {
         name: '',
@@ -277,7 +272,7 @@ export default {
     checkInfo(currentRow){
       console.log('当前人员',currentRow)
       // 当前人员信息
-      this.$router.push('/user/indexm')
+      this.$router.push('/hidden/indexm')
 
 
     },

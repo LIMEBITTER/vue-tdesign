@@ -67,17 +67,17 @@
         :loading="dataLoading"
       >
         <template #status="{ row }">
-          <t-tag v-if="row.status === CONTRACT_STATUS.FAIL" theme="danger" variant="light">审核失败</t-tag>
-          <t-tag v-if="row.status === CONTRACT_STATUS.AUDIT_PENDING" theme="warning" variant="light">待审核</t-tag>
+<!--          <t-tag v-if="row.status === CONTRACT_STATUS.FAIL" theme="danger" variant="light">审核失败</t-tag>-->
+<!--          <t-tag v-if="row.status === CONTRACT_STATUS.AUDIT_PENDING" theme="warning" variant="light">待审核</t-tag>-->
           <t-tag v-if="row.status === CONTRACT_STATUS.EXEC_PENDING" theme="warning" variant="light">未开始</t-tag>
-          <t-tag v-if="row.status === CONTRACT_STATUS.EXECUTING" theme="success" variant="light">进行中</t-tag>
+          <t-tag v-if="row.status === CONTRACT_STATUS.EXECUTING" theme="success" variant="light">正在开会</t-tag>
           <t-tag v-if="row.status === CONTRACT_STATUS.FINISH" theme="success" variant="light">已结束</t-tag>
         </template>
-        <template #contractType="{ row }">
-          <p v-if="row.contractType === CONTRACT_TYPES.MAIN">审核失败</p>
-          <p v-if="row.contractType === CONTRACT_TYPES.SUB">待审核</p>
-          <p v-if="row.contractType === CONTRACT_TYPES.SUPPLEMENT">待履行</p>
-        </template>
+<!--        <template #contractType="{ row }">-->
+<!--          <p v-if="row.contractType === CONTRACT_STATUS.AUDIT_PENDING">未开始</p>-->
+<!--          <p v-if="row.contractType === CONTRACT_STATUS.EXECUTING">正在开会</p>-->
+<!--          <p v-if="row.contractType === CONTRACT_STATUS.FINISH">已结束</p>-->
+<!--        </template>-->
 
         <template #op="slotProps">
 <!--          <a class="t-button-link" @click="startMeeting(slotProps)">开始会议</a>-->
@@ -102,10 +102,6 @@ import Trend from '@/components/trend/index.vue';
 
 import {
   CONTRACT_STATUS,
-  CONTRACT_STATUS_OPTIONS,
-  CONTRACT_TYPES,
-  CONTRACT_TYPE_OPTIONS,
-  CONTRACT_PAYMENT_TYPES,
 } from '@/constants';
 
 export default {
@@ -116,7 +112,6 @@ export default {
   data() {
     return {
       CONTRACT_STATUS,
-      CONTRACT_STATUS_OPTIONS,
       prefix,
       formData: {
         mname: '',
@@ -199,30 +194,30 @@ export default {
     },
   },
   mounted() {
-    // this.dataLoading = true;
-    // this.$request
-    //   .get('/api/meetingRecord')
-    //   .then((res) => {
-    //     console.log('查询所有会议：',res)
-    //     if (res.data.code === '200') {
-    //       // const { list = [] } = res.data.result;
-    //       // console.log('list',list)
-    //       // this.data = list;
-    //       this.data = res.data.result;
-    //
-    //       console.log('data',this.data)
-    //       this.pagination = {
-    //         ...this.pagination,
-    //         total: this.data.length,
-    //       };
-    //     }
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   })
-    //   .finally(() => {
-    //     this.dataLoading = false;
-    //   });
+    this.dataLoading = true;
+    this.$request
+      .get('/api/meetingRecord')
+      .then((res) => {
+        console.log('查询所有历史会议：',res)
+        if (res.data.code === '200') {
+          // const { list = [] } = res.data.result;
+          // console.log('list',list)
+          // this.data = list;
+          this.data = res.data.result;
+
+          console.log('data',this.data)
+          this.pagination = {
+            ...this.pagination,
+            total: this.data.length,
+          };
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        this.dataLoading = false;
+      });
   },
   methods: {
     onReset(data) {
@@ -239,7 +234,7 @@ export default {
     },
     handleClickDetail(currentRow) {
       this.$router.push({
-        name:'BaseCheck',
+        name:'MeetingInfo',
         params:{
           mid:currentRow.row.mid,
           startTime:currentRow.row.startTime,

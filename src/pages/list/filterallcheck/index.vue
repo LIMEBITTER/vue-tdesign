@@ -1,6 +1,6 @@
 <template>
   <div>
-    <CommonTableAll/>
+    <common-table-all/>
   </div>
 </template>
 <script lang="ts">

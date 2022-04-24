@@ -8,10 +8,10 @@
     </div>
     <t-button theme="default" variant="base" @click="getCompetence()">打开摄像头</t-button>
     <t-button theme="default" variant="base" @click="stopNavigator()">关闭摄像头</t-button>
-    <t-button theme="default" variant="base" @click="setImage()">拍照</t-button>
-<!--    <button @click="getCompetence()">打开摄像头</button>-->
-<!--    <button @click="stopNavigator()">关闭摄像头</button>-->
-<!--    <button @click="setImage()">拍照</button>-->
+    <t-button theme="default" variant="base" @click="uploadToSever()">拍照</t-button>
+    <!--    <button @click="getCompetence()">打开摄像头</button>-->
+    <!--    <button @click="stopNavigator()">关闭摄像头</button>-->
+    <!--    <button @click="setImage()">拍照</button>-->
 
 
   </div>
@@ -28,7 +28,8 @@ export default {
       thisCancas: null,
       thisContext: null,
       thisVideo: null,
-      ifOpen:false
+      // ifOpen:false
+      timer:null
     }
   },
   methods: {
@@ -85,19 +86,51 @@ export default {
       _this.thisContext.drawImage(_this.thisVideo, 0, 0, _this.videoWidth, _this.videoHeight)
       // 获取图片base64链接
       const image = this.thisCancas.toDataURL('image/jpg')
+      // console.log('image',image)
       _this.imgSrc = image
       this.$emit('refreshDataList', this.imgSrc)
-      this.uploadToSever(this.dataURLtoFile(image),this.ifOpen)
+      // this.uploadToSever(image)
+      return this.dataURLtoFile(image,'face')
     },
-    uploadToSever(imgSrc,status){
-      if(status){
-        setTimeout(()=>{
-          this.$request.post(('api/uploadFile',imgSrc)).then((res)=>{
-            console.log('图片上传',res)
 
-          })
-        },1000)
-      }
+    uploadToSever(imgSrc){
+      // let timer = setInterval(()=>{
+      //   setTimeout(()=>{
+      //     console.log('status',this.ifOpen)
+      //     if(this.ifOpen){
+      //       console.log('图片上传')
+      //     }else{
+      //       console.log('stop-------------------')
+      //       clearInterval(timer)
+      //       timer = null
+      //     }
+      //
+      //
+      //     // this.$request.post(('api/uploadFile',imgSrc)).then((res)=>{
+      //     //   console.log('图片上传',res)
+      //     //
+      //     // })
+      //   },1000)
+      // })
+      let that = this
+      that.timer = setInterval(()=>{
+        // if(!this.ifOpen){
+        //   console.log('stop-------------------')
+        //   clearInterval()
+        // }
+        setTimeout(()=>{
+          console.log('status',this.ifOpen)
+          const image = this.setImage()
+
+          // if(this.ifOpen){
+          console.log('图片上传',image)
+          // }
+          // this.$request.post(('api/uploadFile',imgSrc)).then((res)=>{
+          //   console.log('图片上传',res)
+          //
+          // })
+        },0)
+      },1*1000)
 
     },
 
@@ -116,70 +149,76 @@ export default {
     // 关闭摄像头
 
     stopNavigator () {
+      // this.ifOpen = false
+      if(this.timer){
+        clearInterval(this.timer)
+        this.timer = null
+      }
       this.thisVideo.srcObject.getTracks()[0].stop()
-      this.ifOpen = false
     }
+
   },
+
 
 }
 
 </script>
 <style lang="less" scoped>
-.camera_outer{
-  position: relative;
-  overflow: hidden;
-  /*background: url("../../assets/img/user_0608_04.jpg") no-repeat center;*/
-  background-size: 100%;
-  video,canvas,.tx_img{
-    -moz-transform:scaleX(-1);
-    -webkit-transform:scaleX(-1);
-    -o-transform:scaleX(-1);
-    transform:scaleX(-1);
-  }
-  .btn_camera{
-    position: absolute;
-    bottom: 4px;
-    left: 0;
-    right: 0;
-    height: 50px;
-    background-color: rgba(0,0,0,0.3);
-    line-height: 50px;
-    text-align: center;
-    color: #ffffff;
-  }
-  .bg_r_img{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: 0;
-  }
-  .img_bg_camera{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: 0;
-    img{
-      /*width: 100%;*/  //注释掉的
-      height: 100%;
-      margin-left: 500px; //另外加的
+  .camera_outer{
+    position: relative;
+    overflow: hidden;
+    /*background: url("../../assets/img/user_0608_04.jpg") no-repeat center;*/
+    background-size: 100%;
+    video,canvas,.tx_img{
+      -moz-transform:scaleX(-1);
+      -webkit-transform:scaleX(-1);
+      -o-transform:scaleX(-1);
+      transform:scaleX(-1);
     }
-    .img_btn_camera{
+    .btn_camera{
+      position: absolute;
+      bottom: 4px;
+      left: 0;
+      right: 0;
+      height: 50px;
+      background-color: rgba(0,0,0,0.3);
+      line-height: 50px;
+      text-align: center;
+      color: #ffffff;
+    }
+    .bg_r_img{
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      height: 50px;
-      line-height: 50px;
-      text-align: center;
-      background-color: rgba(0,0,0,0.3);
-      color: #ffffff;
-      .loding_img{
-        width: 50px;
+      top: 0;
+    }
+    .img_bg_camera{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      top: 0;
+      img{
+        /*width: 100%;*/  //注释掉的
+        height: 100%;
+        margin-left: 500px; //另外加的
+      }
+      .img_btn_camera{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
         height: 50px;
+        line-height: 50px;
+        text-align: center;
+        background-color: rgba(0,0,0,0.3);
+        color: #ffffff;
+        .loding_img{
+          width: 50px;
+          height: 50px;
+        }
       }
     }
   }
-}
 </style>

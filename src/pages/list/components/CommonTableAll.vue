@@ -67,8 +67,8 @@
         :loading="dataLoading"
       >
         <template #status="{ row }">
-          <t-tag v-if="row.status === CONTRACT_STATUS.FAIL" theme="danger" variant="light">审核失败</t-tag>
-          <t-tag v-if="row.status === CONTRACT_STATUS.AUDIT_PENDING" theme="warning" variant="light">待审核</t-tag>
+<!--          <t-tag v-if="row.status === CONTRACT_STATUS.FAIL" theme="danger" variant="light">审核失败</t-tag>-->
+<!--          <t-tag v-if="row.status === CONTRACT_STATUS.AUDIT_PENDING" theme="warning" variant="light">待审核</t-tag>-->
           <t-tag v-if="row.status === CONTRACT_STATUS.EXEC_PENDING" theme="warning" variant="light">未开始</t-tag>
           <t-tag v-if="row.status === CONTRACT_STATUS.EXECUTING" theme="success" variant="light">进行中</t-tag>
           <t-tag v-if="row.status === CONTRACT_STATUS.FINISH" theme="success" variant="light">已结束</t-tag>
@@ -103,9 +103,7 @@ import Trend from '@/components/trend/index.vue';
 import {
   CONTRACT_STATUS,
   CONTRACT_STATUS_OPTIONS,
-  CONTRACT_TYPES,
-  CONTRACT_TYPE_OPTIONS,
-  CONTRACT_PAYMENT_TYPES,
+
 } from '@/constants';
 
 export default {
@@ -201,7 +199,7 @@ export default {
   mounted() {
     this.dataLoading = true;
     this.$request
-      .get('/api/meetingRecord')
+      .get('/api/meetings')
       .then((res) => {
         console.log('查询所有会议：',res)
         if (res.data.code === '200') {
@@ -239,9 +237,12 @@ export default {
     },
     handleClickDetail(currentRow) {
       this.$router.push({
-        name:'BaseCheck',
+        name:'MeetingInfo',
         params:{
           mid:currentRow.row.mid,
+          mname:currentRow.row.mname,
+          host:currentRow.row.host,
+          status:currentRow.row.status,
           startTime:currentRow.row.startTime,
           endTime:currentRow.row.endTime,
           totalNum:currentRow.row.totalNum
@@ -271,17 +272,37 @@ export default {
     },
 
     startMeeting(currentRow){
-      console.log('currentRow',currentRow)
-
-      this.$router.push({
-        name:'DetailBase',
-        params:{
+      if(currentRow.row.status===2){
+        this.$message.question('当前会议已结束！')
+      }else{
+        console.log('当前开始会议信息',currentRow)
+        const cData = {
           mid:currentRow.row.mid,
+          mname:currentRow.row.mname,
+          host:currentRow.row.host,
+          isApply: currentRow.row.isApply,
+          status:currentRow.row.status,
           startTime:currentRow.row.startTime,
           endTime:currentRow.row.endTime,
-          totalNum:currentRow.row.totalNum
-        }
-      })
+          totalNum:currentRow.row.totalNum}
+
+        this.$request.post('api/meetings/start',cData).then(res=>{
+          if (res.data.code==='-1'){
+            this.$message.warning('会议开始失败')
+          }else {
+            console.log('开始会议！！',res)
+            this.$router.push({
+              name:'MeetingStart',
+              params:cData
+            })
+
+          }
+        })
+
+
+
+      }
+
     }
   },
 };

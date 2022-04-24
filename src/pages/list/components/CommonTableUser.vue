@@ -58,17 +58,17 @@
         :loading="dataLoading"
       >
         <template #status="{ row }">
-          <t-tag v-if="row.status === CONTRACT_STATUS.FAIL" theme="danger" variant="light">审核失败</t-tag>
-          <t-tag v-if="row.status === CONTRACT_STATUS.AUDIT_PENDING" theme="warning" variant="light">待审核</t-tag>
+<!--          <t-tag v-if="row.status === CONTRACT_STATUS.FAIL" theme="danger" variant="light">审核失败</t-tag>-->
+<!--          <t-tag v-if="row.status === CONTRACT_STATUS.AUDIT_PENDING" theme="warning" variant="light">待审核</t-tag>-->
           <t-tag v-if="row.status === CONTRACT_STATUS.EXEC_PENDING" theme="warning" variant="light">未开始</t-tag>
           <t-tag v-if="row.status === CONTRACT_STATUS.EXECUTING" theme="success" variant="light">进行中</t-tag>
           <t-tag v-if="row.status === CONTRACT_STATUS.FINISH" theme="success" variant="light">已结束</t-tag>
         </template>
-        <template #contractType="{ row }">
-          <p v-if="row.contractType === CONTRACT_TYPES.MAIN">审核失败</p>
-          <p v-if="row.contractType === CONTRACT_TYPES.SUB">待审核</p>
-          <p v-if="row.contractType === CONTRACT_TYPES.SUPPLEMENT">待履行</p>
-        </template>
+<!--        <template #contractType="{ row }">-->
+<!--          <p v-if="row.contractType === CONTRACT_TYPES.MAIN">审核失败</p>-->
+<!--          <p v-if="row.contractType === CONTRACT_TYPES.SUB">待审核</p>-->
+<!--          <p v-if="row.contractType === CONTRACT_TYPES.SUPPLEMENT">待履行</p>-->
+<!--        </template>-->
 
         <template #op="slotProps">
           <a class="t-button-link" @click="signNow(slotProps)">现在签到</a>
@@ -92,9 +92,7 @@ import Trend from '@/components/trend/index.vue';
 import {
   CONTRACT_STATUS,
   CONTRACT_STATUS_OPTIONS,
-  CONTRACT_TYPES,
-  CONTRACT_TYPE_OPTIONS,
-  CONTRACT_PAYMENT_TYPES,
+
 } from '@/constants';
 
 export default {
@@ -280,7 +278,7 @@ export default {
     // }
     signNow(){
       // 判断当前签到状态 已签到提示已经签到 未签到则跳转至人脸签到页面
-      this.$router.push('/detail/facedetection')
+      this.$router.push('/hidden/faceDetection')
 
     }
   },

@@ -13,7 +13,35 @@ export default [
         path: 'index',
         name: 'UserIndex',
         component: () => import('@/pages/user/index.vue'),
-        meta: { title: '会议人员信息' },
+        meta: { title: '登录信息' },
+      },
+
+    ],
+  },
+  {
+    path: '/hidden',
+    name: 'hiddenPage',
+    component: Layout,
+    meta: { title: '隐藏页', icon: LogoutIcon },
+    // redirect: '/hidden/meetingInfo',
+    children: [
+      {
+        path: 'meetingInfo',
+        name:'MeetingInfo',
+        component: () => import('@/pages/hidden/meetingInfo/index.vue'),
+        meta: { title: '当前会议信息' },
+      },
+      {
+        path: 'meetingStart',
+        name: 'MeetingStart',
+        component: () => import('@/pages/hidden/meetingStart/index.vue'),
+        meta: { title: '会议开始结束' ,keepAlive:false},
+      },
+      {
+        path: 'faceDetection',
+        name: 'FaceDetection',
+        component: () => import('@/pages/hidden/faceDetection/index.vue'),
+        meta: { title: '人脸签到' },
       },
       {
         path: 'indexm',
@@ -23,18 +51,4 @@ export default [
       },
     ],
   },
-  // {
-  //   path: '/loginRedirect',
-  //   name: 'loginRedirect',
-  //   meta: { title: '登录页', icon: LogoutIcon },
-  //   component: () => import('@/pages/login/index.vue'),
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       redirect: '/login',
-  //       component: () => import('@/layouts/blank.vue'),
-  //       meta: { title: '登录中心' },
-  //     },
-  //   ],
-  // },
 ];

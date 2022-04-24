@@ -110,6 +110,6 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-@import './index';
+@import 'src/pages/hidden/faceDetection/index';
 
 </style>

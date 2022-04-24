@@ -1,6 +1,6 @@
 <template>
   <div>
-    <CommonTableUser/>
+    <common-table-user/>
   </div>
 </template>
 <script lang="ts">
