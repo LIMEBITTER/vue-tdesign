@@ -51,10 +51,15 @@ export default ({ mode }) => {
         '/api': {
           // 用于开发环境下的转发请求
           // 更多请参考：https://vitejs.dev/config/#server-proxy
-          target: 'http://81.68.167.55:5518',
+          target: 'http://frp.kawaiimoe.cn:5518',
           changeOrigin: true,
           rewrite:(path) => path.replace(/^\/api/,'')
         },
+        // '/aki': {
+        //   target: 'http://frp.kawaiimoe.cn:5518',
+        //   changeOrigin: true,
+        //   rewrite:(path) => path.replace(/^\/aki/,'')
+        // },
       },
     },
   };

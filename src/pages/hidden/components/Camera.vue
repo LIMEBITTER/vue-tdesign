@@ -9,6 +9,7 @@
     <t-button theme="default" variant="base" @click="getCompetence()">打开摄像头</t-button>
     <t-button theme="default" variant="base" @click="stopNavigator()">关闭摄像头</t-button>
     <t-button theme="default" variant="base" @click="uploadToSever()">拍照</t-button>
+
     <!--    <button @click="getCompetence()">打开摄像头</button>-->
     <!--    <button @click="stopNavigator()">关闭摄像头</button>-->
     <!--    <button @click="setImage()">拍照</button>-->
@@ -85,57 +86,66 @@ export default {
       // 点击，canvas画图
       _this.thisContext.drawImage(_this.thisVideo, 0, 0, _this.videoWidth, _this.videoHeight)
       // 获取图片base64链接
-      const image = this.thisCancas.toDataURL('image/jpg')
+      const image = this.thisCancas.toDataURL('image/jpeg')
+
       // console.log('image',image)
       _this.imgSrc = image
       this.$emit('refreshDataList', this.imgSrc)
       // this.uploadToSever(image)
-      return this.dataURLtoFile(image,'face')
+      const image1 = this.dataURLtoFile(image)
+      // this.imageDownload(image)
+
+      return this.dataURLtoFile(image)
+      // return image
+
     },
+    // imageDownload(image){
+    //   let aLink = document.createElement('a');
+    //   aLink.href = image.src;
+    //   aLink.download = 'test.png';
+    //   document.body.appendChild(aLink);
+    //   aLink.click();
+    //   document.body.removeChild(aLink)
+    //
+    // },
 
     uploadToSever(imgSrc){
-      // let timer = setInterval(()=>{
-      //   setTimeout(()=>{
-      //     console.log('status',this.ifOpen)
-      //     if(this.ifOpen){
-      //       console.log('图片上传')
-      //     }else{
-      //       console.log('stop-------------------')
-      //       clearInterval(timer)
-      //       timer = null
-      //     }
-      //
-      //
-      //     // this.$request.post(('api/uploadFile',imgSrc)).then((res)=>{
-      //     //   console.log('图片上传',res)
-      //     //
-      //     // })
-      //   },1000)
-      // })
-      let that = this
+
+      const that = this
       that.timer = setInterval(()=>{
-        // if(!this.ifOpen){
-        //   console.log('stop-------------------')
-        //   clearInterval()
-        // }
+
         setTimeout(()=>{
           console.log('status',this.ifOpen)
           const image = this.setImage()
+          const uid = localStorage.getItem('uid')
+          // const datas = {uid,file:image}
+          const formData = new FormData();
+          formData.append("uid",uid)
+          formData.append("file",image)
 
-          // if(this.ifOpen){
-          console.log('图片上传',image)
-          // }
-          // this.$request.post(('api/uploadFile',imgSrc)).then((res)=>{
-          //   console.log('图片上传',res)
-          //
-          // })
+          this.$request.post('api/faceCheck',formData).then((res)=>{
+            console.log(formData)
+            console.log('图片上传',res)
+
+          })
         },0)
       },1*1000)
 
     },
 
     // base64转文件
-    dataURLtoFile (dataurl, filename) {
+    // dataURLtoFile (dataurl, filename) {
+    //   const arr = dataurl.split(',')
+    //   const mime = arr[0].match(/:(.*?);/)[1]
+    //   const bstr = atob(arr[1])
+    //   let n = bstr.length
+    //   const u8arr = new Uint8Array(n)
+    //   while (n--) {
+    //     u8arr[n] = bstr.charCodeAt(n)
+    //   }
+    //   return new File([u8arr], filename, { type: mime })
+    // },
+    dataURLtoFile (dataurl) {
       const arr = dataurl.split(',')
       const mime = arr[0].match(/:(.*?);/)[1]
       const bstr = atob(arr[1])
@@ -144,7 +154,7 @@ export default {
       while (n--) {
         u8arr[n] = bstr.charCodeAt(n)
       }
-      return new File([u8arr], filename, { type: mime })
+      return new File([u8arr], { type: mime })
     },
     // 关闭摄像头
 

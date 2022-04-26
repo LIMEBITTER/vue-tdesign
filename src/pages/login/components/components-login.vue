@@ -51,18 +51,24 @@
           </template>
         </t-input>
       </t-form-item>
-
-<!--      <div class="check-container remember-pwd">-->
-<!--        <t-checkbox>记住账号</t-checkbox>-->
-<!--        <span class="tip">忘记账号？</span>-->
-<!--      </div>-->
     </template>
+<!--    <t-form-item name="checkCode">-->
+<!--      <t-input-->
+<!--        v-model="inputCode"-->
+<!--        size="large"-->
+<!--        clearable-->
+<!--        placeholder="请输入验证码"-->
+<!--      ></t-input>-->
+<!--      <check-code v-model="validCode" @sendData="getCode"/>-->
+<!--    </t-form-item>-->
 
 
 <!--    <t-form-item v-if="type !== 'qrcode'" class="btn-container">-->
     <t-form-item class="btn-container">
       <t-button block size="large" type="submit"> 登录 </t-button>
     </t-form-item>
+<!--    <check-code :identify-code="identifyCode" @click="refreshCode"/>-->
+
 
 
   </t-form>
@@ -71,6 +77,7 @@
 import Vue from 'vue';
 import QrcodeVue from 'qrcode.vue';
 import axios from "axios";
+import checkCode from "./checkCode.vue";
 
 const INITIAL_DATA = {
   uname:'',
@@ -90,10 +97,13 @@ const INITIAL_DATA = {
 /** 高级详情 */
 export default Vue.extend({
   name: 'Login',
-
+  components: {checkCode},
   data() {
     return {
       // FORM_RULES,
+      validCode:"",
+      // 输入的验证码
+      inputCode:"",
 
       type: 'password',
       formData: { ...INITIAL_DATA },
@@ -102,20 +112,30 @@ export default Vue.extend({
       intervalTimer: null,
       // 后台获取的token
       userToken:'',
+      uid:'',
       FORM_RULES :{
         uname: [{ required: true, message: '账号必填', type: 'error' }],
         password: [{ required: true, message: '密码必填', type: 'error' }],
         confirmPassword: [{ validator: (val) => val===this.formData.password,  message: '两次输入密码不一致',trigger: 'blur', required: true ,type:'error'}],
+        // inputCode: [{ validator: (val) => val===this.formData.password,  message: '两次输入密码不一致',trigger: 'blur', required: true ,type:'error'}],
+
       },
     };
   },
   beforeDestroy() {
     clearInterval(this.intervalTimer);
   },
+
   methods: {
     switchType(val) {
       this.type = val;
       this.$refs.form.reset();
+    },
+    // 在方法中获取验证码的数据
+    // 从子组件获取验证码，并将验证码返回到页面
+    getCode(data){
+      console.log(data)
+      this.validCode = data;// 在data中定义一个 validCode:'',用来记录验证码。
     },
     async onSubmit({ validateResult }) {
       if (validateResult === true) {
@@ -125,8 +145,9 @@ export default Vue.extend({
           if (res.data.code === '200') {
             // token存储
             this.userToken = res.data.result.token;
+            this.uid = res.data.result.uid;
+            localStorage.setItem('uid',this.uid)
             localStorage.setItem('user_name', this.formData.uname);
-
             localStorage.setItem('token', this.userToken);
             // this.$router.push('/dashboard');
             // console.log('zhixing')
@@ -152,6 +173,8 @@ export default Vue.extend({
         }
       }, 1000);
     },
+
+
   },
 });
 </script>

@@ -175,14 +175,14 @@ export default Vue.extend({
         // })
         console.log('formdata',this.formData)
 
-        this.$http.post('api/user/register',this.formData).then(res=>{
+        this.$request.post('api/user/register',this.formData).then(res=>{
           console.log(res)
           const status = res.data.code;
           console.log('status',status)
-          if (status === 500){
+          // if (status === 500){
             // console.log('zhixing500')
-          }
-          if (res.data.code===20000){
+          // }
+          if (res.data.code==='200'){
             this.$message.success('注册成功');
             this.$emit('registerSuccess');
             // this.$router.push('/login');
