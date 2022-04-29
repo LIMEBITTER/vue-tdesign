@@ -1,14 +1,17 @@
 <template>
   <div class="camera_outer">
+
     <video id="videoCamera" :width="videoWidth" :height="videoHeight" autoplay></video>
     <canvas style="display:none;" id="canvasCamera" :width="videoWidth" :height="videoHeight" ></canvas>
 
-    <div v-if="imgSrc" class="img_bg_camera">
-      <img :src="imgSrc" alt="" class="tx_img">
-    </div>
-    <t-button theme="default" variant="base" @click="getCompetence()">打开摄像头</t-button>
-    <t-button theme="default" variant="base" @click="stopNavigator()">关闭摄像头</t-button>
-    <t-button theme="default" variant="base" @click="uploadToSever()">拍照</t-button>
+<!--    <div v-if="imgSrc" class="img_bg_camera">-->
+<!--      <img :src="imgSrc" alt="" class="tx_img">-->
+<!--    </div>-->
+    <div class="t-progress-domo-margin">正在上传</div>
+    <t-progress style="width: 20%" theme="line" :color="{ from: '#0052D9', to: '#00A870' }" :percentage="60" :status="'active'" />
+<!--    <t-button theme="default" variant="base" @click="getCompetence()">打开摄像头</t-button>-->
+<!--    <t-button theme="default" variant="base" @click="stopNavigator()">关闭摄像头</t-button>-->
+<!--    <t-button theme="default" variant="base" @click="uploadToSever()">录入</t-button>-->
 
     <!--    <button @click="getCompetence()">打开摄像头</button>-->
     <!--    <button @click="stopNavigator()">关闭摄像头</button>-->
@@ -30,9 +33,18 @@ export default {
       thisContext: null,
       thisVideo: null,
       // ifOpen:false
-      timer:null
+      timer:null,
+      timerNum:0,
     }
   },
+  // watch:{
+  //   // '$route':'getCompetence'
+  // },
+  mounted() {
+    this.getCompetence();
+    this.uploadToSever();
+  },
+
   methods: {
     // 调用权限（打开摄像头功能）
     getCompetence () {
@@ -123,11 +135,28 @@ export default {
           formData.append("uid",uid)
           formData.append("file",image)
 
-          this.$request.post('api/faceCheck',formData).then((res)=>{
-            console.log(formData)
-            console.log('图片上传',res)
 
+
+          this.$request.post('api/faceCheck',formData).then((res)=>{
+          //   console.log(formData)
+          //   console.log('图片上传')
+            // if (res.data.code==="200"){
+              // 上传成功 关闭摄像头 结束循环
+              // this.$message.success("人脸识别成功")
+              // this.stopNavigator();
+            // }else {
+            //   this.$message.error("人脸识别失败")
+            // }
+            if (that.timerNum <=10){
+              that.timerNum +=1
+              console.log('图片上传',that.timerNum,res)
+
+            }else {
+              that.stopNavigator()
+              console.log('停止--------------------')
+            }
           })
+
         },0)
       },1*1000)
 
@@ -163,6 +192,7 @@ export default {
       if(this.timer){
         clearInterval(this.timer)
         this.timer = null
+        this.timerNum = 0
       }
       this.thisVideo.srcObject.getTracks()[0].stop()
     }
@@ -185,6 +215,13 @@ export default {
       -o-transform:scaleX(-1);
       transform:scaleX(-1);
     }
+    video{
+      border-radius: 50%;
+    }
+    img{
+      border-radius: 50%;
+
+    }
     .btn_camera{
       position: absolute;
       bottom: 4px;
@@ -204,6 +241,7 @@ export default {
       top: 0;
     }
     .img_bg_camera{
+      border-radius: 50%;
       position: absolute;
       bottom: 0;
       left: 0;

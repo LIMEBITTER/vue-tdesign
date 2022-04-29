@@ -43,6 +43,12 @@ export default [
         component: () => import('@/pages/form/joinmeeting/index.vue'),
         meta: { title: '会议加入' },
       },
+      {
+        path: 'CameraTest',
+        name: 'CameraTest',
+        component: () => import('@/pages/hidden/components/Camera.vue'),
+        meta: { title: '人脸摄像头调用（测试）' },
+      },
       // {
       //   path: 'buqian',
       //   name: 'BuQian',
