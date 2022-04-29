@@ -38,11 +38,12 @@ export default {
     }
   },
   // watch:{
-  //   // '$route':'getCompetence'
+  //   '$route':'initMethods'
   // },
   mounted() {
-    this.getCompetence();
-    this.uploadToSever();
+    // this.getCompetence();
+    // this.uploadToSever();
+    this.initMethods()
   },
 
   methods: {
@@ -100,7 +101,7 @@ export default {
       // 获取图片base64链接
       const image = this.thisCancas.toDataURL('image/jpeg')
 
-      // console.log('image',image)
+      console.log('image',image)
       _this.imgSrc = image
       this.$emit('refreshDataList', this.imgSrc)
       // this.uploadToSever(image)
@@ -111,15 +112,6 @@ export default {
       // return image
 
     },
-    // imageDownload(image){
-    //   let aLink = document.createElement('a');
-    //   aLink.href = image.src;
-    //   aLink.download = 'test.png';
-    //   document.body.appendChild(aLink);
-    //   aLink.click();
-    //   document.body.removeChild(aLink)
-    //
-    // },
 
     uploadToSever(imgSrc){
 
@@ -147,14 +139,16 @@ export default {
             // }else {
             //   this.$message.error("人脸识别失败")
             // }
-            if (that.timerNum <=10){
-              that.timerNum +=1
-              console.log('图片上传',that.timerNum,res)
+            console.log('图片上传',that.timerNum,res)
 
-            }else {
-              that.stopNavigator()
-              console.log('停止--------------------')
-            }
+            // if (that.timerNum <=10){
+            //   that.timerNum +=1
+            //   console.log('图片上传',that.timerNum,res)
+            //
+            // }else {
+            //   that.stopNavigator()
+            //   console.log('停止--------------------')
+            // }
           })
 
         },0)
@@ -195,6 +189,13 @@ export default {
         this.timerNum = 0
       }
       this.thisVideo.srcObject.getTracks()[0].stop()
+    },
+    initMethods(){
+      // if (this.$route.path === 'CameraTest'){
+      this.getCompetence();
+      this.uploadToSever();
+      // }
+
     }
 
   },
