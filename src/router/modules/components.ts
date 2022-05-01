@@ -17,30 +17,31 @@ export default [
         path: 'filter',
         name: 'ListFilter',
         component: () => import('@/pages/list/filter/index.vue'),
-        meta: { title: '会议历史查询' },
+        meta: { title: '历史会议' },
       },
       {
         path: 'filterall',
         name: 'ListFilterAll',
         component: () => import('@/pages/list/filterallcheck/index.vue'),
-        meta: { title: '会议查看' },
+        meta: { title: '我的会议（申请人）' },
       },
-      {
-        path: 'checkallmeetings',
-        name: 'ListFilterUser',
-        component: () => import('@/pages/list/checkallmeetings/index.vue'),
-        meta: { title: '所有会议情况浏览' },
-      },
+      // {
+      //   path: 'checkallmeetings',
+      //   name: 'ListFilterUser',
+      //   component: () => import('@/pages/list/checkallmeetings/index.vue'),
+      //   meta: { title: '所有会议情况浏览' },
+      // },
       {
         path: 'base',
         name: 'FormBase',
         component: () => import('@/pages/form/base/index.vue'),
-        meta: { title: '会议申请' },
+        meta: { title: '会议申请（预定）' },
       },
+
       {
         path: 'joinmeeting',
         name: 'MeetingJoin',
-        component: () => import('@/pages/form/joinmeeting/index.vue'),
+        component: () => import('@/pages/list/joinmeeting/index.vue'),
         meta: { title: '会议加入' },
       },
       {
@@ -49,12 +50,12 @@ export default [
         component: () => import('@/pages/hidden/components/Camera.vue'),
         meta: { title: '人脸摄像头调用（测试）' },
       },
-      // {
-      //   path: 'buqian',
-      //   name: 'BuQian',
-      //   component: () => import('@/pages/form/buqian/index.vue'),
-      //   meta: { title: '补签页面' },
-      // },
+      {
+        path: 'FaceReg',
+        name: 'facereg',
+        component: () => import('@/pages/hidden/components/FaceReg.vue'),
+        meta: { title: '人脸识别（测试）' },
+      },
       // {
       //   path: 'camera',
       //   name: 'Camera',

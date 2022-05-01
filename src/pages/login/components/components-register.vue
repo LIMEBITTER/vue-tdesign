@@ -118,7 +118,7 @@
 </template>
 <script lang="ts">
 import Vue from 'vue';
-import axios from "axios";
+import {userRegister} from "@/utils/api.js";
 
 const INITIAL_DATA = {
   // uid:1,
@@ -173,47 +173,25 @@ export default Vue.extend({
         // this.request.post('/api/users/register',this.formData).then(res=>{
         //   console.log(res)
         // })
-        console.log('formdata',this.formData)
-
-        this.$request.post('api/user/register',this.formData).then(res=>{
-          console.log(res)
+        // console.log('formdata',this.formData)
+        userRegister(this.formData).then(res=>{
           const status = res.data.code;
           console.log('status',status)
-          // if (status === 500){
-            // console.log('zhixing500')
-          // }
+
           if (res.data.code==='200'){
+            console.log('注册成功',res)
+
             this.$message.success('注册成功');
             this.$emit('registerSuccess');
             // this.$router.push('/login');
 
           }else {
+            console.log('注册失败',res)
+
             this.$message.error('注册失败');
 
           }
         })
-
-
-        // this.$request.post('api/user/register',this.formData).then(res=> {
-        //   console.log(res)
-        //   localStorage.setItem('token', this.userToken);
-        //   if (res.data.code === '200') {
-        //     // this.$router.push('/dashboard');
-        //     // console.log('zhixing')
-        //     // console.log(this.formData.uname)
-        //     this.$router.replace('/').catch(() => '');
-        //
-        //     this.$message.success(res.data.msg);
-        //
-        //   } else {
-        //     this.$message.error(res.data.msg);
-        //   }
-        // })
-
-        // this.$request.post('api/users/register',this.formData).then(res=>{
-        //   console.log(res)
-        // })
-
 
       }
     },

@@ -26,14 +26,7 @@
               </t-form-item>
             </t-col>
             <t-col :flex="1">
-<!--              <t-form-item label="会议号" name="no">-->
-<!--                <t-input-->
-<!--                  v-model="formData.no"-->
-<!--                  class="form-item-content"-->
-<!--                  placeholder="请输入会议号"-->
-<!--                  :style="{ minWidth: '134px' }"-->
-<!--                />-->
-<!--              </t-form-item>-->
+
             </t-col>
 <!--            <t-col :flex="1">-->
 <!--              <t-form-item label="合同类型" name="type">-->
@@ -66,17 +59,12 @@
         @change="rehandleChange"
         :loading="dataLoading"
       >
-<!--        <template #status="{ row }">-->
+        <template #isSign="{ row }">
 
-<!--          <t-tag v-if="row.status === CONTRACT_STATUS.EXEC_PENDING" theme="warning" variant="light">未开始</t-tag>-->
-<!--          <t-tag v-if="row.status === CONTRACT_STATUS.EXECUTING" theme="success" variant="light">进行中</t-tag>-->
-<!--          <t-tag v-if="row.status === CONTRACT_STATUS.FINISH" theme="success" variant="light">已结束</t-tag>-->
-<!--        </template>-->
-<!--        <template #contractType="{ row }">-->
-<!--          <p v-if="row.contractType === CONTRACT_TYPES.MAIN">审核失败</p>-->
-<!--          <p v-if="row.contractType === CONTRACT_TYPES.SUB">待审核</p>-->
-<!--          <p v-if="row.contractType === CONTRACT_TYPES.SUPPLEMENT">待履行</p>-->
-<!--        </template>-->
+          <t-tag v-if="row.isSign === 0" theme="warning" variant="light">未签到</t-tag>
+          <t-tag v-if="row.isSign === 1" theme="success" variant="light">已签到</t-tag>
+        </template>
+
 
         <template #op="slotProps">
           <a class="t-button-link" @click="checkInfo(slotProps)">详情</a>
@@ -112,6 +100,7 @@
 <script>
 import { prefix } from '@/config/global';
 import Trend from '@/components/trend/index.vue';
+import {sAllSignRecordsByMid} from '@/utils/api.js';
 
 import {
   CONTRACT_STATUS,
@@ -140,10 +129,11 @@ export default {
         no: undefined,
         status: undefined,
       },
+      t_mid:'',
       // 补签对话框数据
       resignData:{
         resignedUser:'',
-        mid:this.mid,
+        mid:'',
       },
       data: [],
       dataLoading: false,
@@ -155,26 +145,15 @@ export default {
           minWidth: '300',
           align: 'left',
           ellipsis: true,
-          colKey: 'uname',
+          colKey: 'uid',
         },
-        { title: '签到状态', colKey: 'status', width: 200, cell: { col: 'status' } },
-        // {
-        //   title: '电话',
-        //   width: 200,
-        //   ellipsis: true,
-        //   colKey: 'phone',
-        // },
-        // {
-        //   title: '邮箱',
-        //   width: 200,
-        //   ellipsis: true,
-        //   colKey: 'email',
-        // },
+        { title: '签到状态', colKey: 'isSign', width: 200, cell: { col: 'isSign' } },
+
         {
           title: '签到方式',
           width: 200,
           ellipsis: true,
-          colKey: 'signType',
+          colKey: 'signMethod',
         },
         {
           align: 'left',
@@ -193,7 +172,7 @@ export default {
       // 与pagination对齐
       pagination: {
         defaultPageSize: 20,
-        total: 100,
+        total: 0,
         defaultCurrent: 1,
       },
       confirmVisible: false,
@@ -203,32 +182,14 @@ export default {
 
   // 实现每次进入不同的会议能实时更新会议号
   watch:{
-    mid(){
-      this.resignData.mid = this.mid
+    mid(newVal,oldVal){
+      this.t_mid = newVal;
+      this.init_api(this.t_mid);
 
     },
+
   },
-  mounted() {
-    this.dataLoading = true;
-    this.$request
-      .get('/api/get-list')
-      .then((res) => {
-        if (res.code === 0) {
-          const { list = [] } = res.data;
-          this.data = list;
-          this.pagination = {
-            ...this.pagination,
-            total: list.length,
-          };
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      })
-      .finally(() => {
-        this.dataLoading = false;
-      });
-  },
+
   methods: {
     onReset(data) {
       console.log(data);
@@ -289,6 +250,30 @@ export default {
       this.visible5 = false;
       e.stopPropagation();
     },
+    init_api(id){
+      this.dataLoading = true;
+      console.log('jiazai d d d d')
+      console.log('参会者信息查询当前mid',id)
+
+      sAllSignRecordsByMid(id).then(res=>{
+        console.log('参会者信息查询',res)
+
+        if (res.data.code === "200") {
+          console.log('参会者信息查询成功',res)
+          this.data = res.data.result;
+
+          console.log('data',this.data)
+          this.pagination = {
+            ...this.pagination,
+            total: this.data.length,
+          };
+        }
+      }).catch((e) => {
+        console.log(e);
+      }).finally(() => {
+        this.dataLoading = false;
+      });
+    }
 
   },
 };

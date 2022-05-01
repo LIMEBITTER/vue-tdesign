@@ -73,16 +73,16 @@
           <t-tag v-if="row.status === CONTRACT_STATUS.EXECUTING" theme="success" variant="light">进行中</t-tag>
           <t-tag v-if="row.status === CONTRACT_STATUS.FINISH" theme="success" variant="light">已结束</t-tag>
         </template>
-        <template #contractType="{ row }">
-          <p v-if="row.contractType === CONTRACT_TYPES.MAIN">审核失败</p>
-          <p v-if="row.contractType === CONTRACT_TYPES.SUB">待审核</p>
-          <p v-if="row.contractType === CONTRACT_TYPES.SUPPLEMENT">待履行</p>
-        </template>
+<!--        <template #contractType="{ row }">-->
+<!--          <p v-if="row.contractType === CONTRACT_TYPES.MAIN">审核失败</p>-->
+<!--          <p v-if="row.contractType === CONTRACT_TYPES.SUB">待审核</p>-->
+<!--          <p v-if="row.contractType === CONTRACT_TYPES.SUPPLEMENT">待履行</p>-->
+<!--        </template>-->
 
         <template #op="slotProps">
           <a class="t-button-link" @click="startMeeting(slotProps)">开始会议</a>
-          <a class="t-button-link" @click="handleClickDetail(slotProps)">详情</a>
-          <a class="t-button-link" @click="handleClickDelete(slotProps)">删除</a>
+<!--          <a class="t-button-link" @click="handleClickDetail(slotProps)">详情</a>-->
+<!--          <a class="t-button-link" @click="handleClickDelete(slotProps)">删除</a>-->
         </template>
       </t-table>
       <t-dialog
@@ -99,6 +99,7 @@
 <script>
 import { prefix } from '@/config/global';
 import Trend from '@/components/trend/index.vue';
+import {checkAllMeetingsInfo,startMeetingDev} from '@/utils/api.js'
 
 import {
   CONTRACT_STATUS,
@@ -141,11 +142,11 @@ export default {
           colKey: 'mid',
         },
         {
-          title: '开始时间',
+          title: '预定开始时间',
           width: 200,
           ellipsis: true,
           // colKey: 'contractType',
-          colKey:'startTime',
+          colKey:'expectsTime',
         },
         // {
         //   title: '结束时间',
@@ -198,29 +199,35 @@ export default {
   },
   mounted() {
     this.dataLoading = true;
-    this.$request
-      .get('/api/meetings')
-      .then((res) => {
-        console.log('查询所有会议：',res)
-        if (res.data.code === '200') {
-          // const { list = [] } = res.data.result;
-          // console.log('list',list)
-          // this.data = list;
-          this.data = res.data.result;
+    // 调用api
+    checkAllMeetingsInfo().then(res=>{
 
-          console.log('data',this.data)
-          this.pagination = {
-            ...this.pagination,
-            total: this.data.length,
-          };
-        }
-      })
+      console.log('获取所有会议信息',res)
+      if (res.data.code === "200") {
+        // const { list = [] } = res.data.result;
+        // console.log('list',list)
+        // this.data = list;
+        this.data = res.data.result;
+
+        console.log('data',this.data)
+        this.pagination = {
+          ...this.pagination,
+          total: this.data.length,
+        };
+      }
+    })
       .catch((e) => {
         console.log(e);
       })
       .finally(() => {
         this.dataLoading = false;
       });
+
+    const uid = localStorage.getItem('uid')
+    // sAllMeetingsByUid(uid).then(res=>{
+    //   console.log('根据用户id查询所有会议记录',res)
+    // })
+    // console.log(checkAllMeetingsInfo(params))
   },
   methods: {
     onReset(data) {
@@ -272,34 +279,35 @@ export default {
     },
 
     startMeeting(currentRow){
+      console.log('currentRow',currentRow)
       if(currentRow.row.status===2){
         this.$message.question('当前会议已结束！')
       }else{
         console.log('当前开始会议信息',currentRow)
+
         const cData = {
           mid:currentRow.row.mid,
-          mname:currentRow.row.mname,
-          host:currentRow.row.host,
-          isApply: currentRow.row.isApply,
-          status:currentRow.row.status,
-          startTime:currentRow.row.startTime,
-          endTime:currentRow.row.endTime,
-          totalNum:currentRow.row.totalNum}
-
-        this.$request.post('api/meetings/start',cData).then(res=>{
+          // mname:currentRow.row.mname,
+          // host:currentRow.row.host,
+          // isApply: currentRow.row.isApply,
+          // status:currentRow.row.status,
+          // startTime:currentRow.row.startTime,
+          // endTime:currentRow.row.endTime,
+          // totalNum:currentRow.row.totalNum
+        }
+        console.log('cData',cData)
+        startMeetingDev(cData).then(res=>{
           if (res.data.code==='-1'){
             this.$message.warning('会议开始失败')
           }else {
             console.log('开始会议！！',res)
             this.$router.push({
               name:'MeetingStart',
-              params:cData
+              query:cData
             })
 
           }
         })
-
-
 
       }
 

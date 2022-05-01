@@ -4,9 +4,17 @@
     <video id="videoCamera" :width="videoWidth" :height="videoHeight" autoplay></video>
     <canvas style="display:none;" id="canvasCamera" :width="videoWidth" :height="videoHeight" ></canvas>
 
-    <div class="t-progress-domo-margin">{{ this.resMsg }}</div>
-    <t-progress style="width: 20%" theme="line" :color="{ from: '#0052D9', to: '#00A870' }" :percentage="this.msg" :status="'active'" />
+    <div v-if="imgSrc" class="img_bg_camera">
+      <img :src="imgSrc" alt="" class="tx_img">
+    </div>
+    <t-button theme="default" variant="base" @click="getCompetence()">打开摄像头</t-button>
     <t-button theme="default" variant="base" @click="stopNavigator()">关闭摄像头</t-button>
+    <t-button theme="default" variant="base" @click="uploadToSever()">录入</t-button>
+
+    <!--    <button @click="getCompetence()">打开摄像头</button>-->
+    <!--    <button @click="stopNavigator()">关闭摄像头</button>-->
+    <!--    <button @click="setImage()">拍照</button>-->
+
 
   </div>
 </template>
@@ -16,8 +24,6 @@ export default {
   name: "Camera",
   data () {
     return {
-      msg:0,// 识别进度值
-      resMsg:'',// 识别结果信息
       videoWidth: 200,
       videoHeight: 200,
       imgSrc: '',
@@ -27,14 +33,26 @@ export default {
       // ifOpen:false
       timer:null,
       timerNum:0,
+      state: false
     }
   },
   // watch:{
   //   // '$route':'getCompetence'
   // },
   mounted() {
-    this.getCompetence();
-    this.uploadToSever();
+    // this.getCompetence();
+    // this.uploadToSever();
+    //监听视频加载完成时获取第一帧loadeddata
+    video.addEventListener('loadeddata', () => {
+      var videoElement = document.getElementById('video')
+      var canvas = document.createElement("canvas")
+      canvas.width = videoElement.videoWidth
+      canvas.height = videoElement.videoHeight
+      this.canvas = canvas
+      this.videoElement = videoElement
+      this.drawImage(canvas, videoElement)
+    }, false)
+
   },
 
   methods: {
@@ -129,24 +147,24 @@ export default {
 
 
 
-          this.$request.post('api/uploadFile',formData).then((res)=>{
-            if (res.data.code==="200"){
-              that.msg=res.data.result
-              that.resMsg="正在上传中..."
-            }
-            if (res.data.code==="506")
-            {
-              that.msg=res.data.result
-              that.resMsg="未检测到您的人脸"
-            }
-            if (res.data.code==="-1")
-            {
-              that.msg=res.data.result
-              that.resMsg="未检测到您的人脸"
-            }
-            console.log('图片上传',that.timerNum,res,that.msg)
+          this.$request.post('api/faceCheck',formData).then((res)=>{
+          //   console.log(formData)
+          //   console.log('图片上传')
+            // if (res.data.code==="200"){
+              // 上传成功 关闭摄像头 结束循环
+              // this.$message.success("人脸识别成功")
+              // this.stopNavigator();
+            // }else {
+            //   this.$message.error("人脸识别失败")
+            // }
+            if (that.timerNum <=10){
+              that.timerNum +=1
+              console.log('图片上传',that.timerNum,res)
 
-
+            }else {
+              that.stopNavigator()
+              console.log('停止--------------------')
+            }
           })
 
         },0)
@@ -166,28 +184,28 @@ export default {
     //   }
     //   return new File([u8arr], filename, { type: mime })
     // },
-    dataURLtoFile (dataurl) {
-      const arr = dataurl.split(',')
-      const mime = arr[0].match(/:(.*?);/)[1]
-      const bstr = atob(arr[1])
-      let n = bstr.length
-      const u8arr = new Uint8Array(n)
-      while (n--) {
-        u8arr[n] = bstr.charCodeAt(n)
-      }
-      return new File([u8arr], { type: mime })
-    },
+    // dataURLtoFile (dataurl) {
+    //   const arr = dataurl.split(',')
+    //   const mime = arr[0].match(/:(.*?);/)[1]
+    //   const bstr = atob(arr[1])
+    //   let n = bstr.length
+    //   const u8arr = new Uint8Array(n)
+    //   while (n--) {
+    //     u8arr[n] = bstr.charCodeAt(n)
+    //   }
+    //   return new File([u8arr], { type: mime })
+    // },
     // 关闭摄像头
 
-    stopNavigator () {
-      // this.ifOpen = false
-      if(this.timer){
-        clearInterval(this.timer)
-        this.timer = null
-        this.timerNum = 0
-      }
-      this.thisVideo.srcObject.getTracks()[0].stop()
-    }
+    // stopNavigator () {
+    //   // this.ifOpen = false
+    //   if(this.timer){
+    //     clearInterval(this.timer)
+    //     this.timer = null
+    //     this.timerNum = 0
+    //   }
+    //   this.thisVideo.srcObject.getTracks()[0].stop()
+    // }
 
   },
 
@@ -209,10 +227,6 @@ export default {
     }
     video{
       border-radius: 50%;
-    }
-    img{
-      border-radius: 50%;
-
     }
     .btn_camera{
       position: absolute;

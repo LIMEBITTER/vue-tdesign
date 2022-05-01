@@ -78,6 +78,7 @@ import Vue from 'vue';
 import QrcodeVue from 'qrcode.vue';
 import axios from "axios";
 import checkCode from "./checkCode.vue";
+import {userLogin} from "@/utils/api.js";
 
 const INITIAL_DATA = {
   uname:'',
@@ -139,27 +140,29 @@ export default Vue.extend({
     },
     async onSubmit({ validateResult }) {
       if (validateResult === true) {
-        this.$request.post('api/user/login',this.formData).then(res=> {
-          console.log(res)
-
+        userLogin(this.formData).then(res=>{
           if (res.data.code === '200') {
+            console.log('登录成功',res)
+
             // token存储
             this.userToken = res.data.result.token;
             this.uid = res.data.result.uid;
             localStorage.setItem('uid',this.uid)
             localStorage.setItem('user_name', this.formData.uname);
             localStorage.setItem('token', this.userToken);
-            // this.$router.push('/dashboard');
-            // console.log('zhixing')
-            // console.log(this.formData.uname)
+
             this.$router.replace('/').catch(() => '');
 
-            this.$message.success(res.data.msg);
+            this.$message.success('登录成功');
 
           } else {
-            this.$message.error(res.data.message);
+            console.log('登录失败',res)
+
+            this.$message.error('登录失败');
           }
         })
+
+
       }
     },
     handleCounter() {

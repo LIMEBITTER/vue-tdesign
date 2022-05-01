@@ -33,6 +33,7 @@
         <t-col>
           <card title="人脸上传" class="container-base-margin-top">
             <camera/>
+<!--            <camera1></camera1>-->
 
 
           </card>
@@ -48,9 +49,19 @@
           </card>
 
           <div class="form-submit-container" style="margin: auto">
-                <t-button style="margin-top: 20px" theme="primary" class="form-submit-confirm" type="submit"> 人脸签到 </t-button>
+                <t-button style="margin-top: 20px" theme="primary" class="form-submit-confirm" type="submit" @click="qiandao"> 人脸签到 </t-button>
           </div>
         </t-col>
+      <t-dialog header="人脸签到" :closeBtn="false" :visible.sync="visiable1" @confirm="onConfirm" :onClose="close1">
+        <div slot="body">
+<!--          <camera/>-->
+<!--          <camera1></camera1>-->
+
+
+          <div class="t-progress-domo-margin">默认样式</div>
+          <t-progress theme="line" :percentage="30" />
+        </div>
+      </t-dialog>
 
 
     </t-row>
@@ -61,13 +72,15 @@ import { prefix } from '@/config/global';
 import model from '@/service/service-detail-base';
 import Card from '@/components/card/index.vue';
 import Camera from "../components/Camera.vue";
+import Camera1 from "../components/Camera1.vue";
 
 export default {
   name: 'FaceDetection',
-  components: { Card,Camera },
+  components: { Card,Camera,Camera1 },
   data() {
     return {
       prefix,
+      visiable1:false,
       baseInfoData: model.getBaseInfoData(),
       formData:{
         mid:'',
@@ -97,6 +110,9 @@ export default {
       this.$router.go(-1)
 
     },
+    qiandao(){
+      this.visiable1 = true
+    },
     endMeeting(){
       console.log('结束会议！！！！')
       // this.$request.post('api/meetingRecord/endMeeting',this.endData).then(res=>{
@@ -104,7 +120,21 @@ export default {
       //
       // })
       this.$router.push({name:'ListFilter'})
-    }
+    },
+    sendingRequest() {
+      console.log('sending request');
+    },
+    close1() {
+      this.visiable1 = false;
+    },
+    onConfirm(context) {
+      const { e } = context;
+      // todo something else here
+      this.sendingRequest();
+      this.visiable1 = false;
+      e.stopPropagation();
+    },
+
 
   },
 };

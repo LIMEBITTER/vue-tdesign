@@ -1,6 +1,6 @@
 <template>
   <t-form
-    ref="form"
+    ref="applyForm"
     class="base-form"
     :data="formData"
     :rules="FORM_RULES"
@@ -17,8 +17,8 @@
         <!-- 合同名称,合同类型 -->
         <t-row class="row-gap" :gutter="[16, 24]">
           <t-col :span="6">
-            <t-form-item label="会议名" name="mname">
-              <t-input v-model="formData.mname" :style="{ width: '322px' }" placeholder="请输入内容" />
+            <t-form-item label="会议名" name="mname" prop="mname">
+              <t-input v-model="formData.mname"  :style="{ width: '322px' }" placeholder="请输入内容" />
             </t-form-item>
           </t-col>
           <t-col :span="6">
@@ -39,11 +39,11 @@
 <!--              </t-select>-->
 <!--            </t-form-item>-->
             <t-col :span="6">
-              <t-form-item label="申请人" name="host">
-                <t-input v-model="formData.host"  :style="{ width: '322px' }"  placeholder="请输入内容" disabled></t-input>
+<!--              <t-form-item label="申请人" name="host">-->
+<!--                <t-input v-model="formData.host"  :style="{ width: '322px' }"  placeholder="请输入内容" disabled></t-input>-->
 
-              </t-form-item>
-              <t-form-item label="会议总人数" name="totalNum">
+<!--              </t-form-item>-->
+              <t-form-item label="会议总人数" name="totalNum" prop="totalNum">
                 <t-input v-model="formData.totalNum"  :style="{ width: '322px' }" type="number"  placeholder="请输入内容"></t-input>
 
               </t-form-item>
@@ -54,9 +54,9 @@
           </t-col>
 
           <t-col :span="6">
-            <t-form-item label="会议预定时间" name="expectTime">
+            <t-form-item label="会议预定开始时间" name="expectsTime" prop="expectsTime">
               <t-date-picker
-                v-model="formData.expectTime"
+                v-model="formData.expectsTime"
                 :style="{ width: '322px' }"
                 mode="date"
                 format="YYYY-MM-DD HH:mm:ss"
@@ -69,9 +69,9 @@
           <t-col :span="6"></t-col>
 
           <t-col :span="6">
-            <t-form-item label="会议结束时间" name="endTime">
+            <t-form-item label="会议预定结束时间" name="expecteTime" prop="expecteTime">
               <t-date-picker
-                v-model="formData.endTime"
+                v-model="formData.expecteTime"
                 :style="{ width: '322px' }"
                 mode="date"
                 format="YYYY-MM-DD HH:mm:ss"
@@ -104,22 +104,27 @@
 </template>
 <script>
 import { prefix } from '@/config/global';
+import {applyMeeting} from '@/utils/api.js'
 
 const INITIAL_DATA = {
   mname: '',
-  endTime: '',
+  expectsTime:'',
+  expecteTime:'',
   totalNum:null,
-  // 此页面默认申请为预定会议 0
-  isApply:0,
+  // 默认申请会议为未开始状态 0
+  status:0,
+  // 此页面默认申请为预定会议 1
+  isApply:1,
   host:''
 };
 const FORM_RULES = {
   mname: [{ required: true, message: '请输入会议名', type: 'error' }],
-  expectTime: [{ required: true, message: '请选择预定时间', type: 'error' }],
-  endTime: [{ required: true, message: '请选择结束时间', type: 'error' }],
-  totalNum: [{ required: true, message: '请选择结束时间', type: 'error' }],
+  expectsTime: [{ required: true, message: '请选择预定开始时间', type: 'error' }],
+  expecteTime: [{ required: true, message: '请选择预定结束时间', type: 'error' }],
+  totalNum: [{ required: true, message: '请输入会议人数', type: 'error' }],
 
 };
+const that = this
 
 export default {
   name: 'FormBase',
@@ -141,6 +146,8 @@ export default {
   mounted() {
     this.user_name = localStorage.getItem('user_name');
     this.formData.host = this.user_name;
+    // this.$refs.form.rendered = true
+
   },
   methods: {
     changeStatus() {
@@ -150,20 +157,26 @@ export default {
       this.$message.warning('取消申请');
     },
     onSubmit({ validateResult }) {
+      // console.log(this.$refs.applyForm.reset())
+
       if (validateResult === true) {
-        this.$request.post('api/meetings/apply',this.formData).then(res=> {
-          console.log('formdata',this.formData)
-          console.log('meeting apply',res)
+        applyMeeting(this.formData).then(res=>{
+          console.log('会议申请',res)
+
+          console.log('会议申请的formdata',this.formData)
 
           if (res.data.code === '200') {
 
-            this.$message.success(res.data.msg);
+            this.$message.success('申请成功');
+            // this.$refs.applyForm.resetField()
+            this.$router.push('/list/filterall')
 
           } else {
-            this.$message.error(res.data.msg);
+            this.$message.error('申请失败');
+
           }
         })
-        this.$message.success('申请成功');
+
       }
     },
   },

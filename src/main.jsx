@@ -7,8 +7,7 @@ import axiosInstance from '@/utils/request';
 import App from './App.vue';
 import router from './router';
 import zhConfig from 'tdesign-vue/esm/locale/zh_CN';
-import axios from "axios";
-
+// import api from './utils/api.js';
 // import enConfig from 'tdesign-vue/esm/locale/en_US'; // 英文多语言配置
 
 import '@/style/index.less';
@@ -23,7 +22,7 @@ Vue.use(VueClipboard);
 Vue.component('t-page-header');
 
 Vue.prototype.$request = axiosInstance;
-Vue.prototype.$http = axios
+// Vue.prototype.$api = api;
 
 const originPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {

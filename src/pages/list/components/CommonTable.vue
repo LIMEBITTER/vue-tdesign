@@ -82,7 +82,7 @@
         <template #op="slotProps">
 <!--          <a class="t-button-link" @click="startMeeting(slotProps)">开始会议</a>-->
           <a class="t-button-link" @click="handleClickDetail(slotProps)">详情</a>
-          <a class="t-button-link" @click="handleClickDelete(slotProps)">删除</a>
+<!--          <a class="t-button-link" @click="handleClickDelete(slotProps)">删除</a>-->
         </template>
       </t-table>
       <t-dialog
@@ -99,6 +99,7 @@
 <script>
 import { prefix } from '@/config/global';
 import Trend from '@/components/trend/index.vue';
+import {sMeetingsRecord} from '@/utils/api.js';
 
 import {
   CONTRACT_STATUS,
@@ -130,7 +131,7 @@ export default {
           ellipsis: true,
           colKey: 'mname',
         },
-        { title: '会议状态', colKey: 'status', width: 200, cell: { col: 'status' } },
+        // { title: '会议状态', colKey: 'status', width: 200, cell: { col: 'status' } },
         {
           title: '会议号',
           width: 200,
@@ -195,23 +196,20 @@ export default {
   },
   mounted() {
     this.dataLoading = true;
-    this.$request
-      .get('/api/meetingRecord')
-      .then((res) => {
-        console.log('查询所有历史会议：',res)
-        if (res.data.code === '200') {
-          // const { list = [] } = res.data.result;
-          // console.log('list',list)
-          // this.data = list;
-          this.data = res.data.result;
 
-          console.log('data',this.data)
-          this.pagination = {
-            ...this.pagination,
-            total: this.data.length,
-          };
-        }
-      })
+    sMeetingsRecord().then(res=>{
+      console.log('查询所有历史会议：',res)
+      if (res.data.code === '200') {
+
+        this.data = res.data.result;
+
+        console.log('data',this.data)
+        this.pagination = {
+          ...this.pagination,
+          total: this.data.length,
+        };
+      }
+    })
       .catch((e) => {
         console.log(e);
       })
@@ -235,11 +233,8 @@ export default {
     handleClickDetail(currentRow) {
       this.$router.push({
         name:'MeetingInfo',
-        params:{
+        query:{
           mid:currentRow.row.mid,
-          startTime:currentRow.row.startTime,
-          endTime:currentRow.row.endTime,
-          totalNum:currentRow.row.totalNum
         }
       })
     },

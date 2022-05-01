@@ -25,53 +25,64 @@
           </div>
           <div class="info-item">
             <h1>会议状态</h1>
-            <div v-if="formData.status===0">未开始</div>
-            <div v-if="formData.status===1">进行中</div>
-            <div v-if="formData.status===2">已结束</div>
+            <div>已结束</div>
 
-
-            <!--            {{formData.status}}-->
+          </div>
+          <div class="info-item">
+            <h1>会议预计开始时间</h1>
+            {{formData.expectsTime}}
+          </div>
+          <div class="info-item">
+            <h1>会议预计结束时间</h1>
+            {{formData.expecteTime}}
           </div>
           <div class="info-item">
             <h1>会议开始时间</h1>
             {{formData.startTime}}
-          </div>
-          <div class="info-item">
-            <h1>会议预计时间</h1>
 
           </div>
           <div class="info-item">
             <h1>会议结束时间</h1>
-            {{formData.endTime}}
+            <div v-if="formData.endTime===null">\</div>
+            <div v-else>{{formData.endTime}}</div>
           </div>
-          <div class="info-item">
-            <h1>创建时间</h1>
-
-          </div>
-
-
-
-<!--          <div class="info-item">-->
-<!--                        <span-->
-<!--              :class="{-->
-<!--              ['inProgress']: item.type && item.type.value === 'inProgress',-->
-<!--            }"-->
-<!--            >-->
-<!--            <i v-if="item.type && item.type.key === 'contractStatus'" />-->
-<!--            {{ item.value }}-->
-<!--          </span>-->
-<!--          </div>-->
+          <!--            <span-->
+          <!--              :class="{-->
+          <!--              ['inProgress']: item.type && item.type.value === 'inProgress',-->
+          <!--            }"-->
+          <!--            >-->
+          <!--            <i v-if="item.type && item.type.key === 'contractStatus'" />-->
+          <!--            {{ item.value }}-->
+          <!--          </span>-->
         </div>
 
-
-        <t-button theme="primary" style="width: 88px;height: 32px;">
-          修改
-        </t-button>
       </card>
+
+      <t-row :gutter="[16, 16]" class="card-container-margin">
+        <t-col :xs="12" :xl="9">
+          <card title="参会者信息查询">
+            <keep-alive>
+              <common-table :mid="this.mid"/>
+            </keep-alive>
+          </card>
+          <!--          <card title="会议签到" v-else>-->
+          <!--            <t-button>签到</t-button>-->
+          <!--            <t-dialog>-->
+          <!--              <face-reg></face-reg>-->
+          <!--            </t-dialog>-->
+          <!--          </card>-->
+        </t-col>
+        <t-col :xs="12" :xl="3">
+          <card title="签到">
+            <p>已签到人数：40</p>
+            <p>签到率：100%</p>
+            <p>补签人数：0</p>
+
+          </card>
+        </t-col>
+      </t-row>
+
     </t-row>
-
-
-
 
   </div>
 </template>
@@ -79,43 +90,74 @@
 import { prefix } from '@/config/global';
 import model from '@/service/service-detail-base';
 import Card from '@/components/card/index.vue';
+import CommonTable from "../components/CommonTableStart.vue";
+import {sCurrentMeetingInfo,endMeetingDev,recordMeetingInfo} from "@/utils/api.js";
 
 export default {
   name: 'MeetingInfo',
-  components: { Card },
+  components: { Card ,CommonTable,},
   data() {
     return {
       prefix,
+      user_name:localStorage.getItem('user_name'),
+      mid:'',
       baseInfoData: model.getBaseInfoData(),
-      formData:{
-        mid:'',
-        startTime:'',
-        endTime:'',
-        totalNum:null,
-      },
+      formData:[],
+      // 结束会议时传输的数据
+      endData:{
+
+      }
 
     };
   },
   // 此页面不需要缓存 需要重复加载数据
   activated() {
-    this.formData.mid = this.$route.params.mid
-    this.formData.mname = this.$route.params.mname
-    this.formData.host = this.$route.params.host
-    this.formData.status = this.$route.params.status
-    this.formData.startTime = this.$route.params.startTime
-    this.formData.endTime = this.$route.params.endTime
-    this.formData.totalNum = this.$route.params.totalNum
-    console.log('basecheck',this.$route.params.mid)
+    this.mid = this.$route.query.mid
+
+    console.log('当前会议号',this.mid)
+    sCurrentMeetingInfo(this.mid).then(res=>{
+      console.log('查询当前会议信息',res)
+      this.formData = res.data.result.meetingInfo
+      console.log(this.formData)
+
+    })
+
+
   },
+
+
 
   methods: {
     back(){
-      // this.$router.push('/list/filter')
+      // this.$router.push('/list/filterall')
       this.$router.go(-1)
+    },
+    endMeeting(){
+      const eData = {mid:this.mid}
+      endMeetingDev(eData).then(res=>{
+        console.log('结束会议',res)
+        if (res.data.code === "200"){
+          this.$message.success("结束会议")
+          recordMeetingInfo(eData).then(res=>{
+            console.log('生成会议历史记录',res)
+            if(res.data.code === "200"){
+              this.$message.success("生成历史记录")
+
+            }else{
+              this.$message.error("历史记录生成失败")
+            }
+          })
+          this.$router.push({name:'ListFilter'})
+        }else{
+          this.$message.error("结束会议失败")
+        }
+      })
+
     }
+
   },
 };
 </script>
 <style lang="less" scoped>
-@import 'src/pages/hidden/meetingInfo/index';
+  @import 'src/pages/hidden/meetingStart/index';
 </style>
