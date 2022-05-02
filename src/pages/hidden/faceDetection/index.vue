@@ -72,11 +72,10 @@ import { prefix } from '@/config/global';
 import model from '@/service/service-detail-base';
 import Card from '@/components/card/index.vue';
 import Camera from "../components/Camera.vue";
-import Camera1 from "../components/Camera1.vue";
 
 export default {
   name: 'FaceDetection',
-  components: { Card,Camera,Camera1 },
+  components: { Card,Camera },
   data() {
     return {
       prefix,

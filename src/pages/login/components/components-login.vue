@@ -41,7 +41,7 @@
           :type="showPsw ? 'text' : 'password'"
           clearable
           key="password"
-          placeholder="确认密码：123"
+          placeholder="确认密码：aaa"
         >
           <template #prefix-icon>
             <t-icon name="lock-on" />
@@ -151,7 +151,8 @@ export default Vue.extend({
             localStorage.setItem('user_name', this.formData.uname);
             localStorage.setItem('token', this.userToken);
 
-            this.$router.replace('/').catch(() => '');
+            // this.$router.replace('/').catch(() => '');
+            this.$router.push('/');
 
             this.$message.success('登录成功');
 

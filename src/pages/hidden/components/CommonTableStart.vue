@@ -82,25 +82,67 @@
       <t-dialog header="人员补签" :closeBtn="false" :visible.sync="visible5" @confirm="onConfirm" :onClose="close5">
         <div slot="body">
           <t-form :data="resignData" :labelAlign="formData.labelAlign" :labelWidth="60">
-            <t-form-item label="会议号" name="mid" disabled>
-              <t-input v-model="resignData.mid"></t-input>
+            <t-form-item label="补签人" name="uid" >
+              <t-input v-model="resignData.uid" disabled></t-input>
             </t-form-item>
-            <t-form-item label="补签人" name="user" disabled>
-              <t-input v-model="resignData.resignedUser"></t-input>
+            <t-form-item label="备注" name="comment" >
+              <t-input v-model="resignData.comment"></t-input>
             </t-form-item>
           </t-form>
 
 
         </div>
       </t-dialog>
+      <t-dialog header="人员详细信息" :closeBtn="false" :footer="false" :visible.sync="visible6" @confirm="onConfirm" :onClose="close6">
+        <div slot="body">
+          <t-form :data="resignData" :labelAlign="formData.labelAlign" :labelWidth="60">
+            <t-form-item label="用户姓名" name="uid" >
+              <div class="member_detail"></div>
+              {{currentMInfo.uid}}
+            </t-form-item>
+            <t-form-item label="签到时间" name="joinTime" >
+              <div class="member_detail"></div>
+              {{currentMInfo.joinTime}}
+            </t-form-item>
+            <t-form-item label="入会时间" name="signTime" >
+              <div class="member_detail"></div>
+              {{currentMInfo.signTime}}
+            </t-form-item>
+            <t-form-item label="离会时间" name="leaveTime" >
+              <div class="member_detail"></div>
 
+              {{currentMInfo.leaveTime}}
+            </t-form-item>
+            <t-form-item label="是否签到" name="isSign" >
+              <div class="member_detail"></div>
+
+              <t-tag v-if="currentMInfo.isSign === 0" theme="warning" variant="light">未签到</t-tag>
+              <t-tag v-if="currentMInfo.isSign === 1" theme="success" variant="light">已签到</t-tag>
+            </t-form-item>
+            <t-form-item label="是否补签" name="isRetroactive" >
+              <div class="member_detail"></div>
+
+              <t-tag v-if="currentMInfo.isSign === 0" theme="warning" variant="light">非补签</t-tag>
+              <t-tag v-if="currentMInfo.isSign === 1" theme="success" variant="light">补签</t-tag>
+            </t-form-item>
+            <t-form-item label="签到方式" name="signMethod" >
+              <div class="member_detail"></div>
+
+              {{currentMInfo.signMethod}}
+            </t-form-item>
+
+          </t-form>
+
+
+        </div>
+      </t-dialog>
     </div>
   </div>
 </template>
 <script>
 import { prefix } from '@/config/global';
 import Trend from '@/components/trend/index.vue';
-import {sAllSignRecordsByMid} from '@/utils/api.js';
+import {sAllSignRecordsByMid,retroactiveUser} from '@/utils/api.js';
 
 import {
   CONTRACT_STATUS,
@@ -119,6 +161,7 @@ export default {
   data() {
     return {
       visible5: false,
+      visible6:false,
       // 重新签到的人员
       CONTRACT_STATUS,
       CONTRACT_STATUS_OPTIONS,
@@ -130,11 +173,18 @@ export default {
         status: undefined,
       },
       t_mid:'',
+
+      // 参会人员详细信息
+      currentMInfo:[],
       // 补签对话框数据
       resignData:{
-        resignedUser:'',
         mid:'',
+        uid:'',
+        comment:'',
       },
+      // 当前人员是否签到
+      currentIsSign:0,
+
       data: [],
       dataLoading: false,
       value: 'frist',
@@ -184,12 +234,16 @@ export default {
   watch:{
     mid(newVal,oldVal){
       this.t_mid = newVal;
-      this.init_api(this.t_mid);
+      this.init_api(localStorage.getItem('current_mid'));
 
     },
 
   },
-
+  created() {
+    console.log('created=====================')
+    // console.log(this.t_mid)
+    this.init_api(localStorage.getItem('current_mid'));
+  },
   methods: {
     onReset(data) {
       console.log(data);
@@ -227,28 +281,52 @@ export default {
     buqian(e){
       console.log('当前补签人员',e)
       // 将当前行的人员姓名存入
-      this.resignData.resignedUser = e.row.uname
+      this.resignData.uid = e.row.uid
+      this.resignData.mid = e.row.mid
+      this.currentIsSign = e.row.isSign
+
+
       this.visible5 = true
     },
     checkInfo(currentRow){
-      console.log('当前人员',currentRow)
+      console.log('当前人员',currentRow.row)
+      this.visible6 = true
+      this.currentMInfo = currentRow.row
       // 当前人员信息
-      this.$router.push('/hidden/indexm')
+      // this.$router.push('/hidden/indexm')
 
 
     },
-    sendingRequest() {
-      console.log('sending request');
-    },
+
     close5() {
       this.visible5 = false;
     },
-    onConfirm(context) {
-      const { e } = context;
-      // todo something else here
-      this.sendingRequest();
-      this.visible5 = false;
-      e.stopPropagation();
+    close6() {
+      this.visible6 = false;
+    },
+    // 补签
+    onConfirm() {
+
+      console.log(this.currentIsSign)
+      if(this.currentIsSign === 0){
+
+        retroactiveUser(this.resignData).then(res=>{
+          console.log(res)
+          if (res.data.code === '200'){
+            this.$message.success('补签成功')
+            this.visible5 = false;
+            setTimeout(()=>{
+              this.$router.go(0)
+
+            },1000)
+          }
+        })
+      }else {
+        this.$message.info('当前用户已签到！')
+
+      }
+
+      // e.stopPropagation();
     },
     init_api(id){
       this.dataLoading = true;
@@ -294,6 +372,10 @@ export default {
 
 .form-item-content {
   width: 100%;
+}
+
+.member_detail{
+  margin-right: 20px;
 }
 
 .operation-container {

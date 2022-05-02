@@ -16,7 +16,9 @@ router.beforeEach(async (to, from, next) => {
   const token = localStorage.getItem('token')
 
 
+
   if (token) {
+
     // 如果访问login router放行
     if (to.path === '/login') {
       setTimeout(() => {
@@ -26,7 +28,6 @@ router.beforeEach(async (to, from, next) => {
       next();
       return;
     }
-
     // 获取用户角色
     const roles = store.getters['user/roles'];
     console.log('roles',roles)

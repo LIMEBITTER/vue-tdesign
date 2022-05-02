@@ -300,7 +300,7 @@ export default {
           if (res.data.code==='-1'){
             this.$message.warning('会议开始失败')
           }else {
-            console.log('开始会议！！',res)
+            console.log('开始会议！！',res,cData)
             this.$router.push({
               name:'MeetingStart',
               query:cData

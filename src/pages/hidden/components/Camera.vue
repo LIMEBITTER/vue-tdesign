@@ -8,10 +8,13 @@
     <t-progress style="width: 20%" theme="line" :color="{ from: '#0052D9', to: '#00A870' }" :percentage="this.msg" :status="'active'" />
     <t-button theme="default" variant="base" @click="stopNavigator()">关闭摄像头</t-button>
 
+
+    <vue-web-cam :selectFirstDevice="true" />
   </div>
+
 </template>
 <script>
-import {uploadFileOne} from '@utils/api.js';
+import {uploadFileOne} from '@/utils/api.js';
 
 export default {
 
@@ -200,69 +203,69 @@ export default {
 
 </script>
 <style lang="less" scoped>
-  .camera_outer{
-    position: relative;
-    overflow: hidden;
-    /*background: url("../../assets/img/user_0608_04.jpg") no-repeat center;*/
-    background-size: 100%;
-    video,canvas,.tx_img{
-      -moz-transform:scaleX(-1);
-      -webkit-transform:scaleX(-1);
-      -o-transform:scaleX(-1);
-      transform:scaleX(-1);
-    }
-    video{
-      border-radius: 50%;
-    }
-    img{
-      border-radius: 50%;
+  /*.camera_outer{*/
+  /*  position: relative;*/
+  /*  overflow: hidden;*/
+  /*  !*background: url("../../assets/img/user_0608_04.jpg") no-repeat center;*!*/
+  /*  background-size: 100%;*/
+  /*  video,canvas,.tx_img{*/
+  /*    -moz-transform:scaleX(-1);*/
+  /*    -webkit-transform:scaleX(-1);*/
+  /*    -o-transform:scaleX(-1);*/
+  /*    transform:scaleX(-1);*/
+  /*  }*/
+  /*  video{*/
+  /*    border-radius: 50%;*/
+  /*  }*/
+  /*  img{*/
+  /*    border-radius: 50%;*/
 
-    }
-    .btn_camera{
-      position: absolute;
-      bottom: 4px;
-      left: 0;
-      right: 0;
-      height: 50px;
-      background-color: rgba(0,0,0,0.3);
-      line-height: 50px;
-      text-align: center;
-      color: #ffffff;
-    }
-    .bg_r_img{
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      top: 0;
-    }
-    .img_bg_camera{
-      border-radius: 50%;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      top: 0;
-      img{
-        /*width: 100%;*/  //注释掉的
-        height: 100%;
-        margin-left: 500px; //另外加的
-      }
-      .img_btn_camera{
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 50px;
-        line-height: 50px;
-        text-align: center;
-        background-color: rgba(0,0,0,0.3);
-        color: #ffffff;
-        .loding_img{
-          width: 50px;
-          height: 50px;
-        }
-      }
-    }
-  }
+  /*  }*/
+  /*  .btn_camera{*/
+  /*    position: absolute;*/
+  /*    bottom: 4px;*/
+  /*    left: 0;*/
+  /*    right: 0;*/
+  /*    height: 50px;*/
+  /*    background-color: rgba(0,0,0,0.3);*/
+  /*    line-height: 50px;*/
+  /*    text-align: center;*/
+  /*    color: #ffffff;*/
+  /*  }*/
+  /*  .bg_r_img{*/
+  /*    position: absolute;*/
+  /*    bottom: 0;*/
+  /*    left: 0;*/
+  /*    right: 0;*/
+  /*    top: 0;*/
+  /*  }*/
+  /*  .img_bg_camera{*/
+  /*    border-radius: 50%;*/
+  /*    position: absolute;*/
+  /*    bottom: 0;*/
+  /*    left: 0;*/
+  /*    right: 0;*/
+  /*    top: 0;*/
+  /*    img{*/
+  /*      !*width: 100%;*!  //注释掉的*/
+  /*      height: 100%;*/
+  /*      margin-left: 500px; //另外加的*/
+  /*    }*/
+  /*    .img_btn_camera{*/
+  /*      position: absolute;*/
+  /*      bottom: 0;*/
+  /*      left: 0;*/
+  /*      right: 0;*/
+  /*      height: 50px;*/
+  /*      line-height: 50px;*/
+  /*      text-align: center;*/
+  /*      background-color: rgba(0,0,0,0.3);*/
+  /*      color: #ffffff;*/
+  /*      .loding_img{*/
+  /*        width: 50px;*/
+  /*        height: 50px;*/
+  /*      }*/
+  /*    }*/
+  /*  }*/
+  /*}*/
 </style>

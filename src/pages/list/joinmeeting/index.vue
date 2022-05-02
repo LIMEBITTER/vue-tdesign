@@ -98,6 +98,7 @@ export default {
       this.$message.warning('取消提交');
     },
     onSubmit({ validateResult }) {
+      console.log(this.formData)
       if (validateResult === true) {
         pSignRecord(this.formData).then(res=>{
           if(res.data.code === "200"){

@@ -112,12 +112,38 @@ export default {
 
     };
   },
+  // mounted() {
+  //   this.mid = this.$route.query.mid
+  //   localStorage.setItem('current_mid',this.mid)
+  //
+  //   console.log('当前会议号',this.mid)
+  //   const local_mid = localStorage.getItem('current_mid')
+  //   sCurrentMeetingInfo(local_mid).then(res=>{
+  //     console.log('查询当前会议信息',res)
+  //     this.formData = res.data.result.meetingInfo
+  //
+  //   })
+  // },
+  created() {
+    this.mid = this.$route.query.mid
+    localStorage.setItem('current_mid',this.mid)
+
+    console.log('当前会议号',this.mid)
+    const local_mid = localStorage.getItem('current_mid')
+    sCurrentMeetingInfo(local_mid).then(res=>{
+      console.log('查询当前会议信息',res)
+      this.formData = res.data.result.meetingInfo
+
+    })
+  },
   // 此页面不需要缓存 需要重复加载数据
   activated() {
     this.mid = this.$route.query.mid
+    localStorage.setItem('current_mid',this.mid)
 
     console.log('当前会议号',this.mid)
-    sCurrentMeetingInfo(this.mid).then(res=>{
+    const local_mid = localStorage.getItem('current_mid')
+    sCurrentMeetingInfo(local_mid).then(res=>{
       console.log('查询当前会议信息',res)
       this.formData = res.data.result.meetingInfo
 

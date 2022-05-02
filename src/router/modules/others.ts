@@ -35,7 +35,11 @@ export default [
         path: 'meetingStart',
         name: 'MeetingStart',
         component: () => import('@/pages/hidden/meetingStart/index.vue'),
-        meta: { title: '会议开始结束' ,keepAlive:false},
+        meta: { title: '会议开始结束' ,keepAlive:true},
+        // beforeEnter(to,from,next){
+        //   console.log('meetingstart路由守卫',to,from)
+        //   next();
+        // }
       },
       {
         path: 'faceDetection',
@@ -43,12 +47,7 @@ export default [
         component: () => import('@/pages/hidden/faceDetection/index.vue'),
         meta: { title: '人脸签到' },
       },
-      {
-        path: 'indexm',
-        name: 'MemberIndex',
-        component: () => import('@/pages/member/index.vue'),
-        meta: { title: '参会人员信息' },
-      },
+
     ],
   },
 ];

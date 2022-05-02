@@ -14,7 +14,9 @@ import '@/style/index.less';
 
 import './permission';
 import store from './store';
+import WebCam from 'vue-web-cam';
 
+Vue.use(WebCam);
 Vue.use(VueRouter);
 Vue.use(TDesign);
 Vue.use(VueClipboard);
