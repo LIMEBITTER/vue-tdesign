@@ -11,6 +11,8 @@
   </div>
 </template>
 <script>
+import {uploadFileOne} from '@utils/api.js';
+
 export default {
 
   name: "Camera",
@@ -128,8 +130,7 @@ export default {
           formData.append("file",image)
 
 
-
-          this.$request.post('api/uploadFile',formData).then((res)=>{
+          uploadFileOne(formData).then((res=>{
             if (res.data.code==="200"){
               that.msg=res.data.result
               that.resMsg="正在上传中..."
@@ -145,9 +146,12 @@ export default {
               that.resMsg="未检测到您的人脸"
             }
             console.log('图片上传',that.timerNum,res,that.msg)
-
-
-          })
+          }))
+          // this.$request.post('api/uploadFile',formData).then((res)=>{
+          //
+          //
+          //
+          // })
 
         },0)
       },1*1000)
