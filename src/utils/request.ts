@@ -12,7 +12,7 @@ const CODE = {
 };
 
 const instance = axios.create({
-  baseURL: API_HOST,
+  baseURL: 'https://frp.kawaiimoe.cn/api',
   timeout: 1000,
   withCredentials: true,
 });
@@ -78,6 +78,7 @@ function request(config) {
   data = data || {}
   method = method || 'GET'
   headers = headers || ''
+  console.log(headers)
 
   // restful api  GET / POST /PUT/PATCH/DELETE
   switch (method.toUpperCase()) {

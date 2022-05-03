@@ -48,12 +48,15 @@ export default Vue.extend({
       myMenu:this.menu,
     };
   },
+  // created() {
+  //   this.myMenu.pop()
+  //
+  // },
 
   mounted() {
-    this.autoCollapsed();
-    console.log('mymenu--------------',this.myMenu)
     // 隐藏要隐藏的菜单
-    this.myMenu.pop()
+    this.autoCollapsed();
+
     console.log('mymenu--------------',this.myMenu)
 
 

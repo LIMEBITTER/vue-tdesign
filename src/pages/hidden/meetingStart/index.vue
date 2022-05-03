@@ -58,19 +58,13 @@
 
       </card>
 
-      <t-row :gutter="[16, 16]" class="card-container-margin">
+      <t-row :gutter="[16, 16]" class="card-container-margin" v-show="formData.host===user_name">
         <t-col :xs="12" :xl="9">
-          <card title="参会者信息查询">
+          <card title="参会者信息查询" >
             <keep-alive>
-              <common-table :mid="this.mid"/>
+              <common-table :mid="this.mid" />
             </keep-alive>
           </card>
-<!--          <card title="会议签到" v-else>-->
-<!--            <t-button>签到</t-button>-->
-<!--            <t-dialog>-->
-<!--              <face-reg></face-reg>-->
-<!--            </t-dialog>-->
-<!--          </card>-->
         </t-col>
         <t-col :xs="12" :xl="3">
           <card title="签到">
@@ -83,6 +77,15 @@
         </t-col>
       </t-row>
 
+      <t-row :gutter="[16, 16]" class="card-container-margin" v-show="formData.host!==user_name">
+        <t-col :xs="16" :xl="16">
+          <card title="人脸签到" >
+            <common-table-start-user/>
+          </card>
+        </t-col>
+
+      </t-row>
+
     </t-row>
 
   </div>
@@ -93,11 +96,12 @@ import model from '@/service/service-detail-base';
 import Card from '@/components/card/index.vue';
 import CommonTable from "../components/CommonTableStart.vue";
 import {sCurrentMeetingInfo,endMeetingDev,recordMeetingInfo} from "@/utils/api.js";
-import FaceReg from "../components/FaceReg.vue";
+// import FaceReg from "../components/FaceReg.vue";
+import CommonTableStartUser from "../components/CommonTableStartUser.vue";
 
 export default {
   name: 'MeetingStart',
-  components: { Card ,CommonTable,FaceReg},
+  components: { Card ,CommonTable,CommonTableStartUser},
   data() {
     return {
       prefix,

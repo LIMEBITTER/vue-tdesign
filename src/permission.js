@@ -31,13 +31,14 @@ router.beforeEach(async (to, from, next) => {
     // 获取用户角色
     const roles = store.getters['user/roles'];
     console.log('roles',roles)
-
+    // 判断当前用户是否已经拉取userInfo
     if (roles && roles.length > 0) {
       next();
     } else {
       try {
+        // 拉取userInfo
         await store.dispatch('user/getUserInfo');
-
+        // 生成可访问的路由表
         await store.dispatch('permission/initRoutes', store.getters['user/roles']);
 
         next({ ...to });

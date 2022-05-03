@@ -99,7 +99,7 @@
 <script>
 import { prefix } from '@/config/global';
 import Trend from '@/components/trend/index.vue';
-import {checkAllMeetingsInfo,startMeetingDev} from '@/utils/api.js'
+import {sAllMeetingsInfoByUid,startMeetingDev} from '@/utils/api.js'
 
 import {
   CONTRACT_STATUS,
@@ -148,14 +148,6 @@ export default {
           // colKey: 'contractType',
           colKey:'expectsTime',
         },
-        // {
-        //   title: '结束时间',
-        //   width: 200,
-        //   ellipsis: true,
-        //   // colKey: 'paymentType',
-        //   colKey: 'endTime',
-        //
-        // },
         {
           title: '总人数',
           width: 200,
@@ -180,8 +172,8 @@ export default {
       rowClassName: (rowKey) => `${rowKey}-class`,
       // 与pagination对齐
       pagination: {
-        defaultPageSize: 20,
-        total: 100,
+        defaultPageSize: 5,
+        total: 0,
         defaultCurrent: 1,
       },
       confirmVisible: false,
@@ -200,19 +192,21 @@ export default {
   mounted() {
     this.dataLoading = true;
     // 调用api
-    checkAllMeetingsInfo().then(res=>{
+    const sData = {uid:localStorage.getItem('uid'),current:this.pagination.defaultCurrent,size:this.pagination.defaultPageSize}
+    sAllMeetingsInfoByUid(sData).then(res=>{
 
       console.log('获取所有会议信息',res)
       if (res.data.code === "200") {
         // const { list = [] } = res.data.result;
         // console.log('list',list)
         // this.data = list;
-        this.data = res.data.result;
+        this.data = res.data.result.meetingListList;
 
         console.log('data',this.data)
         this.pagination = {
           ...this.pagination,
-          total: this.data.length,
+
+          total: res.data.result.total,
         };
       }
     })
@@ -223,11 +217,6 @@ export default {
         this.dataLoading = false;
       });
 
-    const uid = localStorage.getItem('uid')
-    // sAllMeetingsByUid(uid).then(res=>{
-    //   console.log('根据用户id查询所有会议记录',res)
-    // })
-    // console.log(checkAllMeetingsInfo(params))
   },
   methods: {
     onReset(data) {
@@ -238,6 +227,33 @@ export default {
     },
     rehandlePageChange(curr, pageInfo) {
       console.log('分页变化', curr, pageInfo);
+      // this.dataLoading = true;
+      // // 调用api
+      const sData = {uid:localStorage.getItem('uid'),current:curr.current,size:curr.pageSize}
+      sAllMeetingsInfoByUid(sData).then(res=>{
+
+        console.log('分页数据',res)
+        if (res.data.code === "200") {
+          // const { list = [] } = res.data.result;
+          // console.log('list',list)
+          // this.data = list;
+          this.data = res.data.result.meetingListList;
+
+          console.log('data',this.data)
+          this.pagination = {
+            ...this.pagination,
+            defaultPageSize: sData.size,
+            defaultCurrent: sData.current,
+            total: res.data.result.total,
+          };
+        }
+      })
+        .catch((e) => {
+          console.log(e);
+        })
+        .finally(() => {
+          this.dataLoading = false;
+        });
     },
     rehandleChange(changeParams, triggerAndData) {
       console.log('统一Change', changeParams, triggerAndData);
@@ -287,13 +303,6 @@ export default {
 
         const cData = {
           mid:currentRow.row.mid,
-          // mname:currentRow.row.mname,
-          // host:currentRow.row.host,
-          // isApply: currentRow.row.isApply,
-          // status:currentRow.row.status,
-          // startTime:currentRow.row.startTime,
-          // endTime:currentRow.row.endTime,
-          // totalNum:currentRow.row.totalNum
         }
         console.log('cData',cData)
         startMeetingDev(cData).then(res=>{

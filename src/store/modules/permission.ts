@@ -1,4 +1,4 @@
-import { resetRouter, asyncRouterList } from '@/router';
+import { resetRouter,defaultRouterList, asyncRouterList } from '@/router';
 
 function filterPermissionsRouters(routes, roles) {
   const res = [];
@@ -35,12 +35,14 @@ const getters = {
 };
 
 const actions = {
+  // 初始化路由表
   async initRoutes({ commit }, roles) {
     let accessedRouters;
 
     // special token
     if (roles.includes('ALL_ROUTERS')) {
       accessedRouters = asyncRouterList;
+      console.log('路由表动态',accessedRouters,roles)
     } else {
       accessedRouters = filterPermissionsRouters(asyncRouterList, roles);
     }

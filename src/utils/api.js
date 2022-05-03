@@ -6,7 +6,7 @@ import request from './request.ts'
 // 用户登录
 export function userLogin(data) {
   return request({
-    url:'api/user/login',
+    url:'/user/login',
     method:'post',
     data
   })
@@ -15,7 +15,7 @@ export function userLogin(data) {
 // 用户注册
 export function userRegister(data) {
   return request({
-    url:'api/user/register',
+    url:'/user/register',
     method:'post',
     data
   })
@@ -24,7 +24,7 @@ export function userRegister(data) {
 // 获取当前用户信息
 export function getCurrentUserInfo() {
   return request({
-    url:'api/user/userInfo',
+    url:'/user/userInfo',
     method:'get',
   })
 }
@@ -32,7 +32,7 @@ export function getCurrentUserInfo() {
 // 退出登录,销毁redis
 export function logOut() {
   return request({
-    url:'api/user/loginOut',
+    url:'/user/loginOut',
     method:'get',
   })
 }
@@ -40,18 +40,26 @@ export function logOut() {
 /**
  *  会议服务
  */
-// 查询所有会议信息
-export function checkAllMeetingsInfo() {
+// 根据uid查询所有该用户创建的会议信息
+export function sAllMeetingsInfoByUid(data) {
+  console.log('datadddddddd',data)
+  const pageData = {current:data.current,size:data.size}
+  const {uid} = data
+  console.log(pageData,uid)
   return request({
-    url:'api/meetings',
-    method:'GET',
+    url:`/meetings/host/${uid}`,
+    method:'post',
+    data:pageData
+
   })
 }
+
+
 
 // 预定会议(申请会议)
 export function applyMeeting(data) {
   return request({
-    url:'api/meetings/apply',
+    url:'/meetings/apply',
     method:'post',
     data
   })
@@ -60,7 +68,7 @@ export function applyMeeting(data) {
 // 开始会议(预定与快速会议)
 export function startMeetingDev(data) {
   return request({
-    url:'api/meetings/start',
+    url:'/meetings/start',
     method:'post',
     data
   })
@@ -69,7 +77,7 @@ export function startMeetingDev(data) {
 // 结束会议(需要会议号)  ？？？？？
 export function endMeetingDev(data) {
   return request({
-    url:'api/meetings/end',
+    url:'/meetings/end',
     method:'post',
     data
   })
@@ -78,7 +86,7 @@ export function endMeetingDev(data) {
 // 查询当前会议信息 （根据mid）
 export function sCurrentMeetingInfo(params) {
   return request({
-    url:`api/meetings/${params}`,
+    url:`/meetings/${params}`,
     method:'get',
   })
 }
@@ -86,7 +94,7 @@ export function sCurrentMeetingInfo(params) {
 // 查询所有会议信息
 export function sAllMeetingsInfo() {
   return request({
-    url:'api/meetings',
+    url:'/meetings',
     method:'get',
   })
 }
@@ -97,7 +105,7 @@ export function sAllMeetingsInfo() {
 // 生成会议历史记录(结束会议)  ？？？？？？
 export function recordMeetingInfo(data) {
   return request({
-    url:'api/meetingRecord/endMeeting',
+    url:'/meetingRecord/endMeeting',
     method:'post',
     data
   })
@@ -106,7 +114,7 @@ export function recordMeetingInfo(data) {
 // 查询会议历史记录
 export function sMeetingsRecord() {
   return request({
-    url:'api/meetingRecord',
+    url:'/meetingRecord',
     method:'get',
 
   })
@@ -118,7 +126,7 @@ export function sMeetingsRecord() {
 // 产生签到记录（进入会议） ||只需 会议号 和 用户id  ？？？？？？
 export function pSignRecord(data) {
   return request({
-    url:'api/signRecord/add',
+    url:'/signRecord/add',
     method:'post',
     data
   })
@@ -127,7 +135,7 @@ export function pSignRecord(data) {
 // 离开会议 ||只需 会议号 和 用户id
 export function leaveMeeting(data) {
   return request({
-    url:'api/signRecord/leave',
+    url:'/signRecord/leave',
     method:'post',
     data
   })
@@ -136,7 +144,7 @@ export function leaveMeeting(data) {
 // 签到服务 ||只需 会议号 和 用户id  ？？？？？
 export function signService(data) {
   return request({
-    url:'api/signRecord/sign',
+    url:'/signRecord/sign',
     method:'post',
     data
   })
@@ -145,7 +153,7 @@ export function signService(data) {
 // 补签服务 ||只需 会议号 和 用户id
 export function retroactiveUser(data) {
   return request({
-    url:'api/signRecord/retroactive',
+    url:'/signRecord/retroactive',
     method:'post',
     data
   })
@@ -154,7 +162,7 @@ export function retroactiveUser(data) {
 // 查询所有签到记录
 export function sAllSignRecords() {
   return request({
-    url:'api/signRecord',
+    url:'/signRecord',
     method:'get',
   })
 }
@@ -162,7 +170,7 @@ export function sAllSignRecords() {
 // 根据会议号查询所有签到记录
 export function sAllSignRecordsByMid(params) {
   return request({
-    url:`api/signRecord/meeting/${params}`,
+    url:`/signRecord/meeting/${params}`,
     method:'get',
     // params
   })
@@ -171,7 +179,7 @@ export function sAllSignRecordsByMid(params) {
 // 根据用户id查询所有签到记录
 export function sAllSignRecordsByUid(params) {
   return request({
-    url:'api/signRecord/user',
+    url:'/signRecord/user',
     method:'get',
     params
   })
@@ -180,7 +188,7 @@ export function sAllSignRecordsByUid(params) {
 // 根据用户id查询所有会议记录
 export function sAllMeetingsByUid(params) {
   return request({
-    url:'api/signRecord/meetings',
+    url:'/signRecord/meetings',
     method:'get',
     params
   })
@@ -192,7 +200,7 @@ export function sAllMeetingsByUid(params) {
 // 实现刷新
 export function refreshPage() {
   return request({
-    url:'api/refresh',
+    url:'/refresh',
     method:'get',
   })
 }
@@ -200,7 +208,7 @@ export function refreshPage() {
 // 单文件上传
 export function uploadFileOne(data) {
   return request({
-    url:'api/uploadFile',
+    url:'/uploadFile',
     method:'post',
     headers:{'Content-Type':'multipart/form-data'},
     data
@@ -210,7 +218,7 @@ export function uploadFileOne(data) {
 // 人脸检测
 export function faceCheck(data) {
   return request({
-    url:'api/faceCheck',
+    url:'/faceCheck',
     method:'post',
     headers:{'Content-Type':'multipart/form-data'},
     data
@@ -220,7 +228,7 @@ export function faceCheck(data) {
 // 多文件上传
 export function uploadFileMany(data) {
   return request({
-    url:'api/uploadFiles',
+    url:'/uploadFiles',
     method:'post',
     headers:{'Content-Type':'multipart/form-data'},
     data
@@ -230,7 +238,7 @@ export function uploadFileMany(data) {
 // 单文件上传 test
 export function uploadFileTest(data) {
   return request({
-    url:'api/uploadFileT',
+    url:'/uploadFileT',
     method:'post',
     headers:{'Content-Type':'multipart/form-data'},
     data
@@ -240,7 +248,7 @@ export function uploadFileTest(data) {
 // 人脸检测 test
 export function faceCheckTest(data) {
   return request({
-    url:'api/faceCheckT',
+    url:'/faceCheckT',
     method:'post',
     headers:{'Content-Type':'multipart/form-data'},
     data

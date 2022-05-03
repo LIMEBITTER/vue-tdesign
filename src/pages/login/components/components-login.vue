@@ -52,7 +52,7 @@
         </t-input>
       </t-form-item>
     </template>
-<!--    <t-form-item name="checkCode">-->
+<!--    <t-form-item name="inputCode">-->
 <!--      <t-input-->
 <!--        v-model="inputCode"-->
 <!--        size="large"-->
@@ -83,7 +83,7 @@ import {userLogin} from "@/utils/api.js";
 const INITIAL_DATA = {
   uname:'',
   password:'',
-  confirmPassword: ''
+  confirmPassword: '',
 };
 
 
@@ -101,10 +101,10 @@ export default Vue.extend({
   components: {checkCode},
   data() {
     return {
-      // FORM_RULES,
+      // 随机生成的验证码
       validCode:"",
       // 输入的验证码
-      inputCode:"",
+      inputCode:'',
 
       type: 'password',
       formData: { ...INITIAL_DATA },
@@ -118,7 +118,7 @@ export default Vue.extend({
         uname: [{ required: true, message: '账号必填', type: 'error' }],
         password: [{ required: true, message: '密码必填', type: 'error' }],
         confirmPassword: [{ validator: (val) => val===this.formData.password,  message: '两次输入密码不一致',trigger: 'blur', required: true ,type:'error'}],
-        // inputCode: [{ validator: (val) => val===this.formData.password,  message: '两次输入密码不一致',trigger: 'blur', required: true ,type:'error'}],
+        // inputCode: [{ validator: (val) => val===this.validCode,  message: '验证码输入错误',trigger: 'blur', required: true ,type:'error'}],
 
       },
     };
@@ -139,6 +139,7 @@ export default Vue.extend({
       this.validCode = data;// 在data中定义一个 validCode:'',用来记录验证码。
     },
     async onSubmit({ validateResult }) {
+      console.log('inputcode',this.formData.inputCode,'validCode',this.validCode)
       if (validateResult === true) {
         userLogin(this.formData).then(res=>{
           if (res.data.code === '200') {

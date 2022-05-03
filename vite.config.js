@@ -47,20 +47,15 @@ export default ({ mode }) => {
     server: {
       host: '0.0.0.0',
       port: 3001,
-      proxy: {
-        '/api': {
-          // 用于开发环境下的转发请求
-          // 更多请参考：https://vitejs.dev/config/#server-proxy
-          target: 'http://frp.kawaiimoe.cn:5518',
-          changeOrigin: true,
-          rewrite:(path) => path.replace(/^\/api/,'')
-        },
-        // '/aki': {
-        //   target: 'http://frp.kawaiimoe.cn:5518',
-        //   changeOrigin: true,
-        //   rewrite:(path) => path.replace(/^\/aki/,'')
-        // },
-      },
+      // proxy: {
+      //   '/api': {
+      //     // 用于开发环境下的转发请求
+      //     // 更多请参考：https://vitejs.dev/config/#server-proxy
+      //     target: 'http://frp.kawaiimoe.cn:5518',
+      //     changeOrigin: true,
+      //     rewrite:(path) => path.replace(/^\/api/,'')
+      //   },
+      // },
     },
   };
 };

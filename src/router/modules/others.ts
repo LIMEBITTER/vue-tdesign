@@ -23,6 +23,7 @@ export default [
     name: 'hiddenPage',
     component: Layout,
     meta: { title: '隐藏页', icon: LogoutIcon },
+
     // redirect: '/hidden/meetingInfo',
     children: [
       {

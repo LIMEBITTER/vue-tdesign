@@ -6,7 +6,7 @@ import DetailIcon from '@/assets/assets-slide-detail.svg';
 export default [
   {
     path: '/list',
-    name: 'list',
+    // name: 'list',
     component: Layout,
     redirect: '/list/base',
     // meta: { title: '列表页', icon: ListIcon },

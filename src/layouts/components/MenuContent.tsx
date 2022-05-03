@@ -17,7 +17,10 @@ const getMenuList = (list: MenuRoute[], basePath?: string): MenuRoute[] => {
         redirect: item.redirect,
       };
     })
-    .filter((item) => item.meta && item.meta.hidden !== true);
+  // 过滤除隐藏页以外其他的页面
+    .filter((item) => !(item.path).includes('hidden'));
+
+// .filter((item) => item.meta && item.meta.hidden !== true);
 };
 
 export default {
