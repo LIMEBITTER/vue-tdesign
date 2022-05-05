@@ -143,6 +143,12 @@ export default {
       user_name:''
     };
   },
+  // 监听路由变化以实时刷新数据
+  watch:{
+    $route(to,from){
+      console.log('路由变化',to,from)
+    }
+  },
   mounted() {
     this.user_name = localStorage.getItem('user_name');
     this.formData.host = this.user_name;

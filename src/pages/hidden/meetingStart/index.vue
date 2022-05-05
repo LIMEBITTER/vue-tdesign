@@ -79,7 +79,7 @@
 
       <t-row :gutter="[16, 16]" class="card-container-margin" v-show="formData.host!==user_name">
         <t-col :xs="16" :xl="16">
-          <card title="人脸签到" >
+          <card title="人脸签到（暂时以普通签到代替）" >
             <common-table-start-user/>
           </card>
         </t-col>

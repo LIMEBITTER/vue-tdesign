@@ -15,16 +15,16 @@
                 />
               </t-form-item>
             </t-col>
-            <t-col :flex="1">
-              <t-form-item label="会议状态" name="status">
-                <t-select
-                  v-model="formData.status"
-                  class="form-item-content`"
-                  :options="CONTRACT_STATUS_OPTIONS"
-                  placeholder="请选择会议状态"
-                />
-              </t-form-item>
-            </t-col>
+<!--            <t-col :flex="1">-->
+<!--              <t-form-item label="会议状态" name="status">-->
+<!--                <t-select-->
+<!--                  v-model="formData.status"-->
+<!--                  class="form-item-content`"-->
+<!--                  :options="CONTRACT_STATUS_OPTIONS"-->
+<!--                  placeholder="请选择会议状态"-->
+<!--                />-->
+<!--              </t-form-item>-->
+<!--            </t-col>-->
             <t-col :flex="1">
               <t-form-item label="会议号" name="no">
                 <t-input
@@ -103,7 +103,7 @@ import {sAllMeetingsInfoByUid,startMeetingDev} from '@/utils/api.js'
 
 import {
   CONTRACT_STATUS,
-  CONTRACT_STATUS_OPTIONS,
+  // CONTRACT_STATUS_OPTIONS,
 
 } from '@/constants';
 
@@ -115,7 +115,7 @@ export default {
   data() {
     return {
       CONTRACT_STATUS,
-      CONTRACT_STATUS_OPTIONS,
+      // CONTRACT_STATUS_OPTIONS,
       prefix,
       formData: {
         mname: '',
@@ -189,9 +189,12 @@ export default {
       return '';
     },
   },
+
   mounted() {
+
     this.dataLoading = true;
     // 调用api
+    console.log('commontableall')
     const sData = {uid:localStorage.getItem('uid'),current:this.pagination.defaultCurrent,size:this.pagination.defaultPageSize}
     sAllMeetingsInfoByUid(sData).then(res=>{
 
@@ -200,7 +203,7 @@ export default {
         // const { list = [] } = res.data.result;
         // console.log('list',list)
         // this.data = list;
-        this.data = res.data.result.meetingListList;
+        this.data = res.data.result.meetingList
 
         console.log('data',this.data)
         this.pagination = {
@@ -237,7 +240,7 @@ export default {
           // const { list = [] } = res.data.result;
           // console.log('list',list)
           // this.data = list;
-          this.data = res.data.result.meetingListList;
+          this.data = res.data.result.meetingList;
 
           console.log('data',this.data)
           this.pagination = {

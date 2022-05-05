@@ -70,7 +70,13 @@
 <!--        :onCancel="onCancel"-->
 <!--      >-->
 <!--      </t-dialog>-->
-      <t-dialog header="人员补签" :closeBtn="false" :visible.sync="visible5" @confirm="onConfirm" :onClose="close5">
+      <t-dialog header="人员补签"
+                @opened="buttonDisabled=false"
+                :closeBtn="false"
+                :visible.sync="visible5"
+                :confirmBtn="{content:loadingText,theme:'primary',loading:loadingbut}"
+                :onConfirm="onConfirm"
+                :onClose="close5">
         <div slot="body">
           <t-form :data="resignData" :labelAlign="formData.labelAlign" :labelWidth="60">
             <t-form-item label="补签人" name="uid" >
@@ -93,11 +99,11 @@
             </t-form-item>
             <t-form-item label="签到时间" name="joinTime" >
               <div class="member_detail"></div>
-              {{currentMInfo.joinTime}}
+              {{currentMInfo.signTime}}
             </t-form-item>
             <t-form-item label="入会时间" name="signTime" >
               <div class="member_detail"></div>
-              {{currentMInfo.signTime}}
+              {{currentMInfo.joinTime}}
             </t-form-item>
             <t-form-item label="离会时间" name="leaveTime" >
               <div class="member_detail"></div>
@@ -153,6 +159,10 @@ export default {
     return {
       visible5: false,
       visible6:false,
+      // 防止dialog表单重复提交
+      buttonDisabled:false,
+      loadingbut:false,
+      loadingText:'补签',
       // 重新签到的人员
       CONTRACT_STATUS,
       CONTRACT_STATUS_OPTIONS,
@@ -169,9 +179,7 @@ export default {
       currentMInfo:[],
       // 补签对话框数据
       resignData:{
-        mid:'',
-        uid:'',
-        comment:'',
+        // comment:'',
       },
       // 当前人员是否签到
       currentIsSign:0,
@@ -212,7 +220,7 @@ export default {
       rowClassName: (rowKey) => `${rowKey}-class`,
       // 与pagination对齐
       pagination: {
-        defaultPageSize: 20,
+        defaultPageSize: 5,
         total: 0,
         defaultCurrent: 1,
       },
@@ -222,18 +230,23 @@ export default {
   },
 
   // 实现每次进入不同的会议能实时更新会议号
-  watch:{
-    mid(newVal,oldVal){
-      this.t_mid = newVal;
-      this.init_api(localStorage.getItem('current_mid'));
+  // watch:{
+  //   mid(newVal,oldVal){
+  //     this.t_mid = newVal;
+  //     console.log()
+  //     this.init_api(localStorage.getItem('current_mid'));
+  //
+  //   },
+  //
+  // },
+  // created() {
+  //   console.log('created=====================')
+  //   // console.log(this.t_mid)
+  // },
+  mounted() {
+    const iData = {mid:localStorage.getItem('current_mid'),current:this.pagination.defaultCurrent,size:this.pagination.defaultPageSize}
 
-    },
-
-  },
-  created() {
-    console.log('created=====================')
-    // console.log(this.t_mid)
-    this.init_api(localStorage.getItem('current_mid'));
+    this.init_api(iData);
   },
   methods: {
     onReset(data) {
@@ -244,6 +257,31 @@ export default {
     },
     rehandlePageChange(curr, pageInfo) {
       console.log('分页变化', curr, pageInfo);
+      const rData = {mid:localStorage.getItem('current_mid'),current:curr.current,size:curr.pageSize}
+      this.dataLoading = true;
+
+      sAllSignRecordsByMid(rData).then(res=>{
+        console.log('参会者信息查询',res)
+
+        if (res.data.code === "200") {
+          console.log('参会者信息查询成功',res)
+          this.data = res.data.result.signList;
+          this.currentMInfo = res.data.result.signList;
+          console.log('currentinfo',this.currentMInfo)
+
+          console.log('data',this.data)
+          this.pagination = {
+            ...this.pagination,
+            defaultPageSize: rData.size,
+            defaultCurrent: rData.current,
+            total: res.data.result.total,
+          };
+        }
+      }).catch((e) => {
+        console.log(e);
+      }).finally(() => {
+        this.dataLoading = false;
+      });
     },
     rehandleChange(changeParams, triggerAndData) {
       console.log('统一Change', changeParams, triggerAndData);
@@ -270,14 +308,15 @@ export default {
       this.deleteIdx = -1;
     },
     buqian(e){
-      console.log('当前补签人员',e)
       // 将当前行的人员姓名存入
       this.resignData.uid = e.row.uid
       this.resignData.mid = e.row.mid
+      console.log('当前补签人员',this.resignData)
+
       this.currentIsSign = e.row.isSign
 
-
       this.visible5 = true
+
     },
     checkInfo(currentRow){
       console.log('当前人员',currentRow.row)
@@ -297,20 +336,30 @@ export default {
     },
     // 补签
     onConfirm() {
-
+      this.buttonDisabled = true
+      this.loadingbut = true
+      this.loadingText = '补签中'
+      console.log('这是一次')
       console.log(this.currentIsSign)
+      // 判断当前用户是否已经签到
       if(this.currentIsSign === 0){
-
         retroactiveUser(this.resignData).then(res=>{
+          let count = 0
+          count +=1
+          console.log('执行补签api的次数',count)
           console.log(res)
           if (res.data.code === '200'){
             this.$message.success('补签成功')
+            this.loadingbut = false
+            this.loadingText = '补签'
+            this.buttonDisabled = false
             this.visible5 = false;
             setTimeout(()=>{
               this.$router.go(0)
 
             },1000)
           }
+
         })
       }else {
         this.$message.info('当前用户已签到！')
@@ -319,22 +368,22 @@ export default {
 
       // e.stopPropagation();
     },
-    init_api(id){
+    init_api(iData){
       this.dataLoading = true;
-      console.log('jiazai d d d d')
-      console.log('参会者信息查询当前mid',id)
+      console.log('参会者信息查询当前mid分页',iData)
 
-      sAllSignRecordsByMid(id).then(res=>{
+      sAllSignRecordsByMid(iData).then(res=>{
         console.log('参会者信息查询',res)
 
         if (res.data.code === "200") {
           console.log('参会者信息查询成功',res)
-          this.data = res.data.result;
+          this.data = res.data.result.signList;
+          this.currentMInfo = res.data.result.signList;
 
           console.log('data',this.data)
           this.pagination = {
             ...this.pagination,
-            total: this.data.length,
+            total: res.data.result.total,
           };
         }
       }).catch((e) => {

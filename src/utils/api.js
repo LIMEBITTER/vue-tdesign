@@ -42,7 +42,7 @@ export function logOut() {
  */
 // 根据uid查询所有该用户创建的会议信息
 export function sAllMeetingsInfoByUid(data) {
-  console.log('datadddddddd',data)
+  // console.log('datadddddddd',data)
   const pageData = {current:data.current,size:data.size}
   const {uid} = data
   console.log(pageData,uid)
@@ -168,11 +168,15 @@ export function sAllSignRecords() {
 }
 
 // 根据会议号查询所有签到记录
-export function sAllSignRecordsByMid(params) {
+export function sAllSignRecordsByMid(data) {
+  console.log('执行api')
+  const {mid} = data
+  const pageData = {current:data.current,size:data.size}
+  console.log(mid,pageData)
   return request({
-    url:`/signRecord/meeting/${params}`,
-    method:'get',
-    // params
+    url:`/signRecord/meeting/${mid}`,
+    method:'post',
+    data:pageData
   })
 }
 
@@ -191,6 +195,14 @@ export function sAllMeetingsByUid(params) {
     url:'/signRecord/meetings',
     method:'get',
     params
+  })
+}
+// 根据uid mid 查询单条签到记录
+export function sOneMeetingByUMid(data) {
+  return request({
+    url:'/signRecord/getOne',
+    method:'post',
+    data
   })
 }
 

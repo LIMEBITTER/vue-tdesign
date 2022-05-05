@@ -142,6 +142,7 @@ export default Vue.extend({
       console.log('inputcode',this.formData.inputCode,'validCode',this.validCode)
       if (validateResult === true) {
         userLogin(this.formData).then(res=>{
+          console.log('登录api',res)
           if (res.data.code === '200') {
             console.log('登录成功',res)
 

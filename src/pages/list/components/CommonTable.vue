@@ -16,14 +16,14 @@
               </t-form-item>
             </t-col>
             <t-col :flex="1">
-              <t-form-item label="会议状态" name="status">
-                <t-select
-                  v-model="formData.status"
-                  class="form-item-content`"
-                  :options="CONTRACT_STATUS_OPTIONS"
-                  placeholder="请选择会议状态"
-                />
-              </t-form-item>
+<!--              <t-form-item label="会议状态" name="status">-->
+<!--                <t-select-->
+<!--                  v-model="formData.status"-->
+<!--                  class="form-item-content`"-->
+<!--                  :options="CONTRACT_STATUS_OPTIONS"-->
+<!--                  placeholder="请选择会议状态"-->
+<!--                />-->
+<!--              </t-form-item>-->
             </t-col>
             <t-col :flex="1">
               <t-form-item label="会议号" name="no">
