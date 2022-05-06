@@ -28,10 +28,10 @@ instance.interceptors.request.use((
   config) => {
   // 判断token是否存在
   if (localStorage.getItem('token')) {
-    console.log('执行了request.ts')
+    // console.log('执行了request.ts')
     // 在请求头中添加token
     config.headers.token = localStorage.getItem('token');
-    console.log(config.headers)
+    // console.log(config.headers)
   }
   return config;
 },
@@ -78,7 +78,7 @@ function request(config) {
   data = data || {}
   method = method || 'GET'
   headers = headers || ''
-  console.log(headers)
+  // console.log(headers)
 
   // restful api  GET / POST /PUT/PATCH/DELETE
   switch (method.toUpperCase()) {

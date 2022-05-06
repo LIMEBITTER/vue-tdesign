@@ -34,7 +34,7 @@ export default {
   },
   computed: {
     list(): Array<MenuRoute> {
-      console.log('content _menu-------------',this.navData)
+      // console.log('content _menu-------------',this.navData)
       return getMenuList(this.navData);
     },
   },

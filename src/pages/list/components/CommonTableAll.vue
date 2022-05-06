@@ -194,7 +194,6 @@ export default {
 
     this.dataLoading = true;
     // 调用api
-    console.log('commontableall')
     const sData = {uid:localStorage.getItem('uid'),current:this.pagination.defaultCurrent,size:this.pagination.defaultPageSize}
     sAllMeetingsInfoByUid(sData).then(res=>{
 
@@ -307,7 +306,7 @@ export default {
         const cData = {
           mid:currentRow.row.mid,
         }
-        console.log('cData',cData)
+        console.log('当前会议的mid信息======',cData)
         startMeetingDev(cData).then(res=>{
           if (res.data.code==='-1'){
             this.$message.warning('会议开始失败')

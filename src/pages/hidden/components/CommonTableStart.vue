@@ -59,7 +59,7 @@
 
         <template #op="slotProps">
           <a class="t-button-link" @click="checkInfo(slotProps)">详情</a>
-          <a class="t-button-link" @click="buqian(slotProps)">补签</a>
+          <a class="t-button-link" @click="buqian(slotProps)" v-if="isShow" >补签</a>
         </template>
       </t-table>
 <!--      <t-dialog-->
@@ -163,6 +163,10 @@ export default {
       buttonDisabled:false,
       loadingbut:false,
       loadingText:'补签',
+
+      // 判断 补签 标签是否需要显示
+      isShow:true,
+
       // 重新签到的人员
       CONTRACT_STATUS,
       CONTRACT_STATUS_OPTIONS,
@@ -239,13 +243,31 @@ export default {
   //   },
   //
   // },
+  watch:{
+    $route(to,from){
+      console.log('会议开始的路由监听====参会者信息查询',to,from)
+      if (to.name==="MeetingStart" || to.name==="MeetingInfo"){
+        if (to.name === "MeetingInfo"){
+          this.isShow = false
+        }
+        console.log('路由监听成功====参会者信息查询')
+        localStorage.setItem('current_mid',to.query.mid)
+        const iData = {mid:localStorage.getItem('current_mid'),current:this.pagination.defaultCurrent,size:this.pagination.defaultPageSize}
+        this.init_api(iData);
+        // this.$router.go(0)
+      }
+    }
+  },
   // created() {
   //   console.log('created=====================')
   //   // console.log(this.t_mid)
+  //
+  //   const iData = {mid:localStorage.getItem('current_mid'),current:this.pagination.defaultCurrent,size:this.pagination.defaultPageSize}
+  //   this.init_api(iData);
   // },
   mounted() {
+    console.log('mounted==========')
     const iData = {mid:localStorage.getItem('current_mid'),current:this.pagination.defaultCurrent,size:this.pagination.defaultPageSize}
-
     this.init_api(iData);
   },
   methods: {
@@ -363,6 +385,12 @@ export default {
         })
       }else {
         this.$message.info('当前用户已签到！')
+        this.loadingText = '已签到'
+        setTimeout(()=>{
+          this.loadingbut = false
+          this.loadingText = '签到'
+
+        },2000)
 
       }
 

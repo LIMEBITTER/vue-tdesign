@@ -30,7 +30,7 @@ export default [
         path: 'meetingInfo',
         name:'MeetingInfo',
         component: () => import('@/pages/hidden/meetingInfo/index.vue'),
-        meta: { title: '当前会议信息' },
+        meta: { title: '当前会议信息',keepAlive: true },
       },
       {
         path: 'meetingStart',

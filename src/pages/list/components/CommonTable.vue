@@ -66,33 +66,21 @@
         @change="rehandleChange"
         :loading="dataLoading"
       >
-        <template #status="{ row }">
-<!--          <t-tag v-if="row.status === CONTRACT_STATUS.FAIL" theme="danger" variant="light">审核失败</t-tag>-->
-<!--          <t-tag v-if="row.status === CONTRACT_STATUS.AUDIT_PENDING" theme="warning" variant="light">待审核</t-tag>-->
-          <t-tag v-if="row.status === CONTRACT_STATUS.EXEC_PENDING" theme="warning" variant="light">未开始</t-tag>
-          <t-tag v-if="row.status === CONTRACT_STATUS.EXECUTING" theme="success" variant="light">正在开会</t-tag>
-          <t-tag v-if="row.status === CONTRACT_STATUS.FINISH" theme="success" variant="light">已结束</t-tag>
-        </template>
-<!--        <template #contractType="{ row }">-->
-<!--          <p v-if="row.contractType === CONTRACT_STATUS.AUDIT_PENDING">未开始</p>-->
-<!--          <p v-if="row.contractType === CONTRACT_STATUS.EXECUTING">正在开会</p>-->
-<!--          <p v-if="row.contractType === CONTRACT_STATUS.FINISH">已结束</p>-->
-<!--        </template>-->
+
 
         <template #op="slotProps">
-<!--          <a class="t-button-link" @click="startMeeting(slotProps)">开始会议</a>-->
           <a class="t-button-link" @click="handleClickDetail(slotProps)">详情</a>
 <!--          <a class="t-button-link" @click="handleClickDelete(slotProps)">删除</a>-->
         </template>
       </t-table>
-      <t-dialog
-        header="确认删除当前所选会议？"
-        :body="confirmBody"
-        :visible.sync="confirmVisible"
-        @confirm="onConfirmDelete"
-        :onCancel="onCancel"
-      >
-      </t-dialog>
+<!--      <t-dialog-->
+<!--        header="确认删除当前所选会议？"-->
+<!--        :body="confirmBody"-->
+<!--        :visible.sync="confirmVisible"-->
+<!--        @confirm="onConfirmDelete"-->
+<!--        :onCancel="onCancel"-->
+<!--      >-->
+<!--      </t-dialog>-->
     </div>
   </div>
 </template>
@@ -184,6 +172,15 @@ export default {
       confirmVisible: false,
       deleteIdx: -1,
     };
+  },
+  watch:{
+    $route(to,from){
+      console.log('会议开始的路由监听====会议历史记录总表',to,from)
+      // 刷新历史会议数据
+      if (to.name==="MeetingStart"){
+        this.$router.go(0)
+      }
+    }
   },
   computed: {
     confirmBody() {

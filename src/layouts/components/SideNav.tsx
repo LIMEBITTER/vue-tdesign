@@ -57,7 +57,7 @@ export default Vue.extend({
     // 隐藏要隐藏的菜单
     this.autoCollapsed();
 
-    console.log('mymenu--------------',this.myMenu)
+    // console.log('mymenu--------------',this.myMenu)
 
 
     window.onresize = () => {

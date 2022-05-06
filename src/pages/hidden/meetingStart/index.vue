@@ -128,6 +128,15 @@ export default {
   //
   //   })
   // },
+  // watch:{
+  //   $route(to,from){
+  //     console.log('路由监听======会议开始主界面',to,from)
+  //     if (to.name==='ListFilterAll'){
+  //       console.log('路由监听成功======会议开始主界面')
+  //       console.log('当前mid',this.mid)
+  //     }
+  //   }
+  // },
   created() {
     this.mid = this.$route.query.mid
     localStorage.setItem('current_mid',this.mid)

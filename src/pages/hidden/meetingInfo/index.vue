@@ -110,16 +110,30 @@ export default {
 
     };
   },
+  // created() {
+  //   console.log('created=========')
+  //   this.mid = this.$route.query.mid
+  //   localStorage.setItem('history_mid',this.mid)
+  //   const local_history_mid = localStorage.getItem('history_mid')
+  //   console.log('当前历史会议mid',local_history_mid)
+  //   sCurrentMeetingInfo(local_history_mid).then(res=>{
+  //     console.log('当前历史会议信息',res)
+  //     if (res.data.code === "200"){
+  //       this.formData = res.data.result.meetingInfo
+  //     }
+  //   })
+  // },
   // 此页面不需要缓存 需要重复加载数据
   activated() {
     this.mid = this.$route.query.mid
-
-    console.log('当前会议号',this.mid)
-    sCurrentMeetingInfo(this.mid).then(res=>{
-      console.log('查询当前会议信息',res)
-      this.formData = res.data.result.meetingInfo
-      console.log(this.formData)
-
+    localStorage.setItem('history_mid',this.mid)
+    const local_history_mid = localStorage.getItem('history_mid')
+    console.log('keep-alive-mid',local_history_mid)
+    sCurrentMeetingInfo(local_history_mid).then(res=>{
+      console.log('当前历史会议信息',res)
+      if (res.data.code === "200"){
+        this.formData = res.data.result.meetingInfo
+      }
     })
 
 
