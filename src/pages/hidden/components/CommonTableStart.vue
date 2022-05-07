@@ -95,7 +95,7 @@
           <t-form :data="resignData" :labelAlign="formData.labelAlign" :labelWidth="60">
             <t-form-item label="用户姓名" name="uid" >
               <div class="member_detail"></div>
-              {{currentMInfo.uid}}
+              {{currentMInfo.uname}}
             </t-form-item>
             <t-form-item label="签到时间" name="joinTime" >
               <div class="member_detail"></div>
@@ -139,7 +139,7 @@
 <script>
 import { prefix } from '@/config/global';
 import Trend from '@/components/trend/index.vue';
-import {sAllSignRecordsByMid,retroactiveUser} from '@/utils/api.js';
+import {sAllSignRecordsByMid,retroactiveUser,sCurrentMeetingInfo} from '@/utils/api.js';
 
 import {
   CONTRACT_STATUS,
@@ -198,7 +198,7 @@ export default {
           minWidth: '300',
           align: 'left',
           ellipsis: true,
-          colKey: 'uid',
+          colKey: 'uname',
         },
         { title: '签到状态', colKey: 'isSign', width: 200, cell: { col: 'isSign' } },
 
@@ -247,10 +247,8 @@ export default {
     $route(to,from){
       console.log('会议开始的路由监听====参会者信息查询',to,from)
       if (to.name==="MeetingStart" || to.name==="MeetingInfo"){
-        if (to.name === "MeetingInfo"){
-          this.isShow = false
-        }
         console.log('路由监听成功====参会者信息查询')
+        this.searchStatus()
         localStorage.setItem('current_mid',to.query.mid)
         const iData = {mid:localStorage.getItem('current_mid'),current:this.pagination.defaultCurrent,size:this.pagination.defaultPageSize}
         this.init_api(iData);
@@ -267,6 +265,7 @@ export default {
   // },
   mounted() {
     console.log('mounted==========')
+    this.searchStatus()
     const iData = {mid:localStorage.getItem('current_mid'),current:this.pagination.defaultCurrent,size:this.pagination.defaultPageSize}
     this.init_api(iData);
   },
@@ -397,6 +396,8 @@ export default {
       // e.stopPropagation();
     },
     init_api(iData){
+
+
       this.dataLoading = true;
       console.log('参会者信息查询当前mid分页',iData)
 
@@ -419,7 +420,21 @@ export default {
       }).finally(() => {
         this.dataLoading = false;
       });
+    },
+
+    // 查询会议的状态
+    searchStatus(){
+      console.log('执行searchStatus')
+      sCurrentMeetingInfo(localStorage.getItem('history_mid')).then(res=>{
+        console.log(res.data.result.meetingInfo.status)
+        if (res.data.result.meetingInfo.status===2){
+          this.isShow = false
+        }else {
+          this.isShow = true
+        }
+      })
     }
+
 
   },
 };

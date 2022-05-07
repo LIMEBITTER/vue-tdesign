@@ -101,15 +101,6 @@ export default {
       scatterContainer: '',
       lineChart: '',
       scatterChart: '',
-      productList: [
-        {
-          description: 'SSL证书又叫服务器证书，腾讯云为您提供证书的一站式服务，包括免费、付费证书的申请、管理及部',
-          index: 1,
-          isSetup: true,
-          name: 'SSL证书',
-          type: 4,
-        },
-      ],
       LAST_7_DAYS,
       // currentMonth: this.getThisMonth(),
 
@@ -118,61 +109,61 @@ export default {
   computed: {
     ...mapState('setting', ['brandTheme', 'mode']),
   },
-  watch: {
-    brandTheme() {
-      changeChartsTheme([this.lineChart, this.scatterChart]);
-    },
-    mode() {
-      this.renderCharts();
-    },
-  },
-  mounted() {
-    this.renderCharts();
-  },
-  methods: {
-
-
-
-    /** 采购商品满意度选择 */
-    onSatisfyChange(value) {
-      const { chartColors } = this.$store.state.setting;
-
-      this.scatterChart.setOption(getScatterDataSet({ dateTime: value, ...chartColors }));
-    },
-    /** 采购商品申请趋势选择 */
-    onMaterialChange(value) {
-      const { chartColors } = this.$store.state.setting;
-
-      this.lineChart.setOption(getFolderLineDataSet({ dateTime: value, ...chartColors }));
-    },
-    updateContainer() {
-      this.lineChart.resize?.({
-        width: this.lineContainer.clientWidth,
-        height: this.lineContainer.clientHeight,
-      });
-      this.scatterChart.resize?.({
-        width: this.scatterContainer.clientWidth,
-        height: this.scatterContainer.clientHeight,
-      });
-    },
-    renderCharts() {
-      const { chartColors } = this.$store.state.setting;
-
-      if (!this.lineContainer) {
-        this.lineContainer = document.getElementById('lineContainer');
-      }
-      this.lineChart = echarts.init(this.lineContainer);
-      this.lineChart.setOption(getFolderLineDataSet({ ...chartColors }));
-
-      window.addEventListener('resize', this.updateContainer, false);
-
-      if (!this.scatterContainer) {
-        this.scatterContainer = document.getElementById('scatterContainer');
-      }
-      this.scatterChart = echarts.init(this.scatterContainer);
-      this.scatterChart.setOption(getScatterDataSet({ ...chartColors }));
-    },
-  },
+  // watch: {
+  //   brandTheme() {
+  //     changeChartsTheme([this.lineChart, this.scatterChart]);
+  //   },
+  //   mode() {
+  //     this.renderCharts();
+  //   },
+  // },
+  // mounted() {
+  //   this.renderCharts();
+  // },
+  // methods: {
+  //
+  //
+  //
+  //   /** 采购商品满意度选择 */
+  //   onSatisfyChange(value) {
+  //     const { chartColors } = this.$store.state.setting;
+  //
+  //     this.scatterChart.setOption(getScatterDataSet({ dateTime: value, ...chartColors }));
+  //   },
+  //   /** 采购商品申请趋势选择 */
+  //   onMaterialChange(value) {
+  //     const { chartColors } = this.$store.state.setting;
+  //
+  //     this.lineChart.setOption(getFolderLineDataSet({ dateTime: value, ...chartColors }));
+  //   },
+  //   updateContainer() {
+  //     this.lineChart.resize?.({
+  //       width: this.lineContainer.clientWidth,
+  //       height: this.lineContainer.clientHeight,
+  //     });
+  //     this.scatterChart.resize?.({
+  //       width: this.scatterContainer.clientWidth,
+  //       height: this.scatterContainer.clientHeight,
+  //     });
+  //   },
+  //   renderCharts() {
+  //     const { chartColors } = this.$store.state.setting;
+  //
+  //     if (!this.lineContainer) {
+  //       this.lineContainer = document.getElementById('lineContainer');
+  //     }
+  //     this.lineChart = echarts.init(this.lineContainer);
+  //     this.lineChart.setOption(getFolderLineDataSet({ ...chartColors }));
+  //
+  //     window.addEventListener('resize', this.updateContainer, false);
+  //
+  //     if (!this.scatterContainer) {
+  //       this.scatterContainer = document.getElementById('scatterContainer');
+  //     }
+  //     this.scatterChart = echarts.init(this.scatterContainer);
+  //     this.scatterChart.setOption(getScatterDataSet({ ...chartColors }));
+  //   },
+  // },
 };
 </script>
 <style lang="less" scoped>

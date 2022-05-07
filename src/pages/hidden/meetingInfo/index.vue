@@ -61,9 +61,11 @@
       <t-row :gutter="[16, 16]" class="card-container-margin">
         <t-col :xs="12" :xl="9">
           <card title="参会者信息查询">
-            <keep-alive>
-              <common-table :mid="this.mid"/>
-            </keep-alive>
+<!--            <keep-alive>-->
+              <common-table />
+<!--            </keep-alive>-->
+<!--            <common-table-history/>-->
+
           </card>
           <!--          <card title="会议签到" v-else>-->
           <!--            <t-button>签到</t-button>-->
@@ -95,7 +97,7 @@ import {sCurrentMeetingInfo,endMeetingDev,recordMeetingInfo} from "@/utils/api.j
 
 export default {
   name: 'MeetingInfo',
-  components: { Card ,CommonTable,},
+  components: { Card ,CommonTable},
   data() {
     return {
       prefix,
@@ -110,19 +112,19 @@ export default {
 
     };
   },
-  // created() {
-  //   console.log('created=========')
-  //   this.mid = this.$route.query.mid
-  //   localStorage.setItem('history_mid',this.mid)
-  //   const local_history_mid = localStorage.getItem('history_mid')
-  //   console.log('当前历史会议mid',local_history_mid)
-  //   sCurrentMeetingInfo(local_history_mid).then(res=>{
-  //     console.log('当前历史会议信息',res)
-  //     if (res.data.code === "200"){
-  //       this.formData = res.data.result.meetingInfo
-  //     }
-  //   })
-  // },
+  created() {
+    console.log('created=========')
+    this.mid = this.$route.query.mid
+    localStorage.setItem('history_mid',this.mid)
+    const local_history_mid = localStorage.getItem('history_mid')
+    console.log('当前历史会议mid',local_history_mid)
+    sCurrentMeetingInfo(local_history_mid).then(res=>{
+      console.log('当前历史会议信息',res)
+      if (res.data.code === "200"){
+        this.formData = res.data.result.meetingInfo
+      }
+    })
+  },
   // 此页面不需要缓存 需要重复加载数据
   activated() {
     this.mid = this.$route.query.mid
