@@ -2,75 +2,51 @@
   <div class="dashboard-panel-detail">
     <card title="本月会议使用情况">
       <t-row :gutter="[16, 16]">
-        <t-col v-for="(item, index) in PANE_LIST_DATA" :key="index" :xs="6" :xl="3">
+        <t-col v-for="(item, index) in CHART_LIST" :key="index" :xs="6" :xl="3">
           <card border class="dashboard-detail-container-item" size="small" :describe="item.title">
-            <div class="number">{{ item.number }}</div>
-            <div class="dashboard-detail-container-item-text">
+            <div class="number" style="width: 88px">{{ item.number }}</div>
+            <div class="myCharts" style="width: 210px;height: 75px" ></div>
+
+            <!--            <div class="dashboard-detail-container-item-text">-->
 <!--              <div class="dashboard-detail-container-item-text-left">-->
 <!--                环比-->
 <!--                <trend class="icon" :type="item.upTrend ? 'up' : 'down'" :describe="item.upTrend || item.downTrend" />-->
 <!--              </div>-->
 <!--              <t-icon name="chevron-right" />-->
-            </div>
+<!--            </div>-->
           </card>
         </t-col>
       </t-row>
     </card>
     <t-row :gutter="[16, 16]" class="card-container-margin">
-      <t-col :xs="12" :xl="9">
-<!--        <card title="会议服务使用情况" describe="(次)">-->
-<!--          <template #option>-->
-<!--            <t-date-picker-->
-<!--              class="card-date-picker-container"-->
-<!--              :default-value="LAST_7_DAYS"-->
-<!--              theme="primary"-->
-<!--              mode="date"-->
-<!--              range-->
-<!--              @change="onMaterialChange"-->
-<!--            />-->
-<!--          </template>-->
-<!--          <div id="lineContainer" style="width: 100%; height: 416px"></div>-->
+<!--      <t-col :xs="12" :xl="9">-->
+
+<!--      <t-col v-for="(item,index) in CHART_LIST" :key="index" :xs="6" :xl="3">-->
+<!--        <card border class="dashboard-detail-container-item" size="small" :describe="item.title">-->
+<!--          <div class="myCharts" style="width: 210px;height: 75px" ></div>-->
+
+
 <!--        </card>-->
-      </t-col>
+<!--      </t-col>-->
+
+
+
+
+
+
+      <!--      </t-col>-->
       <t-col :xs="12" :xl="3">
-<!--        <product-card-->
-<!--          v-for="(item, index) in PRODUCT_LIST"-->
-<!--          :key="index"-->
-<!--          :product="item"-->
-<!--          :class="{ 'card-container-margin': index !== 0 }"-->
-<!--        />-->
-<!--        <card title="您的会议及时签到率">-->
-<!--          <div-->
-<!--            id="countContainer"-->
-<!--            ref="countContainer"-->
-<!--            :style="{ width: `${resizeTime * 326}px`, height: `${resizeTime * 326}px`, margin: '0 auto' }"-->
-<!--            class="dashboard-chart-container"-->
-<!--          ></div>-->
-<!--          <div id="piechart"></div>-->
-<!--        </card>-->
+
       </t-col>
     </t-row>
-<!--    <card title="采购商品满意度分布" class="card-container-margin">-->
-<!--      <template #option>-->
-<!--        <t-date-picker-->
-<!--          class="card-date-picker-container"-->
-<!--          :defaultValue="LAST_7_DAYS"-->
-<!--          theme="primary"-->
-<!--          mode="date"-->
-<!--          range-->
-<!--          @change="onSatisfyChange"-->
-<!--        ></t-date-picker>-->
-<!--        <t-button class="card-date-button">导出数据</t-button>-->
-<!--      </template>-->
-<!--      <div id="scatterContainer" style="width: 100%; height: 374px"></div>-->
-<!--    </card>-->
+
   </div>
 </template>
 <script lang="ts">
 import { GridComponent, TooltipComponent, LegendComponent } from 'echarts/components';
 import {LineChart, PieChart, ScatterChart} from 'echarts/charts';
 import { CanvasRenderer } from 'echarts/renderers';
-import * as echarts from 'echarts/core';
+import * as echarts from 'echarts';
 import { mapState } from 'vuex';
 
 import Trend from '@/components/trend/index.vue';
@@ -78,7 +54,7 @@ import Card from '@/components/card/index.vue';
 import { prefix } from '@/config/global';
 
 import { LAST_7_DAYS } from '@/utils/date';
-
+import {interval, Line} from "@antv/g2plot";
 import ProductCard from '@/components/card/component-card.vue';
 import { PANE_LIST_DATA, PRODUCT_LIST } from '@/service/service-detail';
 import { changeChartsTheme, getFolderLineDataSet,getPieChartDataSet, getScatterDataSet } from '../base';
@@ -87,7 +63,9 @@ echarts.use([GridComponent, LegendComponent, PieChart,TooltipComponent, LineChar
 
 export default {
   name: 'DashboardDetail',
+
   components: { Trend, Card, ProductCard },
+
   data() {
     return {
 
@@ -102,6 +80,55 @@ export default {
       lineChart: '',
       scatterChart: '',
       LAST_7_DAYS,
+      CHART_LIST:[
+        {
+          title: '总申请数（次）',
+          number: '1126',
+          name:['2022-05-03','2022-05-04','2022-05-05','2022-05-06','2022-05-07','2022-05-08','2022-05-09'],
+          value: [12,32,23,17,22,33,31]
+        },
+        {
+          title: '使用会议时间',
+          number: '13',
+          name:['2022-05-03','2022-05-04','2022-05-05','2022-05-06','2022-05-07','2022-05-08','2022-05-09'],
+          value: [22,12,33,17,15,25,28]
+        },
+        {
+          title: '参加会议次数',
+          number: '4',
+          name:['2022-05-03','2022-05-04','2022-05-05','2022-05-06','2022-05-07','2022-05-08','2022-05-09'],
+          value: [12,23,13,27,32,13,31]
+        },
+        {
+          title: '签到成功次数',
+          number: 90,
+          name:['2022-05-03','2022-05-04','2022-05-05','2022-05-06','2022-05-07','2022-05-08','2022-05-09'],
+          value: [22,12,23,12,22,39,21]
+        },
+        {
+          title: '您的签到率（%）',
+          number: 80.5,
+          name:['2022-05-03','2022-05-04','2022-05-05','2022-05-06','2022-05-07','2022-05-08','2022-05-09'],
+          value: [90,56,78,89,34,99,74]
+        },
+        {
+          title: '会完成会议签到次数',
+          number: 78,
+          name:['2022-05-03','2022-05-04','2022-05-05','2022-05-06','2022-05-07','2022-05-08','2022-05-09'],
+          value: [95,77,29,85,65,24,21]
+        },
+        {
+          title: '补签数',
+          number: 78,
+          name:['2022-05-03','2022-05-04','2022-05-05','2022-05-06','2022-05-07','2022-05-08','2022-05-09'],
+          value: [42,32,23,17,64,33,39]
+        },
+
+      ]
+      // data:[
+      //
+      //
+      // ]
       // currentMonth: this.getThisMonth(),
 
     };
@@ -109,63 +136,97 @@ export default {
   computed: {
     ...mapState('setting', ['brandTheme', 'mode']),
   },
-  // watch: {
-  //   brandTheme() {
-  //     changeChartsTheme([this.lineChart, this.scatterChart]);
-  //   },
-  //   mode() {
-  //     this.renderCharts();
-  //   },
-  // },
-  // mounted() {
+
+  mounted() {
   //   this.renderCharts();
-  // },
-  // methods: {
-  //
-  //
-  //
-  //   /** 采购商品满意度选择 */
-  //   onSatisfyChange(value) {
-  //     const { chartColors } = this.$store.state.setting;
-  //
-  //     this.scatterChart.setOption(getScatterDataSet({ dateTime: value, ...chartColors }));
-  //   },
-  //   /** 采购商品申请趋势选择 */
-  //   onMaterialChange(value) {
-  //     const { chartColors } = this.$store.state.setting;
-  //
-  //     this.lineChart.setOption(getFolderLineDataSet({ dateTime: value, ...chartColors }));
-  //   },
-  //   updateContainer() {
-  //     this.lineChart.resize?.({
-  //       width: this.lineContainer.clientWidth,
-  //       height: this.lineContainer.clientHeight,
-  //     });
-  //     this.scatterChart.resize?.({
-  //       width: this.scatterContainer.clientWidth,
-  //       height: this.scatterContainer.clientHeight,
-  //     });
-  //   },
-  //   renderCharts() {
-  //     const { chartColors } = this.$store.state.setting;
-  //
-  //     if (!this.lineContainer) {
-  //       this.lineContainer = document.getElementById('lineContainer');
-  //     }
-  //     this.lineChart = echarts.init(this.lineContainer);
-  //     this.lineChart.setOption(getFolderLineDataSet({ ...chartColors }));
-  //
-  //     window.addEventListener('resize', this.updateContainer, false);
-  //
-  //     if (!this.scatterContainer) {
-  //       this.scatterContainer = document.getElementById('scatterContainer');
-  //     }
-  //     this.scatterChart = echarts.init(this.scatterContainer);
-  //     this.scatterChart.setOption(getScatterDataSet({ ...chartColors }));
-  //   },
-  // },
+  //   this.drawChart()
+    this.initEchart()
+
+  },
+  methods: {
+    // drawChart(){
+    //   const data=[
+    //     {Date:"2022-05-03",scales:32},
+    //     {Date:"2022-05-04",scales:23},
+    //     {Date:"2022-05-05",scales:12},
+    //     {Date:"2022-05-06",scales:18},
+    //     {Date:"2022-05-07",scales:38},
+    //     {Date:"2022-05-08",scales:40},
+    //     {Date:"2022-05-09",scales:29},
+    //     {Date:"2022-05-10",scales:16},
+    //   ];
+    //   const line = new Line('myCharts', {
+    //     data,
+    //     padding: 'auto',
+    //     xField: 'Date',
+    //     yField: 'scales',
+    //     xAxis: {
+    //       // type: 'timeCat',
+    //       tickCount: 7,
+    //     },
+    //   });
+    //   line.render()
+    //
+    // }
+    initEchart(){
+      // type EChartsOption = echarts.EChartsOption;
+
+      // const chartDom = document.getElementById('myCharts')!;
+      const chartDom = document.getElementsByClassName('myCharts');
+
+      for (let i = 0;i<chartDom.length;i++){
+        const myChart = echarts.init(chartDom[i]);
+        // let option: EChartsOption;
+        // eslint-disable-next-line prefer-const
+        let option = {
+          grid: {
+            x: 30,
+            y: 80,
+
+          },
+          tooltip:{
+            trigger:'axis'
+          },
+          toolbox:{
+            show:true
+          },
+          xAxis: [{
+            type: 'category',
+            data: this.CHART_LIST[i].name,
+            show:false
+
+          }],
+          yAxis:[{
+            type:'value',
+            axisLabel:{
+              interval:2
+            }
+
+          }],
+          series: [
+            {
+              data: this.CHART_LIST[i].value,
+              type: 'line',
+
+            }
+          ]
+        };
+
+        // eslint-disable-next-line no-unused-expressions
+        myChart.setOption(option);
+      }
+
+
+
+    }
+
+  },
 };
 </script>
 <style lang="less" scoped>
 @import './index';
+  .myCharts{
+    margin-left: 106px;
+    margin-top: -14px;
+  }
 </style>

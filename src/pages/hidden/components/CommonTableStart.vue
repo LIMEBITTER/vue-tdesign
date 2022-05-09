@@ -20,7 +20,7 @@
                 <t-select
                   v-model="formData.status"
                   class="form-item-content`"
-                  :options="CONTRACT_STATUS_OPTIONS"
+                  :options="MEMBER_STATUS"
                   placeholder="请选择签到状态"
                 />
               </t-form-item>
@@ -169,12 +169,15 @@ export default {
 
       // 重新签到的人员
       CONTRACT_STATUS,
-      CONTRACT_STATUS_OPTIONS,
+      MEMBER_STATUS:[
+        {label:'未签到',value:0},
+        {label: '已签到',value: 1}
+      ],
 
       prefix,
       formData: {
         name: '',
-        no: undefined,
+        // no: undefined,
         status: undefined,
       },
       t_mid:'',
@@ -273,8 +276,14 @@ export default {
     onReset(data) {
       console.log(data);
     },
-    onSubmit(data) {
-      console.log(data);
+    onSubmit() {
+
+      const iData = {mid:localStorage.getItem('current_mid'),current:this.pagination.defaultCurrent,size:this.pagination.defaultPageSize,name:this.formData.name,status:this.formData.status}
+      console.log('参会人员查询',iData)
+
+      this.init_api(iData)
+
+      // console.log(data);
     },
     rehandlePageChange(curr, pageInfo) {
       console.log('分页变化', curr, pageInfo);
@@ -425,12 +434,15 @@ export default {
     // 查询会议的状态
     searchStatus(){
       console.log('执行searchStatus')
-      sCurrentMeetingInfo(localStorage.getItem('history_mid')).then(res=>{
+      sCurrentMeetingInfo(localStorage.getItem('current_mid')).then(res=>{
         console.log(res.data.result.meetingInfo.status)
         if (res.data.result.meetingInfo.status===2){
+          console.log('isshow=false')
           this.isShow = false
         }else {
           this.isShow = true
+          console.log('isshow=true')
+
         }
       })
     }

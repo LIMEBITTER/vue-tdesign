@@ -3,7 +3,7 @@
     <t-col :flex="3">
       <div class="user-left-greeting">
         <div>
-          Hi，Image
+          Hi，{{user_name}}
           <span class="regular"> 下午好，今天是你加入嘉心糖的第 100 天～</span>
         </div>
 <!--        <img src="@/assets/assets-tencent-logo.png" class="logo" />-->
@@ -155,6 +155,7 @@ export default {
   data() {
     return {
       prefix,
+      user_name:localStorage.getItem('user_name'),
       dashboardBase: '',
       lineContainer: '',
       lineChart: '',

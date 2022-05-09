@@ -5,7 +5,7 @@
         <t-col :span="10">
           <t-row :gutter="[16, 16]">
             <t-col :flex="1">
-              <t-form-item label="会议名" name="name">
+              <t-form-item label="会议名" name="mname">
                 <t-input
                   v-model="formData.mname"
                   class="form-item-content"
@@ -15,18 +15,18 @@
                 />
               </t-form-item>
             </t-col>
-<!--            <t-col :flex="1">-->
-<!--              <t-form-item label="会议状态" name="status">-->
-<!--                <t-select-->
-<!--                  v-model="formData.status"-->
-<!--                  class="form-item-content`"-->
-<!--                  :options="CONTRACT_STATUS_OPTIONS"-->
-<!--                  placeholder="请选择会议状态"-->
-<!--                />-->
-<!--              </t-form-item>-->
-<!--            </t-col>-->
             <t-col :flex="1">
-              <t-form-item label="会议号" name="no">
+              <t-form-item label="会议状态" name="status">
+                <t-select
+                  v-model="formData.status"
+                  class="form-item-content`"
+                  :options="MEETING_STATUS"
+                  placeholder="请选择会议状态"
+                />
+              </t-form-item>
+            </t-col>
+            <t-col :flex="1">
+              <t-form-item label="会议号" name="mid">
                 <t-input
                   v-model="formData.mid"
                   class="form-item-content"
@@ -35,16 +35,7 @@
                 />
               </t-form-item>
             </t-col>
-<!--            <t-col :flex="1">-->
-<!--              <t-form-item label="合同类型" name="type">-->
-<!--                <t-select-->
-<!--                  v-model="formData.type"-->
-<!--                  class="form-item-content`"-->
-<!--                  :options="CONTRACT_TYPE_OPTIONS"-->
-<!--                  placeholder="请选择合同类型"-->
-<!--                />-->
-<!--              </t-form-item>-->
-<!--            </t-col>-->
+
           </t-row>
         </t-col>
 
@@ -115,6 +106,11 @@ export default {
   data() {
     return {
       CONTRACT_STATUS,
+      MEETING_STATUS:[
+        {label:'未开始',value:0},
+        {label:'进行中',value:1},
+        {label:'已结束',value:2},
+      ],
       // CONTRACT_STATUS_OPTIONS,
       prefix,
       formData: {
@@ -178,6 +174,7 @@ export default {
       },
       confirmVisible: false,
       deleteIdx: -1,
+
     };
   },
   computed: {
@@ -194,7 +191,9 @@ export default {
 
     this.dataLoading = true;
     // 调用api
-    const sData = {uid:localStorage.getItem('uid'),current:this.pagination.defaultCurrent,size:this.pagination.defaultPageSize}
+    const sData ={uid:localStorage.getItem('uid'),current:this.pagination.defaultCurrent,size:this.pagination.defaultPageSize}
+
+    // console.log(this.sData)
     sAllMeetingsInfoByUid(sData).then(res=>{
 
       console.log('获取所有会议信息',res)
@@ -220,18 +219,40 @@ export default {
       });
 
   },
+
   methods: {
+
+
     onReset(data) {
       console.log(data);
     },
-    onSubmit(data) {
-      console.log(data);
+    onSubmit() {
+      console.log('条件查询')
+      console.log(this.formData);
+      const sData = {uid:localStorage.getItem('uid'),current:this.pagination.defaultCurrent,size:this.pagination.defaultPageSize,mname:this.formData.mname,status:this.formData.status,mid:this.formData.mid}
+      sAllMeetingsInfoByUid(sData).then(res=>{
+        console.log('条件查询',res)
+        if (res.data.code === "200"){
+          console.log('条件查询成功!',res)
+          this.data = res.data.result.meetingList;
+
+          // console.log('data',this.data)
+          this.pagination = {
+            ...this.pagination,
+            defaultPageSize: sData.size,
+            defaultCurrent: sData.current,
+            total: res.data.result.total,
+          };
+        }
+      })
+
+
     },
     rehandlePageChange(curr, pageInfo) {
       console.log('分页变化', curr, pageInfo);
       // this.dataLoading = true;
       // // 调用api
-      const sData = {uid:localStorage.getItem('uid'),current:curr.current,size:curr.pageSize}
+      const sData = {uid:localStorage.getItem('uid'),current:curr.current,size:curr.pageSize,mname:this.formData.mname,status:this.formData.status,mid:this.formData.mid}
       sAllMeetingsInfoByUid(sData).then(res=>{
 
         console.log('分页数据',res)

@@ -65,68 +65,6 @@ export default [
 
     ],
   },
-  // {
-  //   path: '/form',
-  //   name: 'form',
-  //   component: Layout,
-  //   redirect: '/form/base',
-  //   meta: { title: '表单页', icon: FormIcon },
-  //   // meta: { title: '签到管理', icon: FormIcon },
-  //
-  //   children: [
-  //     {
-  //       path: 'base',
-  //       name: 'FormBase',
-  //       component: () => import('@/pages/form/base/index.vue'),
-  //       meta: { title: '会议申请' },
-  //     },
-  // {
-  //   path: 'step',
-  //   name: 'FormStep',
-  //   component: () => import('@/pages/form/step/index.vue'),
-  //   meta: { title: '分步表单页' },
-  // },
-  // ],
-  // },
 
-  // {
-  //   path: '/detail',
-  //   name: 'detail',
-  //   component: Layout,
-  //   redirect: '/detail/base',
-  //   meta: { title: '详情页', icon: DetailIcon },
-  //   children: [
-      // {
-      //   path: 'base',
-      //   name: 'DetailBase',
-      //   component: () => import('@/pages/detail/base/index.vue'),
-      //   meta: { title: '会议开始结束' ,keepAlive:false},
-      // },
-      // {
-      //   path: 'basecheck',
-      //   name: 'BaseCheck',
-      //   component: () => import('@/pages/detail/meetingInfo/index.vue'),
-      //   meta: { title: '当前会议信息' },
-      // },
-      // {
-      //   path: 'facedetection',
-      //   name: 'FaceDetection',
-      //   component: () => import('@/pages/detail/facedetection/index.vue'),
-      //   meta: { title: '人脸签到' },
-      // },
-      // {
-      //   path: 'deploy',
-      //   name: 'DetailDeploy',
-      //   component: () => import('@/pages/detail/deploy/index.vue'),
-      //   meta: { title: '数据详情页' },
-      // },
-      // {
-      //   path: 'secondary',
-      //   name: 'DetailSecondary',
-      //   component: () => import('@/pages/detail/secondary/index.vue'),
-      //   meta: { title: '二级详情页' },
-      // },
-    // ],
-  // },
 
 ];

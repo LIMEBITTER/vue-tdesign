@@ -43,7 +43,7 @@ export function logOut() {
 // 根据uid查询所有该用户创建的会议信息
 export function sAllMeetingsInfoByUid(data) {
   // console.log('datadddddddd',data)
-  const pageData = {current:data.current,size:data.size}
+  const pageData = {current:data.current,size:data.size,id:data.mid,status:data.status,name:data.mname}
   const {uid} = data
   console.log(pageData,uid)
   return request({
@@ -112,10 +112,11 @@ export function recordMeetingInfo(data) {
 }
 
 // 查询会议历史记录
-export function sMeetingsRecord() {
+export function sMeetingsRecord(params) {
   return request({
     url:'/meetingRecord',
     method:'get',
+    data:params
 
   })
 }
@@ -171,7 +172,7 @@ export function sAllSignRecords() {
 export function sAllSignRecordsByMid(data) {
   console.log('执行api')
   const {mid} = data
-  const pageData = {current:data.current,size:data.size}
+  const pageData = {current:data.current,size:data.size,name:data.name,isSign:data.status}
   console.log(mid,pageData)
   return request({
     url:`/signRecord/meeting/${mid}`,

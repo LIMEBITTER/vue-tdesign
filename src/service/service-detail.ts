@@ -10,17 +10,17 @@ export const PANE_LIST_DATA: Array<DashboardPanel> = [
   {
     title: '总申请数（次）',
     number: '1126',
-    // upTrend: '10%',
+    upTrend: '10%',
   },
   {
     title: '使用会议时间',
     number: '13',
-    // downTrend: '13%',
+    downTrend: '13%',
   },
   {
     title: '参加会议次数',
     number: '4',
-    // upTrend: '10%',
+    upTrend: '10%',
   },
   {
     title: '签到成功次数',

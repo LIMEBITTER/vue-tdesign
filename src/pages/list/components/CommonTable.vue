@@ -7,7 +7,7 @@
             <t-col :flex="1">
               <t-form-item label="会议名" name="name">
                 <t-input
-                  v-model="formData.mname"
+                  v-model="formData.name"
                   class="form-item-content"
                   type="search"
                   placeholder="请输入会议名称"
@@ -15,7 +15,7 @@
                 />
               </t-form-item>
             </t-col>
-            <t-col :flex="1">
+<!--            <t-col :flex="1">-->
 <!--              <t-form-item label="会议状态" name="status">-->
 <!--                <t-select-->
 <!--                  v-model="formData.status"-->
@@ -24,11 +24,11 @@
 <!--                  placeholder="请选择会议状态"-->
 <!--                />-->
 <!--              </t-form-item>-->
-            </t-col>
+<!--            </t-col>-->
             <t-col :flex="1">
               <t-form-item label="会议号" name="no">
                 <t-input
-                  v-model="formData.mid"
+                  v-model="formData.id"
                   class="form-item-content"
                   placeholder="请输入会议号"
                   :style="{ minWidth: '134px' }"
@@ -103,9 +103,9 @@ export default {
       CONTRACT_STATUS,
       prefix,
       formData: {
-        mname: '',
-        mid: undefined,
-        status: undefined,
+        name: '',
+        id: null,
+        // status: undefined,
       },
       data: [],
       dataLoading: false,
@@ -173,15 +173,6 @@ export default {
       deleteIdx: -1,
     };
   },
-  watch:{
-    $route(to,from){
-      console.log('会议开始的路由监听====会议历史记录总表',to,from)
-      // 刷新历史会议数据
-      if (to.name==="MeetingStart"){
-        this.$router.go(0)
-      }
-    }
-  },
   computed: {
     confirmBody() {
       if (this.deleteIdx > -1) {
@@ -190,6 +181,15 @@ export default {
       }
       return '';
     },
+  },
+  watch:{
+    $route(to,from){
+      console.log('会议开始的路由监听====会议历史记录总表',to,from)
+      // 刷新历史会议数据
+      if (to.name==="MeetingStart"){
+        this.$router.go(0)
+      }
+    }
   },
   mounted() {
     this.dataLoading = true;
@@ -217,9 +217,26 @@ export default {
   methods: {
     onReset(data) {
       console.log(data);
+
     },
-    onSubmit(data) {
-      console.log(data);
+    // 条件查询
+    onSubmit() {
+
+      console.log('条件查询',this.formData);
+
+      sMeetingsRecord(this.formData).then(res=>{
+        console.log('执行条件查询api',res)
+        if (res.data.code === "200"){
+          console.log('条件查询成功',res)
+          this.data = res.data.result;
+
+          this.pagination = {
+            ...this.pagination,
+            total: this.data.length,
+          };
+        }
+
+      })
     },
     rehandlePageChange(curr, pageInfo) {
       console.log('分页变化', curr, pageInfo);
