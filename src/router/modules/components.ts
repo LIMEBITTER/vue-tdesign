@@ -56,12 +56,12 @@ export default [
         component: () => import('@/pages/hidden/components/FaceReg.vue'),
         meta: { title: '人脸识别（测试）' },
       },
-      // {
-      //   path: 'camera',
-      //   name: 'Camera',
-      //   component: () => import('@/pages/camera/Camera.vue'),
-      //   meta: { title: '摄像头' },
-      // },
+      {
+        path: 'screenShow',
+        name: 'ScreenShow',
+        component: () => import('@/pages/hidden/screenshow/index.vue'),
+        meta: { title: '大屏展示（测试）' },
+      },
 
     ],
   },
