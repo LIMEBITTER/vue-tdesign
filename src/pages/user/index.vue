@@ -26,6 +26,9 @@
           </t-col>
         </t-row>
       </card>
+      <card class="user-info-list">
+        <charts/>
+      </card>
 
 <!--      <card class="content-container">-->
 <!--        <t-tabs value="second">-->
@@ -137,6 +140,7 @@ import ProductAIcon from '@/assets/assets-product-1.svg';
 import ProductBIcon from '@/assets/assets-product-2.svg';
 import ProductCIcon from '@/assets/assets-product-3.svg';
 import ProductDIcon from '@/assets/assets-product-4.svg';
+import Charts from '@/pages/dashboard/detail/index.vue'
 
 import Card from '@/components/card/index.vue';
 
@@ -147,6 +151,7 @@ export default {
 
   components: {
     Card,
+    Charts
     // ProductAIcon,
     // ProductBIcon,
     // ProductCIcon,

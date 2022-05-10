@@ -170,7 +170,6 @@ export function sAllSignRecords() {
 
 // 根据会议号查询所有签到记录
 export function sAllSignRecordsByMid(data) {
-  console.log('执行api')
   const {mid} = data
   const pageData = {current:data.current,size:data.size,name:data.name,isSign:data.status}
   console.log(mid,pageData)
