@@ -144,5 +144,5 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-@import 'src/pages/list/joinmeeting/index';
+@import 'src/pages/list/meeting-join/index';
 </style>

@@ -19,7 +19,7 @@ export const defaultRouterList = [
   },
   {
     path: '*',
-    redirect: '/dashboard/base',
+    redirect: '/dashboard/',
   },
 
   ...asyncRouterList,

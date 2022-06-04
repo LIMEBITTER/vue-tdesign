@@ -26,6 +26,7 @@
           </t-col>
         </t-row>
       </card>
+
       <card class="user-info-list">
         <charts/>
       </card>

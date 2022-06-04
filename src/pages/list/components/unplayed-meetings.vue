@@ -90,7 +90,7 @@
 <script>
 import { prefix } from '@/config/global';
 import Trend from '@/components/trend/index.vue';
-import {sAllMeetingsInfoByUid,startMeetingDev} from '@/utils/api.js'
+import {sAllMeetingsInfoByUid,startMeetingDev,visiable} from '@/utils/api.js'
 
 import {
   CONTRACT_STATUS,
@@ -319,6 +319,15 @@ export default {
 
     startMeeting(currentRow){
       console.log('currentRow',currentRow)
+
+      // visiable().then(res=>{
+      //
+      // })
+
+
+
+
+
       if(currentRow.row.status===2){
         this.$message.question('当前会议已结束！')
       }else{

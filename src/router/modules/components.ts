@@ -8,40 +8,34 @@ export default [
     path: '/list',
     // name: 'list',
     component: Layout,
-    redirect: '/list/base',
+    redirect: '/list/meeting_apply_schedule',
     // meta: { title: '列表页', icon: ListIcon },
     meta: { title: '会议管理', icon: ListIcon },
 
     children: [
+
       {
-        path: 'filter',
+        path: 'meeting_apply_schedule',
+        name: 'FormBase',
+        component: () => import('@/pages/form/meeting-apply-sche/index.vue'),
+        meta: { title: '会议申请（预定）' },
+      },
+      {
+        path: 'history_meeting',
         name: 'ListFilter',
-        component: () => import('@/pages/list/filter/index.vue'),
+        component: () => import('@/pages/list/history-meeting/index.vue'),
         meta: { title: '历史会议' },
       },
       {
-        path: 'filterall',
+        path: 'meeting_management',
         name: 'ListFilterAll',
-        component: () => import('@/pages/list/filterallcheck/index.vue'),
+        component: () => import('@/pages/list/meeting-management/index.vue'),
         meta: { title: '我的会议（申请人）' },
       },
-      // {
-      //   path: 'checkallmeetings',
-      //   name: 'ListFilterUser',
-      //   component: () => import('@/pages/list/checkallmeetings/index.vue'),
-      //   meta: { title: '所有会议情况浏览' },
-      // },
       {
-        path: 'base',
-        name: 'FormBase',
-        component: () => import('@/pages/form/base/index.vue'),
-        meta: { title: '会议申请（预定）' },
-      },
-
-      {
-        path: 'joinmeeting',
+        path: 'meeting_join',
         name: 'MeetingJoin',
-        component: () => import('@/pages/list/joinmeeting/index.vue'),
+        component: () => import('@/pages/list/meeting-join/index.vue'),
         meta: { title: '会议加入' },
       },
       {
@@ -57,9 +51,9 @@ export default [
         meta: { title: '人脸识别（测试）' },
       },
       {
-        path: 'screenShow',
+        path: 'screen_show',
         name: 'ScreenShow',
-        component: () => import('@/pages/hidden/screenshow/index.vue'),
+        component: () => import('@/pages/hidden/screen-show/index.vue'),
         meta: { title: '大屏展示（测试）' },
       },
 

@@ -25,8 +25,8 @@
           </div>
           <div class="info-item">
             <h1>会议状态</h1>
-            <div>已结束</div>
-
+            <div v-if="formData.status===0">未开始</div>
+            <div v-if="formData.status===1">进行中</div>
           </div>
           <div class="info-item">
             <h1>会议预计开始时间</h1>
@@ -46,42 +46,44 @@
             <div v-if="formData.endTime===null">\</div>
             <div v-else>{{formData.endTime}}</div>
           </div>
-          <!--            <span-->
-          <!--              :class="{-->
-          <!--              ['inProgress']: item.type && item.type.value === 'inProgress',-->
-          <!--            }"-->
-          <!--            >-->
-          <!--            <i v-if="item.type && item.type.key === 'contractStatus'" />-->
-          <!--            {{ item.value }}-->
-          <!--          </span>-->
+            <!--            <span-->
+<!--              :class="{-->
+<!--              ['inProgress']: item.type && item.type.value === 'inProgress',-->
+<!--            }"-->
+<!--            >-->
+<!--            <i v-if="item.type && item.type.key === 'contractStatus'" />-->
+<!--            {{ item.value }}-->
+<!--          </span>-->
         </div>
 
       </card>
 
-      <t-row :gutter="[16, 16]" class="card-container-margin">
+      <t-row :gutter="[16, 16]" class="card-container-margin" v-show="formData.host===user_name">
         <t-col :xs="12" :xl="9">
-          <card title="参会者信息查询">
-<!--            <keep-alive>-->
-              <common-table />
-<!--            </keep-alive>-->
-<!--            <common-table-history/>-->
-
+          <card title="参会者信息查询" >
+            <keep-alive>
+              <common-table :mid="this.mid" />
+            </keep-alive>
           </card>
-          <!--          <card title="会议签到" v-else>-->
-          <!--            <t-button>签到</t-button>-->
-          <!--            <t-dialog>-->
-          <!--              <face-reg></face-reg>-->
-          <!--            </t-dialog>-->
-          <!--          </card>-->
         </t-col>
         <t-col :xs="12" :xl="3">
           <card title="签到">
             <p>已签到人数：40</p>
             <p>签到率：100%</p>
             <p>补签人数：0</p>
+            <t-button style="margin-top: 10px" @click="endMeeting()">结束签到</t-button>
 
           </card>
         </t-col>
+      </t-row>
+
+      <t-row :gutter="[16, 16]" class="card-container-margin" v-show="formData.host!==user_name">
+        <t-col :xs="16" :xl="16">
+          <card title="人脸签到（暂时以普通签到代替）" >
+            <common-table-start-user/>
+          </card>
+        </t-col>
+
       </t-row>
 
     </t-row>
@@ -94,10 +96,12 @@ import model from '@/service/service-detail-base';
 import Card from '@/components/card/index.vue';
 import CommonTable from "../components/CommonTableStart.vue";
 import {sCurrentMeetingInfo,endMeetingDev,recordMeetingInfo} from "@/utils/api.js";
+// import FaceReg from "../components/FaceReg.vue";
+import CommonTableStartUser from "../components/CommonTableStartUser.vue";
 
 export default {
-  name: 'MeetingInfo',
-  components: { Card ,CommonTable},
+  name: 'MeetingStart',
+  components: { Card ,CommonTable,CommonTableStartUser},
   data() {
     return {
       prefix,
@@ -112,30 +116,50 @@ export default {
 
     };
   },
+  // mounted() {
+  //   this.mid = this.$route.query.mid
+  //   localStorage.setItem('current_mid',this.mid)
+  //
+  //   console.log('当前会议号',this.mid)
+  //   const local_mid = localStorage.getItem('current_mid')
+  //   sCurrentMeetingInfo(local_mid).then(res=>{
+  //     console.log('查询当前会议信息',res)
+  //     this.formData = res.data.result.meetingInfo
+  //
+  //   })
+  // },
+  // watch:{
+  //   $route(to,from){
+  //     console.log('路由监听======会议开始主界面',to,from)
+  //     if (to.name==='ListFilterAll'){
+  //       console.log('路由监听成功======会议开始主界面')
+  //       console.log('当前mid',this.mid)
+  //     }
+  //   }
+  // },
   created() {
-    console.log('created=========')
     this.mid = this.$route.query.mid
-    localStorage.setItem('history_mid',this.mid)
-    const local_history_mid = localStorage.getItem('history_mid')
-    console.log('当前历史会议mid',local_history_mid)
-    sCurrentMeetingInfo(local_history_mid).then(res=>{
-      console.log('当前历史会议信息',res)
-      if (res.data.code === "200"){
-        this.formData = res.data.result.meetingInfo
-      }
+    localStorage.setItem('current_mid',this.mid)
+
+    console.log('当前会议号',this.mid)
+    const local_mid = localStorage.getItem('current_mid')
+    sCurrentMeetingInfo(local_mid).then(res=>{
+      console.log('查询当前会议信息',res)
+      this.formData = res.data.result.meetingInfo
+
     })
   },
   // 此页面不需要缓存 需要重复加载数据
   activated() {
     this.mid = this.$route.query.mid
-    localStorage.setItem('history_mid',this.mid)
-    const local_history_mid = localStorage.getItem('history_mid')
-    console.log('keep-alive-mid',local_history_mid)
-    sCurrentMeetingInfo(local_history_mid).then(res=>{
-      console.log('当前历史会议信息',res)
-      if (res.data.code === "200"){
-        this.formData = res.data.result.meetingInfo
-      }
+    localStorage.setItem('current_mid',this.mid)
+
+    console.log('当前会议号',this.mid)
+    const local_mid = localStorage.getItem('current_mid')
+    sCurrentMeetingInfo(local_mid).then(res=>{
+      console.log('查询当前会议信息',res)
+      this.formData = res.data.result.meetingInfo
+
     })
 
 
@@ -175,5 +199,5 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-  @import 'src/pages/hidden/meetingStart/index';
+@import 'src/pages/hidden/meeting-start/index';
 </style>

@@ -150,9 +150,10 @@ export default Vue.extend({
     },
     handleLogout() {
       // 退出登录 清空token
+      localStorage.removeItem('uid');
+      localStorage.removeItem('history_mid');
       localStorage.removeItem('user_name');
       localStorage.removeItem('token');
-      localStorage.removeItem('uid');
       localStorage.removeItem('current_mid');
 
       this.$router.push(`/login?redirect=${this.$router.history.current.fullPath}`);

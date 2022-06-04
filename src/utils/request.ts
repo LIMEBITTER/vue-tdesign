@@ -12,7 +12,7 @@ const CODE = {
 };
 
 const instance = axios.create({
-  baseURL: 'https://frp.kawaiimoe.cn/api',
+  baseURL: 'http://10.18.220.188:5518/',
   timeout: 1000,
   withCredentials: true,
 });

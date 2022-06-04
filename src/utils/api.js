@@ -1,4 +1,5 @@
 import request from './request.ts'
+import axios from "axios";
 
 /**
  *  用户服务
@@ -263,6 +264,16 @@ export function faceCheckTest(data) {
     url:'/faceCheckT',
     method:'post',
     headers:{'Content-Type':'multipart/form-data'},
+    data
+  })
+
+}
+
+// 可视化图表
+export function visiable(data) {
+  return axios({
+    url:'ws://10.18.220.188:5518/meeting',
+    method:'post',
     data
   })
 }

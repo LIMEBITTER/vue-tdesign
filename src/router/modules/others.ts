@@ -27,15 +27,15 @@ export default [
     // redirect: '/hidden/meetingInfo',
     children: [
       {
-        path: 'meetingInfo',
+        path: 'history_meeting-info',
         name:'MeetingInfo',
-        component: () => import('@/pages/hidden/meetingInfo/index.vue'),
+        component: () => import('@/pages/hidden/hmeeting-info/index.vue'),
         meta: { title: '当前会议信息',keepAlive: true },
       },
       {
-        path: 'meetingStart',
+        path: 'meeting_start',
         name: 'MeetingStart',
-        component: () => import('@/pages/hidden/meetingStart/index.vue'),
+        component: () => import('@/pages/hidden/meeting-start/index.vue'),
         meta: { title: '会议开始结束' ,keepAlive:true},
         // beforeEnter(to,from,next){
         //   console.log('meetingstart路由守卫',to,from)
@@ -43,9 +43,9 @@ export default [
         // }
       },
       {
-        path: 'faceDetection',
+        path: 'face_detection',
         name: 'FaceDetection',
-        component: () => import('@/pages/hidden/faceDetection/index.vue'),
+        component: () => import('@/pages/hidden/face-detection/index.vue'),
         meta: { title: '人脸签到' },
       },
 

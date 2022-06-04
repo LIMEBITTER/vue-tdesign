@@ -5,7 +5,7 @@ export default [
   {
     path: '/dashboard',
     component: Layout,
-    redirect: '/dashboard/detail',
+    redirect: '/dashboard/statistics_form',
     name: 'dashboard',
     meta: { title: '仪表盘', icon: DashboardIcon },
     children: [
@@ -16,9 +16,9 @@ export default [
       //   meta: { title: '概览仪表盘' },
       // },
       {
-        path: 'base',
+        path: 'statistics_form',
         name: 'DashboardDetail',
-        component: () => import('@/pages/dashboard/detail/index.vue'),
+        component: () => import('@/pages/dashboard/statistics-form/index.vue'),
         meta: { title: '统计报表' },
       },
 

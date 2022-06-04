@@ -208,11 +208,11 @@ export default {
 
   },
   methods: {
-    testPush(){
-      console.log('testpush')
-      window.open('https://www.baidu.com')
-      // this.$router.push('src/pages/hidden/testvue/test-vue.vue')
-    },
+    // testPush(){
+    //   console.log('testpush')
+    //   window.open('https://www.baidu.com')
+    //   // this.$router.push('src/pages/hidden/testvue/test-vue.vue')
+    // },
     drawChart(){
       // const data=[
       //   {Date:"2022-05-03",scales:32},

@@ -1,15 +1,15 @@
 <template>
   <div>
-    <common-table />
+    <history-meetings/>
   </div>
 </template>
 <script lang="ts">
-import CommonTable from '../components/CommonTable.vue';
+import HistoryMeetings from '../components/history-meetings.vue';
 
 export default {
   name: 'ListFilter',
   components: {
-    CommonTable,
+    HistoryMeetings,
   },
 };
 </script>

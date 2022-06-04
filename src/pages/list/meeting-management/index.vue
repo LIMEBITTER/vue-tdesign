@@ -1,15 +1,15 @@
 <template>
   <div>
-    <common-table-all/>
+    <unplayed-meetings/>
   </div>
 </template>
 <script lang="ts">
-import CommonTableAll from '../components/CommonTableAll.vue';
+import UnplayedMeetings from '../components/unplayed-meetings.vue';
 
 export default {
   name: 'ListFilterAll',
   components: {
-    CommonTableAll,
+    UnplayedMeetings,
   },
 };
 </script>

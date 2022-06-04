@@ -77,7 +77,7 @@
 import Vue from 'vue';
 import QrcodeVue from 'qrcode.vue';
 import axios from "axios";
-import checkCode from "./checkCode.vue";
+import checkCode from "./verify-code.vue";
 import {userLogin} from "@/utils/api.js";
 
 const INITIAL_DATA = {
@@ -153,8 +153,8 @@ export default Vue.extend({
             localStorage.setItem('user_name', this.formData.uname);
             localStorage.setItem('token', this.userToken);
 
-            // this.$router.replace('/').catch(() => '');
-            this.$router.push('/');
+            this.$router.replace('/').catch(() => '');
+            // this.$router.push('/');
 
             this.$message.success('登录成功');
 

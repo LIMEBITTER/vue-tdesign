@@ -139,6 +139,6 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-@import 'src/pages/hidden/faceDetection/index';
+@import 'src/pages/hidden/face-detection/index';
 
 </style>
