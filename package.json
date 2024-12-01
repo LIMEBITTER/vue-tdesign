@@ -20,7 +20,7 @@
   "dependencies": {
     "@antv/g2plot": "^2.4.16",
     "@vitejs/plugin-vue": "^2.3.2",
-    "axios": "^0.26.1",
+    "axios": "^1.7.8",
     "dayjs": "^1.10.8",
     "echarts": "~5.3.2",
     "hex-to-hsl": "^1.0.2",
